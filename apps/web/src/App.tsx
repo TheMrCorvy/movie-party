@@ -1,10 +1,31 @@
-import { Button, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
+import Container from "@mui/material/Container";
 
-export default function App() {
+const App = () => {
 	return (
-		<>
-			<Typography variant="h4">Hello MUI</Typography>
-			<Button variant="contained">Click Me</Button>
-		</>
+		<Container
+			maxWidth="xl"
+			sx={{
+				height: "100vh",
+				display: "flex",
+				flexDirection: "column",
+				alignItems: "center",
+				justifyContent: "center",
+			}}
+		>
+			<Typography
+				variant="h4"
+				sx={{
+					color: "#333",
+					fontWeight: "bold",
+					textAlign: "center",
+					marginBottom: 2,
+				}}
+			>
+				Welcome to Movie-Party app!
+			</Typography>
+		</Container>
 	);
-}
+};
+
+export default App;
