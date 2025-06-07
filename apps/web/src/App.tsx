@@ -2,8 +2,27 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Card from "@mui/material/Card";
 import Box from "@mui/material/Box";
+import SocketIOClient from "socket.io-client";
+import { useEffect } from "react";
 
 const App = () => {
+	useEffect(() => {
+		const socket = SocketIOClient("http://localhost:4000");
+		console.log("connecting");
+
+		socket.on("connect", () => {
+			console.log("Connected to server");
+		});
+
+		socket.on("disconnect", () => {
+			console.log("Disconnected from server");
+		});
+
+		return () => {
+			socket.disconnect();
+		};
+	}, []);
+
 	return (
 		<Container
 			maxWidth="xl"
