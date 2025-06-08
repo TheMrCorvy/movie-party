@@ -6,12 +6,16 @@ import { RoomContext } from "../../context/roomContext";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 
+import { helloWorld } from "@repo/type-definitions";
+
 const CreateRoom: FC = () => {
 	const { ws } = useContext(RoomContext);
 
 	const createRoom = () => {
 		ws.emit("create-room");
 	};
+
+	console.log(helloWorld);
 
 	return (
 		<Container

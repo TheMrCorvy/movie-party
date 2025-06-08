@@ -1,0 +1,9 @@
+{
+	"name": "@repo/shared-constants",
+	"exports": {
+		".": "./src/index.ts"
+	},
+	"devDependencies": {
+		"@repo/typescript-config": "*"
+	}
+}

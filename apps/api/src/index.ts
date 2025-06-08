@@ -3,6 +3,9 @@ import { Server } from "socket.io";
 import http from "http";
 import cors from "cors";
 import { roomHandler } from "./rooms";
+import { helloWorld } from "@repo/type-definitions";
+
+console.log(helloWorld);
 
 const app = express();
 
