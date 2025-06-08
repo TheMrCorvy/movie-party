@@ -1,7 +1,14 @@
 {
 	"name": "@repo/type-definitions",
 	"exports": {
-		".": "./src/index.ts"
+		"./rooms": {
+			"types": "./src/rooms/index.ts",
+			"default": "./src/rooms/index.ts"
+		},
+		".": {
+			"types": "./src/index.ts",
+			"default": "./src/index.ts"
+		}
 	},
 	"devDependencies": {
 		"@repo/typescript-config": "*"
