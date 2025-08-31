@@ -1,0 +1,37 @@
+{
+    "name": "chaldea-foundation",
+    "private": true,
+    "scripts": {
+        "build": "turbo run build",
+        "dev": "turbo run dev",
+        "lint": "turbo run lint",
+        "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+        "check-types": "turbo run check-types",
+        "prepare": "husky",
+        "test": "turbo run test --filter='!chaldea-foundation-center'",
+        "test:coverage": "turbo test:coverage --filter='!chaldea-foundation-center'",
+        "clean": "turbo clean"
+    },
+    "devDependencies": {
+        "esbuild": "^0.25.9",
+        "husky": "^9.1.7",
+        "lint-staged": "^15.3.0",
+        "prettier": "^3.6.2",
+        "turbo": "^2.5.6",
+        "typescript": "5.9.2"
+    },
+    "engines": {
+        "node": ">=18"
+    },
+    "packageManager": "npm@11.4.2",
+    "workspaces": [
+        "apps/*",
+        "packages/*"
+    ],
+    "dependencies": {
+        "uuid": "^11.1.0"
+    },
+    "overrides": {
+        "@types/react": "^19.1.2"
+    }
+}
