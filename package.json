@@ -6,11 +6,13 @@
         "dev": "turbo run dev",
         "lint": "turbo run lint",
         "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+        "format:check": "prettier --check .",
         "check-types": "turbo run check-types",
         "prepare": "husky",
         "test": "turbo run test --filter='!chaldea-foundation-center'",
         "test:coverage": "turbo test:coverage --filter='!chaldea-foundation-center'",
-        "clean": "turbo clean"
+        "clean": "turbo clean",
+        "start": "turbo run start"
     },
     "devDependencies": {
         "esbuild": "^0.25.9",
@@ -33,5 +35,14 @@
     },
     "overrides": {
         "@types/react": "^19.1.2"
+    },
+    "lint-staged": {
+        "src/**/*.{ts,js}": [
+            "eslint --fix",
+            "prettier --check"
+        ],
+        "*.{json,md}": [
+            "prettier --check"
+        ]
     }
 }
