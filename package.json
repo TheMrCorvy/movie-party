@@ -9,8 +9,8 @@
         "format:check": "prettier --check .",
         "check-types": "turbo run check-types",
         "prepare": "husky",
-        "test": "turbo run test --filter='!chaldea-foundation-center'",
-        "test:coverage": "turbo test:coverage --filter='!chaldea-foundation-center'",
+        "test": "turbo run test",
+        "test:coverage": "turbo test:coverage",
         "clean": "turbo clean",
         "start": "turbo run start"
     },
