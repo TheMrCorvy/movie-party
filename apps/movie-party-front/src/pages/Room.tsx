@@ -5,13 +5,13 @@ import { Signals } from "@repo/type-definitions/rooms";
 
 const Room: FC = () => {
     const { roomId } = useParams();
-    const { ws } = useContext(RoomContext);
+    const { ws, me } = useContext(RoomContext);
 
     useEffect(() => {
-        if (roomId) {
-            ws.emit(Signals.ENTER_ROOM, { roomId });
+        if (roomId && me) {
+            ws.emit(Signals.ENTER_ROOM, { roomId, peerId: me._id });
         }
-    }, [roomId, ws]);
+    }, [roomId, ws, me]);
 
     return (
         <div>
