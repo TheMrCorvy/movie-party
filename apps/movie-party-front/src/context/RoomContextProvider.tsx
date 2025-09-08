@@ -26,6 +26,7 @@ interface Participants {
 export const RoomProvider: FC<RoomProviderProps> = ({ children }) => {
     const navigate = useNavigate();
     const [me, setMe] = useState<Peer>();
+    const [stream, setStream] = useState<MediaStream>();
 
     const enterRoom = ({ roomId }: EnterRoomResponse) => {
         navigate(`/room/${roomId}`);
@@ -43,13 +44,24 @@ export const RoomProvider: FC<RoomProviderProps> = ({ children }) => {
         const meId = uuidV4();
         const peer = new Peer(meId);
         setMe(peer);
+
+        try {
+            navigator.mediaDevices
+                .getUserMedia({ video: true, audio: false }) // to do: implement FF here
+                .then((stream) => {
+                    setStream(stream);
+                });
+        } catch (error) {
+            console.error(error);
+        }
+
         ws.on(Signals.ROOM_CREATED, enterRoom);
         ws.on(Signals.GET_PARTICIPANTS, getParticipants);
         ws.on(Signals.USER_LEFT, removePeer);
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
-        <RoomContext.Provider value={{ ws, me }}>
+        <RoomContext.Provider value={{ ws, me, stream }}>
             {children}
         </RoomContext.Provider>
     );
