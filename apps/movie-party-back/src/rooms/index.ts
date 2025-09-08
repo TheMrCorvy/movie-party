@@ -29,11 +29,6 @@ export const roomHandler = (socket: Socket, io: SocketIOServer) => {
             rooms[roomId].push(peerId);
         }
 
-        socket.to(roomId).emit(Signals.GET_PARTICIPANTS, {
-            roomId,
-            participants: rooms[roomId],
-        });
-
         io.in(roomId).emit(Signals.GET_PARTICIPANTS, {
             roomId,
             participants: rooms[roomId],
