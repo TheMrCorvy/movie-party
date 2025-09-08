@@ -29,7 +29,7 @@ app.get("/", (req, res) => {
 io.on("connection", (socket) => {
     console.log("a user connected");
 
-    roomHandler(socket);
+    roomHandler(socket, io);
 });
 
 server.listen(port, () => {

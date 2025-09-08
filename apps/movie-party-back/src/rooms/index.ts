@@ -1,4 +1,4 @@
-import { Socket } from "socket.io";
+import { Socket, Server as SocketIOServer } from "socket.io";
 import { v4 as uuidv4 } from "uuid";
 import { Signals } from "@repo/type-definitions/rooms";
 
@@ -9,7 +9,7 @@ interface RoomParams {
 
 const rooms: Record<string, string[]> = {};
 
-export const roomHandler = (socket: Socket) => {
+export const roomHandler = (socket: Socket, io: SocketIOServer) => {
     const createRoom = () => {
         const roomId = uuidv4();
         rooms[roomId] = [];
@@ -33,6 +33,12 @@ export const roomHandler = (socket: Socket) => {
             roomId,
             participants: rooms[roomId],
         });
+
+        io.in(roomId).emit(Signals.GET_PARTICIPANTS, {
+            roomId,
+            participants: rooms[roomId],
+        });
+
         console.log("user joined the room: ", { roomId, peerId });
 
         socket.on("disconnect", () => {
