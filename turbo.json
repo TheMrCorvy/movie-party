@@ -5,25 +5,31 @@
         "build": {
             "dependsOn": ["^build"],
             "inputs": ["$TURBO_DEFAULT$", ".env*"],
-            "outputs": [".next/**", "!.next/cache/**", "dist/**", "build/**"]
+            "outputs": [".next/**", "!.next/cache/**", "dist/**", "build/**"],
+            "env": ["PORT"]
         },
         "lint": {
-            "dependsOn": ["^lint"]
+            "dependsOn": ["^lint"],
+            "env": ["PORT"]
         },
         "check-types": {
-            "dependsOn": ["^check-types"]
+            "dependsOn": ["^check-types"],
+            "env": ["PORT"]
         },
         "dev": {
             "cache": false,
-            "persistent": true
+            "persistent": true,
+            "env": ["PORT"]
         },
         "test": {
             "dependsOn": ["^build"],
-            "inputs": ["$TURBO_DEFAULT$", ".env*"]
+            "inputs": ["$TURBO_DEFAULT$", ".env*"],
+            "env": ["PORT"]
         },
         "test:coverage": {
             "dependsOn": ["^build"],
-            "inputs": ["$TURBO_DEFAULT$", ".env*"]
+            "inputs": ["$TURBO_DEFAULT$", ".env*"],
+            "env": ["PORT"]
         },
         "clean": {
             "cache": false

@@ -9,13 +9,13 @@ interface EnterRoomParams {
 export const roomHandler = (socket: Socket) => {
     const enterRoom = ({ roomId }: EnterRoomParams) => {
         socket.join(roomId);
-        console.log("user asked to enter the room: ", roomId);
+        console.log("user joined the room: ", roomId);
     };
 
     const createRoom = () => {
         const roomId = uuidv4();
         socket.emit(Signals.ROOM_CREATED, { roomId });
-        console.log("user asked to create a room");
+        console.log("user created a room");
     };
 
     socket.on(Signals.CREATE_ROOM, createRoom);

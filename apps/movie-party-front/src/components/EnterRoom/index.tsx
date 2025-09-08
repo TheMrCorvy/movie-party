@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import { useContext } from "react";
 
-import { RoomContext } from "../../context/roomContext";
+import { RoomContext } from "../../context/RoomContext";
 
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
