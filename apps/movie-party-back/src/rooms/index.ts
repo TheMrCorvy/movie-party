@@ -44,6 +44,13 @@ export const roomHandler = (socket: Socket, io: SocketIOServer) => {
 
     const leaveRoom = ({ peerId, roomId }: RoomParams) => {
         rooms[roomId] = rooms[roomId]?.filter((id) => id !== peerId);
+
+        if (rooms[roomId]?.length === 0) {
+            delete rooms[roomId];
+            console.log("room deleted: ", roomId);
+            return;
+        }
+
         socket.to(roomId).emit(Signals.USER_LEFT, peerId);
     };
 
