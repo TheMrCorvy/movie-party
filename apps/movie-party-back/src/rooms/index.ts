@@ -2,7 +2,7 @@ import { Socket } from "socket.io";
 import { v4 as uuidv4 } from "uuid";
 import { Signals } from "@repo/type-definitions/rooms";
 
-interface EnterRoomParams {
+interface RoomParams {
     roomId: string;
     peerId: string;
 }
@@ -17,7 +17,7 @@ export const roomHandler = (socket: Socket) => {
         console.log("user created a room");
     };
 
-    const enterRoom = ({ roomId, peerId }: EnterRoomParams) => {
+    const enterRoom = ({ roomId, peerId }: RoomParams) => {
         if (!rooms[roomId]) {
             socket.emit(Signals.ROOM_NOT_FOUND);
             return;
@@ -34,6 +34,16 @@ export const roomHandler = (socket: Socket) => {
             participants: rooms[roomId],
         });
         console.log("user joined the room: ", { roomId, peerId });
+
+        socket.on("disconnect", () => {
+            console.log("user left the room", peerId);
+            leaveRoom({ roomId, peerId });
+        });
+    };
+
+    const leaveRoom = ({ peerId, roomId }: RoomParams) => {
+        rooms[roomId] = rooms[roomId]?.filter((id) => id !== peerId);
+        socket.to(roomId).emit(Signals.USER_LEFT, peerId);
     };
 
     socket.on(Signals.CREATE_ROOM, createRoom);

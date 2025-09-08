@@ -35,12 +35,17 @@ export const RoomProvider: FC<RoomProviderProps> = ({ children }) => {
         console.log(participants);
     };
 
+    const removePeer = (peerId: string) => {
+        console.log("peer left: ", peerId);
+    };
+
     useEffect(() => {
         const meId = uuidV4();
         const peer = new Peer(meId);
         setMe(peer);
         ws.on(Signals.ROOM_CREATED, enterRoom);
         ws.on(Signals.GET_PARTICIPANTS, getParticipants);
+        ws.on(Signals.USER_LEFT, removePeer);
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
