@@ -2,6 +2,8 @@
 
 A Turborepo monorepo project with TypeScript, Prettier, ESLint, and Strapi CMS.
 
+inspired on this project https://github.com/nim-f/webrtc-react/
+
 ## Project Structure
 
 ```
