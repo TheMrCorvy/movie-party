@@ -1,3 +1,17 @@
 import { createContext } from "react";
+import { Socket } from "socket.io-client";
+import Peer from "peerjs";
 
-export const RoomContext = createContext<null | any>(null);
+interface PeerState {
+    stream: MediaStream;
+}
+
+interface RoomContextType {
+    ws: Socket;
+    me?: Peer;
+    stream?: MediaStream;
+    peers: Record<string, PeerState>;
+    roomId: string;
+}
+
+export const RoomContext = createContext<RoomContextType | null>(null);

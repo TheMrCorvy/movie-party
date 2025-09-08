@@ -9,7 +9,13 @@ import Container from "@mui/material/Container";
 import { Signals } from "@repo/type-definitions/rooms";
 
 const CreateRoom: FC = () => {
-    const { ws } = useContext(RoomContext);
+    const context = useContext(RoomContext);
+
+    if (!context) {
+        return <div>Loading...</div>;
+    }
+
+    const { ws } = context;
 
     const createRoom = () => {
         ws.emit(Signals.CREATE_ROOM);

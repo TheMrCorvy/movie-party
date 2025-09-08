@@ -4,16 +4,30 @@ import { RoomContext } from "../context/RoomContext";
 import { Signals } from "@repo/type-definitions/rooms";
 import { Container } from "@mui/material";
 import VideoPlayerComponent from "../components/VideoPlayerComponent";
+import PeerVideo from "../components/PeerVideo";
 
 const Room: FC = () => {
     const { roomId } = useParams();
-    const { ws, me, stream } = useContext(RoomContext);
+    const context = useContext(RoomContext);
 
     useEffect(() => {
-        if (roomId && me) {
-            ws.emit(Signals.ENTER_ROOM, { roomId, peerId: me._id });
+        if (context && roomId && context.me) {
+            console.log(
+                "Entering room:",
+                roomId,
+                "with peer ID:",
+                context.me.id
+            );
+            context.ws.emit(Signals.ENTER_ROOM, {
+                roomId,
+                peerId: context.me.id,
+            });
         }
-    }, [roomId, ws, me]);
+    }, [roomId, context?.me?.id, context?.ws]); // Only depend on stable values
+
+    if (!context) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <Container
@@ -27,10 +41,37 @@ const Room: FC = () => {
                 color: "white",
             }}
         >
-            <div>
+            <div style={{ textAlign: "center" }}>
                 <h1>Room</h1>
                 <p>Room ID: {roomId}</p>
-                <VideoPlayerComponent stream={stream} />
+
+                <div style={{ marginBottom: "20px" }}>
+                    <h3>Your Video</h3>
+                    {context.stream && (
+                        <VideoPlayerComponent stream={context.stream} />
+                    )}
+                </div>
+
+                <div>
+                    <h3>
+                        Connected Peers: {Object.keys(context.peers).length}
+                    </h3>
+                    <div
+                        style={{
+                            display: "flex",
+                            flexWrap: "wrap",
+                            justifyContent: "center",
+                        }}
+                    >
+                        {Object.entries(context.peers).map(([peerId, peer]) => (
+                            <PeerVideo
+                                key={peerId}
+                                peerId={peerId}
+                                stream={peer.stream}
+                            />
+                        ))}
+                    </div>
+                </div>
             </div>
         </Container>
     );
