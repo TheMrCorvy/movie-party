@@ -1,10 +1,11 @@
-import { useEffect, useState, type FC } from "react";
+import { useEffect, useState, type FC, useReducer } from "react";
 import { useNavigate } from "react-router-dom";
 import SocketIOClient from "socket.io-client";
 import { RoomContext } from "./RoomContext";
 import { Signals } from "@repo/type-definitions/rooms";
 import Peer from "peerjs";
 import { v4 as uuidV4 } from "uuid";
+import { peerReducer } from "./peerReducer";
 
 const WS = "http://localhost:4000";
 
@@ -27,6 +28,7 @@ export const RoomProvider: FC<RoomProviderProps> = ({ children }) => {
     const navigate = useNavigate();
     const [me, setMe] = useState<Peer>();
     const [stream, setStream] = useState<MediaStream>();
+    const [peers, dispatch] = useReducer(peerReducer, {});
 
     const enterRoom = ({ roomId }: EnterRoomResponse) => {
         navigate(`/room/${roomId}`);
@@ -58,7 +60,44 @@ export const RoomProvider: FC<RoomProviderProps> = ({ children }) => {
         ws.on(Signals.ROOM_CREATED, enterRoom);
         ws.on(Signals.GET_PARTICIPANTS, getParticipants);
         ws.on(Signals.USER_LEFT, removePeer);
+
+        return () => {
+            ws.off(Signals.ROOM_CREATED, enterRoom);
+            ws.off(Signals.GET_PARTICIPANTS, getParticipants);
+            ws.off(Signals.USER_LEFT, removePeer);
+        };
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+    useEffect(() => {
+        if (!me || !stream) return;
+
+        ws.on(Signals.USER_JOINED, ({ peerId }) => {
+            const call = me.call(peerId, stream);
+            call.on("stream", (peerStream) => {
+                dispatch({
+                    type: "ADD_PEER",
+                    payload: { peerId, stream: peerStream },
+                });
+            });
+        });
+
+        me.on("call", (call) => {
+            call.answer(stream);
+            call.on("stream", (remoteStream) => {
+                dispatch({
+                    type: "ADD_PEER",
+                    payload: { peerId: call.peer, stream: remoteStream },
+                });
+            });
+        });
+
+        return () => {
+            ws.off(Signals.USER_JOINED);
+            me.removeAllListeners("call");
+        };
+    }, [me, stream]);
+
+    console.log({ peers });
 
     return (
         <RoomContext.Provider value={{ ws, me, stream }}>

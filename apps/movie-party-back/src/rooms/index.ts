@@ -34,6 +34,8 @@ export const roomHandler = (socket: Socket, io: SocketIOServer) => {
             participants: rooms[roomId],
         });
 
+        socket.to(roomId).emit(Signals.USER_JOINED, { peerId });
+
         console.log("user joined the room: ", { roomId, peerId });
 
         socket.on("disconnect", () => {
