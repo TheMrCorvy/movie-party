@@ -11,7 +11,6 @@ interface RoomContextType {
     me?: Peer;
     stream?: MediaStream;
     peers: Record<string, PeerState>;
-    roomId: string;
 }
 
 export const RoomContext = createContext<RoomContextType | null>(null);

@@ -23,11 +23,13 @@ const Room: FC = () => {
                 peerId: context.me.id,
             });
         }
-    }, [roomId, context?.me?.id, context?.ws]); // Only depend on stable values
+    }, [roomId, context?.me?.id, context?.ws]); // eslint-disable-line react-hooks/exhaustive-deps
 
     if (!context) {
         return <div>Loading...</div>;
     }
+
+    const peersArr = Object.entries(context.peers);
 
     return (
         <Container
@@ -63,13 +65,17 @@ const Room: FC = () => {
                             justifyContent: "center",
                         }}
                     >
-                        {Object.entries(context.peers).map(([peerId, peer]) => (
-                            <PeerVideo
-                                key={peerId}
-                                peerId={peerId}
-                                stream={peer.stream}
-                            />
-                        ))}
+                        {peersArr.length < 1 ? (
+                            <p>loading...</p>
+                        ) : (
+                            peersArr.map(([peerId, peer]) => (
+                                <PeerVideo
+                                    key={peerId}
+                                    peerId={peerId}
+                                    stream={peer.stream}
+                                />
+                            ))
+                        )}
                     </div>
                 </div>
             </div>
