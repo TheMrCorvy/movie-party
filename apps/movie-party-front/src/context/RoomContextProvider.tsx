@@ -27,15 +27,31 @@ export const RoomProvider: FC<RoomProviderProps> = ({ children }) => {
     const [me, setMe] = useState<Peer>();
     const [stream, setStream] = useState<MediaStream>();
     const [peers, dispatch] = useReducer(peerReducer, {});
+    const [screenSharingId, setScreenSharingId] = useState<string>("");
 
     const enterRoom = ({ roomId }: EnterRoomResponse) => {
         navigate(`/room/${roomId}`);
     };
 
+    const switchStream = (stream: MediaStream) => {
+        setStream(stream);
+        setScreenSharingId(me?.id || "");
+    };
+
     const shareScreen = () => {
-        navigator.mediaDevices
-            .getDisplayMedia({})
-            .then((screen) => setStream(screen));
+        if (screenSharingId) {
+            navigator.mediaDevices
+                .getUserMedia({ video: true, audio: false }) // to do: implement FF here
+                .then((stream) => {
+                    setStream(stream);
+                    setScreenSharingId("");
+                })
+                .catch((err) => {
+                    console.error("Failed to get user media:", err);
+                });
+        } else {
+            navigator.mediaDevices.getDisplayMedia({}).then(switchStream);
+        }
     };
 
     useEffect(() => {
