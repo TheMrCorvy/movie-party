@@ -2,7 +2,7 @@ import { useContext, useEffect, type FC } from "react";
 import { useParams } from "react-router-dom";
 import { RoomContext } from "../context/RoomContext";
 import { Signals } from "@repo/type-definitions/rooms";
-import { Container } from "@mui/material";
+import { Button, Container } from "@mui/material";
 import VideoPlayerComponent from "../components/VideoPlayerComponent";
 import PeerVideo from "../components/PeerVideo";
 
@@ -46,6 +46,14 @@ const Room: FC = () => {
             <div style={{ textAlign: "center" }}>
                 <h1>Room</h1>
                 <p>Room ID: {roomId}</p>
+
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={context.shareScreen}
+                >
+                    Share screen
+                </Button>
 
                 <div style={{ marginBottom: "20px" }}>
                     <h3>Your Video</h3>

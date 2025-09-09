@@ -11,6 +11,7 @@ interface RoomContextType {
     me?: Peer;
     stream?: MediaStream;
     peers: Record<string, PeerState>;
+    shareScreen: () => void;
 }
 
 export const RoomContext = createContext<RoomContextType | null>(null);

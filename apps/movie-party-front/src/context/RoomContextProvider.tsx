@@ -32,6 +32,12 @@ export const RoomProvider: FC<RoomProviderProps> = ({ children }) => {
         navigate(`/room/${roomId}`);
     };
 
+    const shareScreen = () => {
+        navigator.mediaDevices
+            .getDisplayMedia({})
+            .then((screen) => setStream(screen));
+    };
+
     useEffect(() => {
         if (!me || !stream) return;
 
@@ -92,7 +98,7 @@ export const RoomProvider: FC<RoomProviderProps> = ({ children }) => {
     }, [me, stream, peers]);
 
     return (
-        <RoomContext.Provider value={{ ws, me, stream, peers }}>
+        <RoomContext.Provider value={{ ws, me, stream, peers, shareScreen }}>
             {children}
         </RoomContext.Provider>
     );
