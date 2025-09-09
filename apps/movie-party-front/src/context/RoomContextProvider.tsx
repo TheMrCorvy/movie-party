@@ -69,7 +69,7 @@ export const RoomProvider: FC<RoomProviderProps> = ({ children }) => {
         });
 
         return () => {
-            cleanupFunction();
+            cleanupFunction(); // DO NOT REMOVE THE ARROW FUNCTION
         };
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -89,7 +89,7 @@ export const RoomProvider: FC<RoomProviderProps> = ({ children }) => {
                 handleIncomingCall({ call, stream, dispatch })
             );
         };
-    }, [me, stream, peers]); // Include peers to see state updates
+    }, [me, stream, peers]);
 
     return (
         <RoomContext.Provider value={{ ws, me, stream, peers }}>

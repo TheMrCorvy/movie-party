@@ -1,8 +1,6 @@
 import type Peer from "peerjs";
 import type { PeerAction } from "../context/peerReducer";
 
-const bufferTime = 1000; //1 sec
-
 interface Participants {
     participants: string[];
     roomId: string;
@@ -31,37 +29,46 @@ const handleGetParticipants = ({
         return;
     }
 
-    otherParticipants.forEach((peerId) => {
-        setTimeout(() => {
-            try {
-                const call = me.call(peerId, stream, {
-                    metadata: { peerId: me.id },
-                });
+    otherParticipants.forEach((peerId) =>
+        handleCallSent({ peerId, me, stream, dispatch })
+    );
+};
 
-                if (!call) {
-                    console.error("Failed to create call object");
-                    return;
-                }
+interface HandleCallParams {
+    peerId: string;
+    me: Peer;
+    stream: MediaStream;
+    dispatch: (payload: PeerAction) => void;
+}
 
-                call.on("stream", (peerStream) => {
-                    dispatch({
-                        type: "ADD_PEER",
-                        payload: { peerId, stream: peerStream },
-                    });
-                });
+const handleCallSent = ({ peerId, me, stream, dispatch }: HandleCallParams) => {
+    try {
+        const call = me.call(peerId, stream, {
+            metadata: { peerId: me.id },
+        });
 
-                call.on("error", (err) => {
-                    console.error(`!!! Call error with peer ${peerId}:`, err);
-                });
+        if (!call) {
+            console.error("Failed to create call object");
+            return;
+        }
 
-                call.on("close", () => {
-                    console.log(`Call closed with peer ${peerId}`);
-                });
-            } catch (error) {
-                console.error(`Failed to call peer ${peerId}:`, error);
-            }
-        }, bufferTime);
-    });
+        call.on("stream", (peerStream) => {
+            dispatch({
+                type: "ADD_PEER",
+                payload: { peerId, stream: peerStream },
+            });
+        });
+
+        call.on("error", (err) => {
+            console.error(`!!! Call error with peer ${peerId}:`, err);
+        });
+
+        call.on("close", () => {
+            console.log(`Call closed with peer ${peerId}`);
+        });
+    } catch (error) {
+        console.error(`Failed to call peer ${peerId}:`, error);
+    }
 };
 
 export default handleGetParticipants;
