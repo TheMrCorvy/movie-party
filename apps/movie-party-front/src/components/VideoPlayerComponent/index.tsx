@@ -12,6 +12,15 @@ const VideoPlayerComponent: FC<props> = ({ stream }) => {
             videoref.current.srcObject = stream;
         }
     }, [stream]);
-    return <video autoPlay ref={videoref} />;
+    return (
+        <video
+            style={{
+                width: "700px",
+                objectFit: "cover",
+            }}
+            autoPlay
+            ref={videoref}
+        />
+    );
 };
 export default VideoPlayerComponent;
