@@ -56,6 +56,18 @@ export const roomHandler = (socket: Socket, io: SocketIOServer) => {
         socket.to(roomId).emit(Signals.USER_LEFT, peerId);
     };
 
+    const startSharing = ({ roomId, peerId }: RoomParams) => {
+        socket.to(roomId).emit(Signals.STARTED_SHARING, { peerId });
+        console.log("user started sharing: ", peerId);
+    };
+
+    const stopSharing = ({ roomId, peerId }: RoomParams) => {
+        socket.to(roomId).emit(Signals.STOPPED_SHARING, { peerId });
+        console.log("user stopped sharing: ", peerId);
+    };
+
     socket.on(Signals.CREATE_ROOM, createRoom);
     socket.on(Signals.ENTER_ROOM, enterRoom);
+    socket.on(Signals.START_SHARING, startSharing);
+    socket.on(Signals.STOP_SHARING, stopSharing);
 };

@@ -10,6 +10,7 @@ import handleGetParticipants from "../utils/handleGetParticipants";
 import handleIncomingCall from "../utils/handleIncomingCall";
 import handleUserJoined from "../utils/handleUserJoined";
 import handleRemovePeer from "../utils/handleRemovePeer";
+import { handleShareScreen } from "../utils/handleShareScreen";
 
 const WS = "http://localhost:4000";
 const ws = SocketIOClient(WS);
@@ -33,41 +34,6 @@ export const RoomProvider: FC<RoomProviderProps> = ({ children }) => {
 
     const enterRoom = ({ roomId }: EnterRoomResponse) => {
         navigate(`/room/${roomId}`);
-    };
-
-    const switchStream = (newStream: MediaStream, isScreen = false) => {
-        setStream(newStream);
-        setScreenSharingId(isScreen ? me?.id || "" : "");
-
-        const videoTrack = newStream.getVideoTracks()[0];
-
-        callsRef.current.forEach((call) => {
-            const sender = call.peerConnection
-                .getSenders()
-                .find((s) => s.track?.kind === "video");
-
-            if (sender && videoTrack) {
-                sender.replaceTrack(videoTrack).catch(console.error);
-            }
-        });
-    };
-
-    const shareScreen = async () => {
-        if (screenSharingId) {
-            if (cameraStream) switchStream(cameraStream, false);
-            setScreenSharingId("");
-        } else {
-            const displayStream = await navigator.mediaDevices.getDisplayMedia({
-                video: true,
-                audio: false,
-            });
-            switchStream(displayStream, true);
-
-            displayStream.getVideoTracks()[0].onended = () => {
-                if (cameraStream) switchStream(cameraStream, false);
-                setScreenSharingId("");
-            };
-        }
     };
 
     useEffect(() => {
@@ -140,6 +106,16 @@ export const RoomProvider: FC<RoomProviderProps> = ({ children }) => {
             );
         };
     }, [me, stream, peers]);
+
+    const shareScreen = async () =>
+        await handleShareScreen({
+            me: me as Peer,
+            setStream,
+            setScreenSharingId,
+            callsRef,
+            cameraStream,
+            screenSharingId,
+        });
 
     return (
         <RoomContext.Provider value={{ ws, me, stream, peers, shareScreen }}>
