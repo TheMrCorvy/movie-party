@@ -9,6 +9,7 @@ interface SetMeUpParams {
     enterRoom: (data: { roomId: string }) => void;
     removePeer: (peerId: string) => void;
     setStream: (stream: MediaStream) => void;
+    setScreenSharingId: (id: string) => void;
 }
 
 const setMeUp = ({
@@ -17,6 +18,7 @@ const setMeUp = ({
     ws,
     enterRoom,
     removePeer,
+    setScreenSharingId,
 }: SetMeUpParams) => {
     const meId = uuidV4();
     const peer = new Peer(meId);
@@ -54,9 +56,11 @@ const setMeUp = ({
     ws.on(Signals.ROOM_CREATED, enterRoom);
     ws.on(Signals.USER_LEFT, removePeer);
     ws.on(Signals.STARTED_SHARING, ({ peerId }) => {
+        setScreenSharingId(peerId);
         console.log("User started sharing:", peerId);
     });
     ws.on(Signals.STOPPED_SHARING, ({ peerId }) => {
+        setScreenSharingId("");
         console.log("User stopped sharing:", peerId);
     });
     return () => {

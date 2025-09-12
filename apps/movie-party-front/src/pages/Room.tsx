@@ -31,6 +31,8 @@ const Room: FC = () => {
 
     const peersArr = Object.entries(context.peers);
 
+    console.log(context.screenSharingId);
+
     return (
         <Container
             maxWidth="xl"

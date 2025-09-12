@@ -74,6 +74,7 @@ export const RoomProvider: FC<RoomProviderProps> = ({ children }) => {
             enterRoom,
             removePeer: (peerId: string) =>
                 handleRemovePeer({ peerId, dispatch }),
+            setScreenSharingId,
         });
 
         return () => {
@@ -123,7 +124,9 @@ export const RoomProvider: FC<RoomProviderProps> = ({ children }) => {
     };
 
     return (
-        <RoomContext.Provider value={{ ws, me, stream, peers, shareScreen }}>
+        <RoomContext.Provider
+            value={{ ws, me, stream, peers, shareScreen, screenSharingId }}
+        >
             {children}
         </RoomContext.Provider>
     );
