@@ -1,77 +1,24 @@
-import { useContext, useEffect, type FC } from "react";
-import { useParams } from "react-router-dom";
-import { RoomContext } from "../context/RoomContext";
-import { Signals } from "@repo/type-definitions/rooms";
+import { type FC } from "react";
 import { Button, Container } from "@mui/material";
 import VideoPlayerComponent from "../components/VideoPlayerComponent";
 import PeerVideo from "../components/PeerVideo";
+import { useRoom } from "../hooks/useRoom";
 
 const Room: FC = () => {
-    const { roomId } = useParams();
-    const context = useContext(RoomContext);
+    const {
+        loading,
+        roomId,
+        shareScreen,
+        videoStream,
+        ownCamera,
+        filteredPeersArr,
+        peers,
+        peersArr,
+    } = useRoom();
 
-    useEffect(() => {
-        if (context && roomId && context.me) {
-            console.log(
-                "Entering room:",
-                roomId,
-                "with peer ID:",
-                context.me.id
-            );
-            context.ws.emit(Signals.ENTER_ROOM, {
-                roomId,
-                peerId: context.me.id,
-            });
-        }
-    }, [roomId, context?.me?.id, context?.ws]); // eslint-disable-line react-hooks/exhaustive-deps
-
-    if (!context) {
+    if (loading) {
         return <div>Loading...</div>;
     }
-
-    const peersArr = Object.entries(context.peers);
-    const video = () => {
-        if (context.screenSharingId) {
-            if (context.me?.id === context.screenSharingId && context.stream) {
-                return context.stream;
-            }
-            const peer = context.peers[context.screenSharingId];
-            if (peer) {
-                return peer.stream;
-            }
-            return undefined;
-        }
-        if (context.stream) {
-            return context.stream;
-        }
-        return undefined;
-    };
-    const videoStream = video();
-
-    const shouldShowOwnPeerVideo = () => {
-        if (context.screenSharingId) {
-            if (!context.me || !context.stream) {
-                return false;
-            }
-
-            if (context.screenSharingId !== context.me.id) {
-                return true;
-            }
-        }
-
-        return false;
-    };
-
-    const ownCamera = shouldShowOwnPeerVideo()
-        ? {
-              stream: context.stream as MediaStream,
-              peerId: context.me!.id,
-          }
-        : null;
-
-    const filteredPeersArr = peersArr.filter(
-        ([peerId]) => peerId !== context.screenSharingId
-    );
 
     return (
         <Container
@@ -92,7 +39,7 @@ const Room: FC = () => {
                 <Button
                     variant="contained"
                     color="primary"
-                    onClick={context.shareScreen}
+                    onClick={shareScreen}
                 >
                     Share screen
                 </Button>
@@ -105,9 +52,7 @@ const Room: FC = () => {
                 </div>
 
                 <div>
-                    <h3>
-                        Connected Peers: {Object.keys(context.peers).length}
-                    </h3>
+                    <h3>Connected Peers: {Object.keys(peers).length}</h3>
                     <div
                         style={{
                             display: "flex",
@@ -115,7 +60,7 @@ const Room: FC = () => {
                             justifyContent: "center",
                         }}
                     >
-                        {peersArr.length < 1 && !context.screenSharingId ? (
+                        {peersArr.length < 1 && !ownCamera ? (
                             <p>loading...</p>
                         ) : (
                             <>
