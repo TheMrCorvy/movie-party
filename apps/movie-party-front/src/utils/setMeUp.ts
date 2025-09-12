@@ -53,10 +53,17 @@ const setMeUp = ({
 
     ws.on(Signals.ROOM_CREATED, enterRoom);
     ws.on(Signals.USER_LEFT, removePeer);
-
+    ws.on(Signals.STARTED_SHARING, ({ peerId }) => {
+        console.log("User started sharing:", peerId);
+    });
+    ws.on(Signals.STOPPED_SHARING, ({ peerId }) => {
+        console.log("User stopped sharing:", peerId);
+    });
     return () => {
         ws.off(Signals.ROOM_CREATED, enterRoom);
         ws.off(Signals.USER_LEFT, removePeer);
+        ws.off(Signals.STARTED_SHARING);
+        ws.off(Signals.STOPPED_SHARING);
         peer.destroy();
     };
 };

@@ -76,13 +76,6 @@ export const RoomProvider: FC<RoomProviderProps> = ({ children }) => {
                 handleRemovePeer({ peerId, dispatch }),
         });
 
-        ws.on(Signals.STARTED_SHARING, ({ peerId }) => {
-            console.log("User started sharing:", peerId);
-        });
-        ws.on(Signals.STOPPED_SHARING, ({ peerId }) => {
-            console.log("User stopped sharing:", peerId);
-        });
-
         return () => {
             cleanupFunction(); // DO NOT REMOVE THE ARROW FUNCTION
         };
