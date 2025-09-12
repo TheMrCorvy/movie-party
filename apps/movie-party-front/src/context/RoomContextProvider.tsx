@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import SocketIOClient from "socket.io-client";
 import { RoomContext } from "./RoomContext";
 import { Signals } from "@repo/type-definitions/rooms";
-import Peer, { MediaConnection } from "peerjs";
+import Peer from "peerjs";
+import type { MediaConnection } from "peerjs";
 import { peerReducer } from "./peerReducer";
 import setMeUp from "../utils/setMeUp";
 import handleGetParticipants from "../utils/handleGetParticipants";
@@ -75,6 +76,13 @@ export const RoomProvider: FC<RoomProviderProps> = ({ children }) => {
                 handleRemovePeer({ peerId, dispatch }),
         });
 
+        ws.on(Signals.STARTED_SHARING, ({ peerId }) => {
+            console.log("User started sharing:", peerId);
+        });
+        ws.on(Signals.STOPPED_SHARING, ({ peerId }) => {
+            console.log("User stopped sharing:", peerId);
+        });
+
         return () => {
             cleanupFunction(); // DO NOT REMOVE THE ARROW FUNCTION
         };
@@ -107,7 +115,8 @@ export const RoomProvider: FC<RoomProviderProps> = ({ children }) => {
         };
     }, [me, stream, peers]);
 
-    const shareScreen = async () =>
+    const shareScreen = async () => {
+        const roomId = window.location.pathname.split("/")[2];
         await handleShareScreen({
             me: me as Peer,
             setStream,
@@ -115,7 +124,10 @@ export const RoomProvider: FC<RoomProviderProps> = ({ children }) => {
             callsRef,
             cameraStream,
             screenSharingId,
+            ws,
+            roomId,
         });
+    };
 
     return (
         <RoomContext.Provider value={{ ws, me, stream, peers, shareScreen }}>

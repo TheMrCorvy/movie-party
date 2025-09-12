@@ -1,6 +1,8 @@
 import type { MediaConnection } from "peerjs";
 import type Peer from "peerjs";
 import type { Dispatch, RefObject, SetStateAction } from "react";
+import { Socket } from "socket.io-client";
+import { Signals } from "@repo/type-definitions/rooms";
 
 interface HandleShareScreenProps {
     me: Peer;
@@ -9,6 +11,8 @@ interface HandleShareScreenProps {
     callsRef: RefObject<MediaConnection[]>;
     cameraStream: MediaStream | undefined;
     screenSharingId: string;
+    ws: Socket;
+    roomId: string;
 }
 
 interface HandleSwitchStreamProps {
@@ -51,9 +55,11 @@ export const handleShareScreen = async ({
     callsRef,
     cameraStream,
     screenSharingId,
+    ws,
+    roomId,
 }: HandleShareScreenProps) => {
     if (screenSharingId) {
-        if (cameraStream)
+        if (cameraStream) {
             switchStream({
                 newStream: cameraStream,
                 isScreen: false,
@@ -62,6 +68,8 @@ export const handleShareScreen = async ({
                 callsRef,
                 me,
             });
+            ws.emit(Signals.STOP_SHARING, { peerId: me.id, roomId });
+        }
         setScreenSharingId("");
     } else {
         const displayStream = await navigator.mediaDevices.getDisplayMedia({
@@ -76,9 +84,10 @@ export const handleShareScreen = async ({
             callsRef,
             me,
         });
+        ws.emit(Signals.START_SHARING, { peerId: me.id, roomId });
 
         displayStream.getVideoTracks()[0].onended = () => {
-            if (cameraStream)
+            if (cameraStream) {
                 switchStream({
                     newStream: cameraStream,
                     isScreen: false,
@@ -87,6 +96,8 @@ export const handleShareScreen = async ({
                     callsRef,
                     me,
                 });
+                ws.emit(Signals.STOP_SHARING, { peerId: me.id, roomId });
+            }
             setScreenSharingId("");
         };
     }

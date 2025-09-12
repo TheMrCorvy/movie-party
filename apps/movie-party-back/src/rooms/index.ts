@@ -57,12 +57,12 @@ export const roomHandler = (socket: Socket, io: SocketIOServer) => {
     };
 
     const startSharing = ({ roomId, peerId }: RoomParams) => {
-        socket.to(roomId).emit(Signals.STARTED_SHARING, { peerId });
+        io.in(roomId).emit(Signals.STARTED_SHARING, { peerId });
         console.log("user started sharing: ", peerId);
     };
 
     const stopSharing = ({ roomId, peerId }: RoomParams) => {
-        socket.to(roomId).emit(Signals.STOPPED_SHARING, { peerId });
+        io.in(roomId).emit(Signals.STOPPED_SHARING, { peerId });
         console.log("user stopped sharing: ", peerId);
     };
 
