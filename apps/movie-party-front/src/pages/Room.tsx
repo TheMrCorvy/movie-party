@@ -30,8 +30,48 @@ const Room: FC = () => {
     }
 
     const peersArr = Object.entries(context.peers);
+    const video = () => {
+        if (context.screenSharingId) {
+            if (context.me?.id === context.screenSharingId && context.stream) {
+                return context.stream;
+            }
+            const peer = context.peers[context.screenSharingId];
+            if (peer) {
+                return peer.stream;
+            }
+            return undefined;
+        }
+        if (context.stream) {
+            return context.stream;
+        }
+        return undefined;
+    };
+    const videoStream = video();
 
-    console.log(context.screenSharingId);
+    const shouldShowOwnPeerVideo = () => {
+        if (context.screenSharingId) {
+            if (!context.me || !context.stream) {
+                return false;
+            }
+
+            if (context.screenSharingId !== context.me.id) {
+                return true;
+            }
+        }
+
+        return false;
+    };
+
+    const ownCamera = shouldShowOwnPeerVideo()
+        ? {
+              stream: context.stream as MediaStream,
+              peerId: context.me!.id,
+          }
+        : null;
+
+    const filteredPeersArr = peersArr.filter(
+        ([peerId]) => peerId !== context.screenSharingId
+    );
 
     return (
         <Container
@@ -59,8 +99,8 @@ const Room: FC = () => {
 
                 <div style={{ marginBottom: "20px" }}>
                     <h3>Your Video</h3>
-                    {context.stream && (
-                        <VideoPlayerComponent stream={context.stream} />
+                    {videoStream && (
+                        <VideoPlayerComponent stream={videoStream} />
                     )}
                 </div>
 
@@ -75,16 +115,25 @@ const Room: FC = () => {
                             justifyContent: "center",
                         }}
                     >
-                        {peersArr.length < 1 ? (
+                        {peersArr.length < 1 && !context.screenSharingId ? (
                             <p>loading...</p>
                         ) : (
-                            peersArr.map(([peerId, peer]) => (
-                                <PeerVideo
-                                    key={peerId}
-                                    peerId={peerId}
-                                    stream={peer.stream}
-                                />
-                            ))
+                            <>
+                                {ownCamera && (
+                                    <PeerVideo
+                                        key={ownCamera.peerId}
+                                        peerId={ownCamera.peerId}
+                                        stream={ownCamera.stream}
+                                    />
+                                )}
+                                {filteredPeersArr.map(([peerId, peer]) => (
+                                    <PeerVideo
+                                        key={peerId}
+                                        peerId={peerId}
+                                        stream={peer.stream}
+                                    />
+                                ))}
+                            </>
                         )}
                     </div>
                 </div>
