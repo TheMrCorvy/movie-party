@@ -17,6 +17,11 @@ import SendIcon from "@mui/icons-material/Send";
 import Stack from "@mui/material/Stack";
 import { v4 as uuidV4 } from "uuid";
 import { generateMockMessages } from "./generateMockMessages";
+import { Avatar, ListItemAvatar } from "@mui/material";
+import {
+    generateAvatar,
+    generateMUIAvatarProps,
+} from "../../utils/avatarGenerator";
 
 export interface ChatMessage {
     id: string;
@@ -56,94 +61,148 @@ const Chat: FC = () => {
     return (
         <Box
             sx={{
+                width: "100%",
+                maxWidth: 500,
+                backdropFilter: "blur(10px)",
+                backgroundColor: "rgba(255, 255, 255, 0.15)",
+                border: "1px solid rgba(255, 255, 255, 0.3)",
+                borderRadius: 3,
+                boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
+                overflow: "hidden",
                 display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                minHeight: "100vh",
-                p: 2,
+                flexDirection: "column",
             }}
         >
-            <Box
+            <List
                 sx={{
-                    width: "100%",
-                    maxWidth: 500,
-                    bgcolor: "background.paper",
-                    borderRadius: 2,
-                    boxShadow: 3,
-                    overflow: "hidden",
-                    display: "flex",
-                    flexDirection: "column",
+                    flexGrow: 1,
+                    overflowY: "auto",
+                    maxHeight: "70vh",
+                    p: 0,
+
+                    backgroundColor: "rgba(255, 255, 255, 0.05)",
                 }}
             >
-                <List
+                {messages.map((chatMessage, index) => (
+                    <Fragment key={chatMessage.id}>
+                        <ListItem alignItems="flex-start">
+                            <ListItemAvatar>
+                                {chatMessage.name === "Yo" ? (
+                                    <Avatar
+                                        alt={chatMessage.name}
+                                        {...generateMUIAvatarProps(
+                                            chatMessage.name
+                                        )}
+                                    />
+                                ) : (
+                                    <Avatar
+                                        alt={chatMessage.name}
+                                        src={generateAvatar({
+                                            name: chatMessage.name,
+                                            size: 40,
+                                            useExternalService: false,
+                                        })}
+                                    />
+                                )}
+                            </ListItemAvatar>
+                            <ListItemText
+                                primary={
+                                    <Typography
+                                        component="span"
+                                        variant="subtitle1"
+                                        sx={{
+                                            fontWeight: "bold",
+                                            color: "text.primary",
+                                        }}
+                                    >
+                                        {chatMessage.name}
+                                    </Typography>
+                                }
+                                secondary={
+                                    <Typography
+                                        component="span"
+                                        variant="body2"
+                                        sx={{
+                                            color: "text.secondary",
+                                            display: "block",
+                                        }}
+                                    >
+                                        {chatMessage.message}
+                                    </Typography>
+                                }
+                            />
+                        </ListItem>
+                        {index < messages.length - 1 && (
+                            <Divider
+                                variant="inset"
+                                component="li"
+                                sx={{
+                                    borderColor: "rgba(255, 255, 255, 0.2)",
+                                }}
+                            />
+                        )}
+                    </Fragment>
+                ))}
+            </List>
+            <Divider sx={{ borderColor: "rgba(255, 255, 255, 0.2)" }} />
+            <Stack
+                direction="row"
+                spacing={1}
+                sx={{
+                    p: 2,
+                    alignItems: "center",
+                    backgroundColor: "rgba(255, 255, 255, 0.1)",
+                }}
+            >
+                <TextField
+                    fullWidth
+                    variant="outlined"
+                    size="small"
+                    placeholder="Escribe tu mensaje..."
+                    value={messageInput}
+                    onChange={handleInputChange}
+                    onKeyDown={handleKeyPress}
+                    aria-label="Message input"
                     sx={{
-                        flexGrow: 1,
-                        overflowY: "auto",
-                        maxHeight: "70vh",
-                        p: 0,
+                        "& .MuiOutlinedInput-root": {
+                            backgroundColor: "rgba(255, 255, 255, 0.2)",
+                            "& fieldset": {
+                                borderColor: "rgba(255, 255, 255, 0.3)",
+                            },
+                            "&:hover fieldset": {
+                                borderColor: "rgba(255, 255, 255, 0.5)",
+                            },
+                            "&.Mui-focused fieldset": {
+                                borderColor: "rgba(255, 255, 255, 0.7)",
+                            },
+                        },
+                        "& .MuiInputBase-input": {
+                            color: "white",
+                        },
+                        "& .MuiInputLabel-root": {
+                            color: "rgba(255, 255, 255, 0.7)",
+                        },
+                        "& .MuiInputBase-input::placeholder": {
+                            color: "rgba(255, 255, 255, 0.7)",
+                            opacity: 1,
+                        },
+                    }}
+                />
+                <IconButton
+                    color="primary"
+                    onClick={handleSendMessage}
+                    aria-label="Send message"
+                    sx={{
+                        backgroundColor: "rgba(255, 255, 255, 0.2)",
+                        "&:hover": {
+                            backgroundColor: "rgba(255, 255, 255, 0.3)",
+                        },
+                        color: "white",
                     }}
                 >
-                    {messages.map((chatMessage, index) => (
-                        <Fragment key={chatMessage.id}>
-                            <ListItem alignItems="flex-start">
-                                <ListItemText
-                                    primary={
-                                        <Typography
-                                            component="span"
-                                            variant="subtitle1"
-                                            sx={{
-                                                fontWeight: "bold",
-                                                color: "text.primary",
-                                            }}
-                                        >
-                                            {chatMessage.name}
-                                        </Typography>
-                                    }
-                                    secondary={
-                                        <Typography
-                                            component="span"
-                                            variant="body2"
-                                            sx={{
-                                                color: "text.secondary",
-                                                display: "block",
-                                            }}
-                                        >
-                                            {chatMessage.message}
-                                        </Typography>
-                                    }
-                                />
-                            </ListItem>
-                            {index < messages.length - 1 && (
-                                <Divider variant="inset" component="li" />
-                            )}
-                        </Fragment>
-                    ))}
-                </List>
-                <Divider />
-                <Stack
-                    direction="row"
-                    spacing={1}
-                    sx={{ p: 2, alignItems: "center" }}
-                >
-                    <TextField
-                        fullWidth
-                        variant="outlined"
-                        size="small"
-                        placeholder="Type your message..."
-                        value={messageInput}
-                        onChange={handleInputChange}
-                        onKeyDown={handleKeyPress}
-                        aria-label="Message input"
-                    />
-                    <IconButton
-                        color="primary"
-                        onClick={handleSendMessage}
-                        aria-label="Send message"
-                    >
-                        <SendIcon />
-                    </IconButton>
-                </Stack>
-            </Box>
+                    <SendIcon />
+                </IconButton>
+            </Stack>
         </Box>
     );
 };
