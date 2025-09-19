@@ -1,4 +1,12 @@
 import { useEffect, useRef, type FC } from "react";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import {
+    videoContainerStyles,
+    videoStyles,
+    peerLabelStyles,
+    peerTextStyles,
+} from "./styles";
 
 interface PeerVideoProps {
     stream: MediaStream;
@@ -15,37 +23,20 @@ const PeerVideo: FC<PeerVideoProps> = ({ stream, peerId }) => {
     }, [stream]);
 
     return (
-        <div
-            style={{
-                display: "inline-block",
-                margin: "10px",
-                border: "2px solid #333",
-                borderRadius: "8px",
-                overflow: "hidden",
-            }}
-        >
-            <video
+        <Box sx={videoContainerStyles}>
+            <Box
+                component="video"
                 ref={videoRef}
                 autoPlay
                 playsInline
-                style={{
-                    width: "300px",
-                    height: "200px",
-                    objectFit: "cover",
-                }}
+                sx={videoStyles}
             />
-            <div
-                style={{
-                    padding: "5px",
-                    backgroundColor: "#333",
-                    color: "white",
-                    fontSize: "12px",
-                    textAlign: "center",
-                }}
-            >
-                Peer: {peerId.substring(0, 8)}...
-            </div>
-        </div>
+            <Box sx={peerLabelStyles}>
+                <Typography variant="caption" sx={peerTextStyles}>
+                    Peer: {peerId.substring(0, 8)}...
+                </Typography>
+            </Box>
+        </Box>
     );
 };
 

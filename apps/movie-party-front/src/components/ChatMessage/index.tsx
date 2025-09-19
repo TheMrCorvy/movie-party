@@ -12,6 +12,7 @@ import {
     generateMUIAvatarProps,
 } from "../../utils/avatarGenerator";
 import type { Message } from "../Chat";
+import { dividerStyles, messageStyles, nameStyles } from "./styles";
 
 interface ChatMessageProps {
     message: Message;
@@ -46,10 +47,7 @@ const ChatMessage: FC<ChatMessageProps> = ({
                         <Typography
                             component="span"
                             variant="subtitle1"
-                            sx={{
-                                fontWeight: "bold",
-                                color: "text.primary",
-                            }}
+                            sx={nameStyles}
                         >
                             {message.name}
                         </Typography>
@@ -58,10 +56,7 @@ const ChatMessage: FC<ChatMessageProps> = ({
                         <Typography
                             component="span"
                             variant="body2"
-                            sx={{
-                                color: "text.secondary",
-                                display: "block",
-                            }}
+                            sx={messageStyles}
                         >
                             {message.message}
                         </Typography>
@@ -69,13 +64,7 @@ const ChatMessage: FC<ChatMessageProps> = ({
                 />
             </ListItem>
             {shouldAddLastDivider && (
-                <Divider
-                    variant="inset"
-                    component="li"
-                    sx={{
-                        borderColor: "rgba(255, 255, 255, 0.2)",
-                    }}
-                />
+                <Divider variant="inset" component="li" sx={dividerStyles} />
             )}
         </Fragment>
     );
