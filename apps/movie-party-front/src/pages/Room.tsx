@@ -1,9 +1,18 @@
 import { type FC } from "react";
-import { Button, Container, Grid } from "@mui/material";
+import { Button, Container, Grid, Box, Typography } from "@mui/material";
 import VideoPlayerComponent from "../components/VideoPlayerComponent";
 import PeerVideo from "../components/PeerVideo";
 import Chat from "../components/Chat";
 import { useRoom } from "../hooks/useRoom";
+import {
+    roomContainerStyles,
+    roomGridContainerStyles,
+    roomMainContentStyles,
+    roomChatSectionStyles,
+    roomHeaderStyles,
+    roomVideoSectionStyles,
+    peerVideosContainerStyles,
+} from "../styles/pages";
 
 const Room: FC = () => {
     const {
@@ -22,25 +31,22 @@ const Room: FC = () => {
     }
 
     return (
-        <Container
-            maxWidth="xl"
-            sx={{ height: "100vh", color: "white", padding: 0 }}
-        >
-            <Grid container sx={{ height: "100vh" }}>
+        <Container maxWidth="xl" sx={roomContainerStyles}>
+            <Grid container sx={roomGridContainerStyles}>
                 <Grid
                     size={{
                         xs: 12,
                         md: 9,
                     }}
-                    sx={{
-                        padding: "24px",
-                        overflowY: "auto",
-                        height: "100vh",
-                    }}
+                    sx={roomMainContentStyles}
                 >
-                    <div style={{ textAlign: "center" }}>
-                        <h1>Room</h1>
-                        <p>Room ID: {roomId}</p>
+                    <Box sx={roomHeaderStyles}>
+                        <Typography variant="h3" component="h1" gutterBottom>
+                            Room
+                        </Typography>
+                        <Typography variant="body1" paragraph>
+                            Room ID: {roomId}
+                        </Typography>
 
                         <Button
                             variant="contained"
@@ -50,26 +56,30 @@ const Room: FC = () => {
                             Share screen
                         </Button>
 
-                        <div style={{ marginBottom: "20px" }}>
-                            <h3>Your Video</h3>
+                        <Box sx={roomVideoSectionStyles}>
+                            <Typography
+                                variant="h5"
+                                component="h3"
+                                gutterBottom
+                            >
+                                Your Video
+                            </Typography>
                             {videoStream && (
                                 <VideoPlayerComponent stream={videoStream} />
                             )}
-                        </div>
+                        </Box>
 
-                        <div>
-                            <h3>
-                                Connected Peers: {Object.keys(peers).length}
-                            </h3>
-                            <div
-                                style={{
-                                    display: "flex",
-                                    flexWrap: "wrap",
-                                    justifyContent: "center",
-                                }}
+                        <Box>
+                            <Typography
+                                variant="h5"
+                                component="h3"
+                                gutterBottom
                             >
+                                Connected Peers: {Object.keys(peers).length}
+                            </Typography>
+                            <Box sx={peerVideosContainerStyles}>
                                 {peersArr.length < 1 && !ownCamera ? (
-                                    <p>loading...</p>
+                                    <Typography>loading...</Typography>
                                 ) : (
                                     <>
                                         {ownCamera && (
@@ -90,21 +100,16 @@ const Room: FC = () => {
                                         )}
                                     </>
                                 )}
-                            </div>
-                        </div>
-                    </div>
+                            </Box>
+                        </Box>
+                    </Box>
                 </Grid>
                 <Grid
                     size={{
                         xs: 12,
                         md: 3,
                     }}
-                    sx={{
-                        height: "100vh",
-                        display: "flex",
-                        flexDirection: "column",
-                        padding: "24px 12px",
-                    }}
+                    sx={roomChatSectionStyles}
                 >
                     <Chat />
                 </Grid>

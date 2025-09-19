@@ -8,7 +8,7 @@ import {
 import { generateMockMessages } from "./generateMockMessages";
 import type { Message } from "./index";
 
-const initialMockMessages: Message[] = generateMockMessages(11);
+const initialMockMessages: Message[] = generateMockMessages(1);
 
 export const useChatLogic = () => {
     const [messages, setMessages] = useState<Message[]>(initialMockMessages);

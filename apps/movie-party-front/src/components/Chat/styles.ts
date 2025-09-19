@@ -16,7 +16,7 @@ export const chatBoxStyles: SxProps<Theme> = {
 export const chatListStyles: SxProps<Theme> = {
     flexGrow: 1,
     overflowY: "auto",
-    maxHeight: "70vh",
+    height: "70vh",
     p: 0,
     backgroundColor: "rgba(255, 255, 255, 0.05)",
     "&::-webkit-scrollbar": {
