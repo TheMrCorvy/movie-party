@@ -67,9 +67,11 @@ export const generateMUIAvatarProps = (name: string) => {
         children: getInitials(name),
         sx: {
             bgcolor: getColorForName(name),
-            color: "white", // Explicitly set text color to white
+            color: "white",
             fontWeight: 600,
             fontSize: "1rem",
+            minWidth: "auto",
+            mr: 1.5,
         },
     };
 };

@@ -1,6 +1,5 @@
 import {
     Avatar,
-    Divider,
     ListItem,
     ListItemAvatar,
     ListItemText,
@@ -12,28 +11,30 @@ import {
     generateMUIAvatarProps,
 } from "../../utils/avatarGenerator";
 import type { Message } from "../Chat";
-import { dividerStyles, messageStyles, nameStyles } from "./styles";
+import {
+    listItemAvatar,
+    listItemBackground,
+    messageStyles,
+    nameStyles,
+} from "./styles";
 
 interface ChatMessageProps {
     message: Message;
-    shouldAddLastDivider: boolean;
 }
 
-const ChatMessage: FC<ChatMessageProps> = ({
-    message,
-    shouldAddLastDivider,
-}) => {
+const ChatMessage: FC<ChatMessageProps> = ({ message }) => {
     return (
         <Fragment>
-            <ListItem alignItems="flex-start">
+            <ListItem alignItems="flex-start" sx={listItemBackground}>
                 <ListItemAvatar>
                     {message.name === "Yo" ? (
                         <Avatar
                             alt={message.name}
-                            {...generateMUIAvatarProps(message.name)}
+                            {...generateMUIAvatarProps(message.name)} // The styles for my avatar are inside the function
                         />
                     ) : (
                         <Avatar
+                            sx={listItemAvatar}
                             alt={message.name}
                             src={generateAvatar({
                                 name: message.name,
@@ -63,9 +64,6 @@ const ChatMessage: FC<ChatMessageProps> = ({
                     }
                 />
             </ListItem>
-            {shouldAddLastDivider && (
-                <Divider variant="inset" component="li" sx={dividerStyles} />
-            )}
         </Fragment>
     );
 };

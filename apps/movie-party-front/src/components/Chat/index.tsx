@@ -29,7 +29,6 @@ const Chat: FC = () => {
                 {messages.map((message, index) => (
                     <ChatMessage
                         key={index + "-chat-message-" + message.name}
-                        shouldAddLastDivider={index < messages.length - 1}
                         message={message}
                     />
                 ))}
