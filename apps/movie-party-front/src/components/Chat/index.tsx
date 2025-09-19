@@ -83,14 +83,30 @@ const Chat: FC = () => {
                     maxHeight: "70vh",
                     p: 0,
                     backgroundColor: "rgba(255, 255, 255, 0.05)",
-                    // Hide scrollbar for Chrome, Safari and Opera
                     "&::-webkit-scrollbar": {
-                        display: "none",
+                        width: "8px",
                     },
-                    // Hide scrollbar for Firefox
-                    scrollbarWidth: "none",
-                    // Hide scrollbar for IE and Edge
-                    msOverflowStyle: "none",
+                    "&::-webkit-scrollbar-track": {
+                        background: "rgba(255, 255, 255, 0.1)",
+                        borderRadius: "10px",
+                        backdropFilter: "blur(10px)",
+                        margin: "8px 0",
+                    },
+                    "&::-webkit-scrollbar-thumb": {
+                        background: "rgba(255, 255, 255, 0.3)",
+                        borderRadius: "10px",
+                        border: "1px solid rgba(255, 255, 255, 0.2)",
+                        backdropFilter: "blur(10px)",
+                        "&:hover": {
+                            background: "rgba(255, 255, 255, 0.4)",
+                        },
+                        "&:active": {
+                            background: "rgba(255, 255, 255, 0.5)",
+                        },
+                    },
+                    scrollbarWidth: "thin",
+                    scrollbarColor:
+                        "rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.1)",
                 }}
             >
                 {messages.map((chatMessage, index) => (
