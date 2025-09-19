@@ -11,34 +11,31 @@ import {
     generateAvatar,
     generateMUIAvatarProps,
 } from "../../utils/avatarGenerator";
+import type { Message } from "../Chat";
 
 interface ChatMessageProps {
-    chatMessage: {
-        id: string;
-        name: string;
-        message: string;
-    };
+    message: Message;
     shouldAddLastDivider: boolean;
 }
 
 const ChatMessage: FC<ChatMessageProps> = ({
-    chatMessage,
+    message,
     shouldAddLastDivider,
 }) => {
     return (
-        <Fragment key={chatMessage.id}>
+        <Fragment>
             <ListItem alignItems="flex-start">
                 <ListItemAvatar>
-                    {chatMessage.name === "Yo" ? (
+                    {message.name === "Yo" ? (
                         <Avatar
-                            alt={chatMessage.name}
-                            {...generateMUIAvatarProps(chatMessage.name)}
+                            alt={message.name}
+                            {...generateMUIAvatarProps(message.name)}
                         />
                     ) : (
                         <Avatar
-                            alt={chatMessage.name}
+                            alt={message.name}
                             src={generateAvatar({
-                                name: chatMessage.name,
+                                name: message.name,
                                 size: 40,
                             })}
                         />
@@ -54,7 +51,7 @@ const ChatMessage: FC<ChatMessageProps> = ({
                                 color: "text.primary",
                             }}
                         >
-                            {chatMessage.name}
+                            {message.name}
                         </Typography>
                     }
                     secondary={
@@ -66,7 +63,7 @@ const ChatMessage: FC<ChatMessageProps> = ({
                                 display: "block",
                             }}
                         >
-                            {chatMessage.message}
+                            {message.message}
                         </Typography>
                     }
                 />

@@ -1,7 +1,7 @@
 import { v4 as uuidV4 } from "uuid";
-import type { ChatMessage } from ".";
+import type { Message } from ".";
 
-export const generateMockMessages = (count: number): ChatMessage[] => {
+export const generateMockMessages = (count: number): Message[] => {
     const uuid = uuidV4();
     return Array.from({ length: count }, (_, index) => ({
         id: uuid,

@@ -13,21 +13,18 @@ import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
 import SendIcon from "@mui/icons-material/Send";
 import Stack from "@mui/material/Stack";
-import { v4 as uuidV4 } from "uuid";
 import { generateMockMessages } from "./generateMockMessages";
 import ChatMessage from "../ChatMessage";
 
-export interface ChatMessage {
-    id: string;
+export interface Message {
     name: string;
     message: string;
 }
 
-const initialMockMessages: ChatMessage[] = generateMockMessages(1);
+const initialMockMessages: Message[] = generateMockMessages(11);
 
 const Chat: FC = () => {
-    const [messages, setMessages] =
-        useState<ChatMessage[]>(initialMockMessages);
+    const [messages, setMessages] = useState<Message[]>(initialMockMessages);
     const [messageInput, setMessageInput] = useState("");
     const listRef = useRef<HTMLUListElement>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -40,8 +37,7 @@ const Chat: FC = () => {
 
     const handleSendMessage = () => {
         if (messageInput.trim()) {
-            const newMessage: ChatMessage = {
-                id: uuidV4(),
+            const newMessage: Message = {
                 name: "Yo",
                 message: messageInput.trim(),
             };
@@ -109,11 +105,11 @@ const Chat: FC = () => {
                         "rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.1)",
                 }}
             >
-                {messages.map((chatMessage, index) => (
+                {messages.map((message, index) => (
                     <ChatMessage
-                        key={chatMessage.id}
+                        key={index + "-chat-message-" + message.name}
                         shouldAddLastDivider={index < messages.length - 1}
-                        chatMessage={chatMessage}
+                        message={message}
                     />
                 ))}
                 <div ref={messagesEndRef} />
