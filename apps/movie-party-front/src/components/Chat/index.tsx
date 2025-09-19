@@ -1,27 +1,14 @@
-import {
-    type FC,
-    useState,
-    type ChangeEvent,
-    type KeyboardEvent,
-    Fragment,
-} from "react";
+import { type FC, useState, type ChangeEvent, type KeyboardEvent } from "react";
 import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
 import Divider from "@mui/material/Divider";
-import ListItemText from "@mui/material/ListItemText";
-import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
 import SendIcon from "@mui/icons-material/Send";
 import Stack from "@mui/material/Stack";
 import { v4 as uuidV4 } from "uuid";
-import { generateMockMessages } from "./generateMockMessages";
-import { Avatar, ListItemAvatar } from "@mui/material";
-import {
-    generateAvatar,
-    generateMUIAvatarProps,
-} from "../../utils/avatarGenerator";
+// import { generateMockMessages } from "./generateMockMessages";
+import ChatMessage from "../ChatMessage";
 
 export interface ChatMessage {
     id: string;
@@ -29,7 +16,7 @@ export interface ChatMessage {
     message: string;
 }
 
-const initialMockMessages: ChatMessage[] = generateMockMessages(10);
+const initialMockMessages: ChatMessage[] = [];
 
 const Chat: FC = () => {
     const [messages, setMessages] =
@@ -84,63 +71,11 @@ const Chat: FC = () => {
                 }}
             >
                 {messages.map((chatMessage, index) => (
-                    <Fragment key={chatMessage.id}>
-                        <ListItem alignItems="flex-start">
-                            <ListItemAvatar>
-                                {chatMessage.name === "Yo" ? (
-                                    <Avatar
-                                        alt={chatMessage.name}
-                                        {...generateMUIAvatarProps(
-                                            chatMessage.name
-                                        )}
-                                    />
-                                ) : (
-                                    <Avatar
-                                        alt={chatMessage.name}
-                                        src={generateAvatar({
-                                            name: chatMessage.name,
-                                            size: 40,
-                                        })}
-                                    />
-                                )}
-                            </ListItemAvatar>
-                            <ListItemText
-                                primary={
-                                    <Typography
-                                        component="span"
-                                        variant="subtitle1"
-                                        sx={{
-                                            fontWeight: "bold",
-                                            color: "text.primary",
-                                        }}
-                                    >
-                                        {chatMessage.name}
-                                    </Typography>
-                                }
-                                secondary={
-                                    <Typography
-                                        component="span"
-                                        variant="body2"
-                                        sx={{
-                                            color: "text.secondary",
-                                            display: "block",
-                                        }}
-                                    >
-                                        {chatMessage.message}
-                                    </Typography>
-                                }
-                            />
-                        </ListItem>
-                        {index < messages.length - 1 && (
-                            <Divider
-                                variant="inset"
-                                component="li"
-                                sx={{
-                                    borderColor: "rgba(255, 255, 255, 0.2)",
-                                }}
-                            />
-                        )}
-                    </Fragment>
+                    <ChatMessage
+                        key={chatMessage.id}
+                        shouldAddLastDivider={index < messages.length - 1}
+                        chatMessage={chatMessage}
+                    />
                 ))}
             </List>
             <Divider sx={{ borderColor: "rgba(255, 255, 255, 0.2)" }} />
