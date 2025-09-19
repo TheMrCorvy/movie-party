@@ -1,4 +1,11 @@
-import { type FC, useState, type ChangeEvent, type KeyboardEvent } from "react";
+import {
+    type FC,
+    useState,
+    type ChangeEvent,
+    type KeyboardEvent,
+    useRef,
+    useEffect,
+} from "react";
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
@@ -7,7 +14,7 @@ import IconButton from "@mui/material/IconButton";
 import SendIcon from "@mui/icons-material/Send";
 import Stack from "@mui/material/Stack";
 import { v4 as uuidV4 } from "uuid";
-// import { generateMockMessages } from "./generateMockMessages";
+import { generateMockMessages } from "./generateMockMessages";
 import ChatMessage from "../ChatMessage";
 
 export interface ChatMessage {
@@ -16,12 +23,20 @@ export interface ChatMessage {
     message: string;
 }
 
-const initialMockMessages: ChatMessage[] = [];
+const initialMockMessages: ChatMessage[] = generateMockMessages(1);
 
 const Chat: FC = () => {
     const [messages, setMessages] =
         useState<ChatMessage[]>(initialMockMessages);
     const [messageInput, setMessageInput] = useState("");
+    const listRef = useRef<HTMLUListElement>(null);
+    const messagesEndRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+        }
+    }, [messages]);
 
     const handleSendMessage = () => {
         if (messageInput.trim()) {
@@ -61,13 +76,21 @@ const Chat: FC = () => {
             }}
         >
             <List
+                ref={listRef}
                 sx={{
                     flexGrow: 1,
                     overflowY: "auto",
                     maxHeight: "70vh",
                     p: 0,
-
                     backgroundColor: "rgba(255, 255, 255, 0.05)",
+                    // Hide scrollbar for Chrome, Safari and Opera
+                    "&::-webkit-scrollbar": {
+                        display: "none",
+                    },
+                    // Hide scrollbar for Firefox
+                    scrollbarWidth: "none",
+                    // Hide scrollbar for IE and Edge
+                    msOverflowStyle: "none",
                 }}
             >
                 {messages.map((chatMessage, index) => (
@@ -77,6 +100,7 @@ const Chat: FC = () => {
                         chatMessage={chatMessage}
                     />
                 ))}
+                <div ref={messagesEndRef} />
             </List>
             <Divider sx={{ borderColor: "rgba(255, 255, 255, 0.2)" }} />
             <Stack
