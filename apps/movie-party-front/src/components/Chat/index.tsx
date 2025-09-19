@@ -100,7 +100,6 @@ const Chat: FC = () => {
                                         src={generateAvatar({
                                             name: chatMessage.name,
                                             size: 40,
-                                            useExternalService: false,
                                         })}
                                     />
                                 )}
