@@ -3,6 +3,11 @@ import type Peer from "peerjs";
 import type { Dispatch, RefObject, SetStateAction } from "react";
 import { Socket } from "socket.io-client";
 import { Signals } from "@repo/type-definitions/rooms";
+import type { PeerAction } from "../context/peerReducer";
+import {
+    initiateCameraCallsDuringScreenShare,
+    cleanupCameraCalls,
+} from "./handleCameraCallsDuringScreenShare";
 
 interface HandleShareScreenProps {
     me: Peer;
@@ -13,6 +18,9 @@ interface HandleShareScreenProps {
     screenSharingId: string;
     ws: Socket;
     roomId: string;
+    dispatch: (payload: PeerAction) => void;
+    cameraCalls: RefObject<MediaConnection[]>;
+    peers: Record<string, { stream: MediaStream }>;
 }
 
 interface HandleSwitchStreamProps {
@@ -43,7 +51,16 @@ const switchStream = ({
             .find((s) => s.track?.kind === "video");
 
         if (sender && videoTrack) {
-            sender.replaceTrack(videoTrack).catch(console.error);
+            sender.replaceTrack(videoTrack).catch((error) => {
+                console.error(
+                    `[Switch Stream] Error replacing track for peer ${call.peer}:`,
+                    error
+                );
+            });
+        } else {
+            console.warn(
+                `[Switch Stream] Could not replace track - sender: ${!!sender}, videoTrack: ${!!videoTrack}`
+            );
         }
     });
 };
@@ -57,6 +74,9 @@ export const handleShareScreen = async ({
     screenSharingId,
     ws,
     roomId,
+    dispatch,
+    cameraCalls,
+    peers,
 }: HandleShareScreenProps) => {
     if (screenSharingId) {
         if (cameraStream) {
@@ -70,6 +90,8 @@ export const handleShareScreen = async ({
             });
             ws.emit(Signals.STOP_SHARING, { peerId: me.id, roomId });
         }
+
+        cleanupCameraCalls({ cameraCalls });
         setScreenSharingId("");
     } else {
         const displayStream = await navigator.mediaDevices.getDisplayMedia({
@@ -84,7 +106,20 @@ export const handleShareScreen = async ({
             callsRef,
             me,
         });
+
         ws.emit(Signals.START_SHARING, { peerId: me.id, roomId });
+
+        if (cameraStream) {
+            const otherPeerIds = Object.keys(peers);
+
+            initiateCameraCallsDuringScreenShare({
+                me,
+                cameraStream,
+                participants: otherPeerIds,
+                dispatch,
+                cameraCalls,
+            });
+        }
 
         displayStream.getVideoTracks()[0].onended = () => {
             if (cameraStream) {
@@ -98,6 +133,7 @@ export const handleShareScreen = async ({
                 });
                 ws.emit(Signals.STOP_SHARING, { peerId: me.id, roomId });
             }
+            cleanupCameraCalls({ cameraCalls });
             setScreenSharingId("");
         };
     }

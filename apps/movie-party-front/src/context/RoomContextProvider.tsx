@@ -31,6 +31,7 @@ export const RoomProvider: FC<RoomProviderProps> = ({ children }) => {
     const [peers, dispatch] = useReducer(peerReducer, {});
     const [screenSharingId, setScreenSharingId] = useState<string>("");
     const callsRef = useRef<MediaConnection[]>([]);
+    const cameraCalls = useRef<MediaConnection[]>([]);
     const [cameraStream, setCameraStream] = useState<MediaStream>();
 
     const enterRoom = ({ roomId }: EnterRoomResponse) => {
@@ -90,11 +91,26 @@ export const RoomProvider: FC<RoomProviderProps> = ({ children }) => {
         );
 
         me.on("call", (call) => {
-            callsRef.current.push(call);
+            const isCameraCall =
+                call.metadata?.streamType === "camera-during-screenshare";
 
-            call.on("close", () => {
-                callsRef.current = callsRef.current.filter((c) => c !== call);
-            });
+            if (isCameraCall) {
+                cameraCalls.current.push(call);
+
+                call.on("close", () => {
+                    cameraCalls.current = cameraCalls.current.filter(
+                        (c) => c !== call
+                    );
+                });
+            } else {
+                callsRef.current.push(call);
+
+                call.on("close", () => {
+                    callsRef.current = callsRef.current.filter(
+                        (c) => c !== call
+                    );
+                });
+            }
 
             handleIncomingCall({ call, stream, dispatch });
         });
@@ -120,6 +136,9 @@ export const RoomProvider: FC<RoomProviderProps> = ({ children }) => {
             screenSharingId,
             ws,
             roomId,
+            dispatch,
+            cameraCalls,
+            peers,
         });
     };
 
