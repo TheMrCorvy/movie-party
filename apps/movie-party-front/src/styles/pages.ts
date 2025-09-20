@@ -12,7 +12,6 @@ export const roomGridContainerStyles: SxProps<Theme> = {
 };
 
 export const roomMainContentStyles: SxProps<Theme> = {
-    padding: "24px",
     overflowY: "auto",
     height: "100vh",
     display: "flex",
@@ -25,7 +24,7 @@ export const roomChatSectionStyles: SxProps<Theme> = {
     height: "100vh",
     display: "flex",
     flexDirection: "column",
-    padding: "24px 12px",
+    padding: "24px",
     justifyContent: "center",
 };
 

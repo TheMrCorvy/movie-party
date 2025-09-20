@@ -4,6 +4,7 @@ import {
     ListItemAvatar,
     ListItemText,
     Typography,
+    useTheme,
 } from "@mui/material";
 import { Fragment, type FC } from "react";
 import {
@@ -18,8 +19,9 @@ interface ChatMessageProps {
 }
 
 const ChatMessage: FC<ChatMessageProps> = ({ message }) => {
+    const theme = useTheme();
     const { listItemBackground, listItemAvatar, nameStyles, messageStyles } =
-        styles();
+        styles(theme.palette.mode);
     return (
         <Fragment>
             <ListItem alignItems="flex-start" sx={listItemBackground}>

@@ -1,12 +1,12 @@
-import { lightThemeBg } from "../../styles/components";
+import { darkThemeBg, lightThemeBg } from "../../styles/components";
 import type { StylesService } from "../../styles/types";
 
-const styles: StylesService = () => {
+const styles: StylesService = (theme = "light") => {
     return {
         sendMessageContainerStyles: {
             p: 2,
             alignItems: "center",
-            backgroundColor: lightThemeBg,
+            backgroundColor: theme === "light" ? lightThemeBg : darkThemeBg,
         },
     };
 };

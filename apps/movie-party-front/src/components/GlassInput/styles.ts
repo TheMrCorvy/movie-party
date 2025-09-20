@@ -1,4 +1,8 @@
-import { lightThemeBg, lightThemeLighterBg } from "../../styles/components";
+import {
+    backdropFilter,
+    lightThemeBg,
+    lightThemeLighterBg,
+} from "../../styles/components";
 import type { StylesService } from "../../styles/types";
 
 const styles: StylesService = () => {
@@ -39,7 +43,7 @@ const styles: StylesService = () => {
             },
         },
         selectStyles: {
-            backdropFilter: "blur(10px)",
+            backdropFilter: backdropFilter,
             backgroundColor: "rgba(0, 0, 0, 0.5)",
             border: `1px solid ${lightThemeLighterBg}`,
             borderRadius: 2,

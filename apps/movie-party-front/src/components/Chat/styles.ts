@@ -1,7 +1,7 @@
 import {
     backdropFilter,
     borderWhite,
-    darkThemeBg,
+    darkThemeDarkerBg,
     lightThemeBg,
     lightThemeLighterBg,
 } from "../../styles/components";
@@ -13,7 +13,8 @@ const styles: StylesService = (theme = "light") => {
             width: "100%",
             maxWidth: 500,
             backdropFilter: backdropFilter,
-            backgroundColor: theme === "dark" ? darkThemeBg : lightThemeBg,
+            backgroundColor:
+                theme === "light" ? lightThemeBg : darkThemeDarkerBg,
             border: borderWhite,
             borderRadius: 3,
             overflow: "hidden",

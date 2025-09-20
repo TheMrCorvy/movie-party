@@ -1,7 +1,11 @@
-import { borderWhite } from "../../styles/components";
+import {
+    borderWhite,
+    darkThemeBg,
+    lightThemeBg,
+} from "../../styles/components";
 import type { StylesService } from "../../styles/types";
 
-const styles: StylesService = () => {
+const styles: StylesService = (theme = "light") => {
     return {
         messageStyles: {
             color: "text.primary",
@@ -18,7 +22,7 @@ const styles: StylesService = () => {
         listItemBackground: {
             px: 2,
             py: 1.5,
-            backgroundColor: "rgba(150, 150, 150, 0.05)",
+            backgroundColor: theme === "light" ? lightThemeBg : darkThemeBg,
             borderRadius: 2,
             my: 1,
             border: borderWhite,

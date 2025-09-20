@@ -1,22 +1,26 @@
 import { useContext } from "react";
-import { IconButton } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import { ThemeContext } from "../../context/ThemeContext/ThemeContextProvider";
+import styles from "./styles";
 
 const ThemeSwitcher = () => {
     const theme = useTheme();
     const { toggleColorMode } = useContext(ThemeContext);
+    const { containerStyles } = styles(theme.palette.mode);
 
     return (
-        <IconButton sx={{ ml: 1 }} onClick={toggleColorMode} color="inherit">
-            {theme.palette.mode === "dark" ? (
-                <Brightness7Icon />
-            ) : (
-                <Brightness4Icon />
-            )}
-        </IconButton>
+        <Box sx={containerStyles}>
+            <IconButton onClick={toggleColorMode} color="inherit">
+                {theme.palette.mode === "dark" ? (
+                    <Brightness4Icon />
+                ) : (
+                    <Brightness7Icon />
+                )}
+            </IconButton>
+        </Box>
     );
 };
 

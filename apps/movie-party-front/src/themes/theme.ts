@@ -17,7 +17,7 @@ const getDesignTokens = (mode: PaletteMode) => ({
                   },
                   text: {
                       primary: "#ffffff",
-                      secondary: "rgba(255, 255, 255, 0.7)",
+                      secondary: "#000000",
                   },
               }
             : {
@@ -33,7 +33,7 @@ const getDesignTokens = (mode: PaletteMode) => ({
                   },
                   text: {
                       primary: "#ffffff",
-                      secondary: "rgba(255, 255, 255, 0.7)",
+                      secondary: "#000000",
                   },
               }),
     },

@@ -1,23 +1,13 @@
 import { Outlet } from "react-router-dom";
-import { AppBar, Box, Toolbar, Typography } from "@mui/material";
-import ThemeSwitcher from "./ThemeSwitcher";
+import { Box } from "@mui/material";
 import type { FC } from "react";
+import GlassContainer from "./GlassContainer";
+import ThemeSwitcher from "./ThemeSwitcher";
 
 export const Layout: FC = () => {
     return (
-        <Box sx={{ display: "flex" }}>
-            <AppBar component="nav">
-                <Toolbar>
-                    <Typography
-                        variant="h6"
-                        component="div"
-                        sx={{ flexGrow: 1 }}
-                    >
-                        My App
-                    </Typography>
-                    <ThemeSwitcher />
-                </Toolbar>
-            </AppBar>
+        <Box sx={{ display: "flex", flexDirection: "column" }}>
+            <ThemeSwitcher />
             <Outlet />
         </Box>
     );
