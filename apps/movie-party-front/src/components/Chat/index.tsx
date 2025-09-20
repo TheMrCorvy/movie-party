@@ -6,6 +6,7 @@ import ChatMessage from "../ChatMessage";
 import SendMessage from "../SendMessage";
 import { useChatLogic } from "./useChatLogic";
 import styles from "./styles";
+import { useTheme } from "@mui/material/styles";
 
 export interface Message {
     name: string;
@@ -22,8 +23,10 @@ const Chat: FC = () => {
         handleInputChange,
         handleKeyPress,
     } = useChatLogic();
-
-    const { chatBoxStyles, chatListStyles, dividerStyles } = styles("light");
+    const theme = useTheme();
+    const { chatBoxStyles, chatListStyles, dividerStyles } = styles(
+        theme.palette.mode
+    );
 
     return (
         <Box sx={chatBoxStyles}>

@@ -1,25 +1,25 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { ThemeProvider } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
-import { RoomProvider } from "./context/RoomContextProvider";
+import { RoomProvider } from "./context/RoomContext/RoomContextProvider";
 import Home from "./pages/Home.tsx";
 import Room from "./pages/Room.tsx";
-import theme from "./themes/theme";
+import { ThemeContextProvider } from "./context/ThemeContext/ThemeContextProvider.tsx";
+import { Layout } from "./components/Layout.tsx";
 
 createRoot(document.getElementById("root")!).render(
     <StrictMode>
-        <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <BrowserRouter>
-                <RoomProvider>
+        <BrowserRouter>
+            <RoomProvider>
+                <ThemeContextProvider>
                     <Routes>
-                        <Route path="/" element={<Home />} />
-                        <Route path="/room/:roomId" element={<Room />} />
+                        <Route path="/" element={<Layout />}>
+                            <Route index element={<Home />} />
+                            <Route path="/room/:roomId" element={<Room />} />
+                        </Route>
                     </Routes>
-                </RoomProvider>
-            </BrowserRouter>
-        </ThemeProvider>
+                </ThemeContextProvider>
+            </RoomProvider>
+        </BrowserRouter>
     </StrictMode>
 );

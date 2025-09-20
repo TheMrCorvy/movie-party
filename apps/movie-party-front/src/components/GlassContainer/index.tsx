@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, useTheme } from "@mui/material";
 import type { FC } from "react";
 import styles from "./styles";
 
@@ -13,7 +13,8 @@ const GlassContainer: FC<GlassContainerProps> = ({
     height,
     width,
 }) => {
-    const { containerStyles } = styles("light");
+    const theme = useTheme();
+    const { containerStyles } = styles(theme.palette.mode);
 
     return (
         <Box

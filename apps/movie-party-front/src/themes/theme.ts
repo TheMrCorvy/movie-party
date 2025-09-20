@@ -1,22 +1,41 @@
-import { createTheme } from "@mui/material/styles";
+import { type PaletteMode } from "@mui/material";
 
-const theme = createTheme({
+const getDesignTokens = (mode: PaletteMode) => ({
     palette: {
-        mode: "dark",
-        primary: {
-            main: "#ffffff",
-        },
-        secondary: {
-            main: "#f48fb1",
-        },
-        background: {
-            default: "#1a1a2e",
-            paper: "rgba(255, 255, 255, 0.05)",
-        },
-        text: {
-            primary: "#ffffff",
-            secondary: "rgba(255, 255, 255, 0.7)",
-        },
+        mode,
+        ...(mode === "light"
+            ? {
+                  primary: {
+                      main: "#1976d2",
+                  },
+                  secondary: {
+                      main: "#dc004e",
+                  },
+                  background: {
+                      default: "#f4f6f8",
+                      paper: "#ffffff",
+                  },
+                  text: {
+                      primary: "#ffffff",
+                      secondary: "rgba(255, 255, 255, 0.7)",
+                  },
+              }
+            : {
+                  primary: {
+                      main: "#ffffff",
+                  },
+                  secondary: {
+                      main: "#f48fb1",
+                  },
+                  background: {
+                      default: "#1a1a2e",
+                      paper: "rgba(255, 255, 255, 0.05)",
+                  },
+                  text: {
+                      primary: "#ffffff",
+                      secondary: "rgba(255, 255, 255, 0.7)",
+                  },
+              }),
     },
     typography: {
         fontFamily: "Roboto, sans-serif",
@@ -55,4 +74,4 @@ const theme = createTheme({
     },
 });
 
-export default theme;
+export default getDesignTokens;

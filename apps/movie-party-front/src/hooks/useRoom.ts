@@ -1,6 +1,6 @@
 import { useContext, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { RoomContext } from "../context/RoomContext";
+import { RoomContext } from "../context/RoomContext/RoomContext";
 import { Signals } from "@repo/type-definitions/rooms";
 
 export const useRoom = () => {

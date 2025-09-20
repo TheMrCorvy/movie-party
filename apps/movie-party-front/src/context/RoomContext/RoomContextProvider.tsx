@@ -6,12 +6,12 @@ import { Signals } from "@repo/type-definitions/rooms";
 import Peer from "peerjs";
 import type { MediaConnection } from "peerjs";
 import { peerReducer } from "./peerReducer";
-import setMeUp from "../utils/setMeUp";
-import handleGetParticipants from "../utils/handleGetParticipants";
-import handleIncomingCall from "../utils/handleIncomingCall";
-import handleUserJoined from "../utils/handleUserJoined";
-import handleRemovePeer from "../utils/handleRemovePeer";
-import { handleShareScreen } from "../utils/handleShareScreen";
+import setMeUp from "../../utils/setMeUp";
+import handleGetParticipants from "../../utils/handleGetParticipants";
+import handleIncomingCall from "../../utils/handleIncomingCall";
+import handleUserJoined from "../../utils/handleUserJoined";
+import handleRemovePeer from "../../utils/handleRemovePeer";
+import { handleShareScreen } from "../../utils/handleShareScreen";
 
 const WS = "http://localhost:4000";
 const ws = SocketIOClient(WS);
