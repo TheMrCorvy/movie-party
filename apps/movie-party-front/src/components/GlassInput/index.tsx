@@ -1,5 +1,12 @@
 import type { ChangeEvent, FC } from "react";
-import { textArea, textField } from "./styles";
+import {
+    checkboxStyles,
+    radioStyles,
+    selectFormControlStyles,
+    selectStyles,
+    textArea,
+    textField,
+} from "./styles";
 import {
     Checkbox,
     FormControl,
@@ -50,10 +57,10 @@ export interface GlassInputProps {
     ariaLabel?: string;
     size?: "small" | "medium";
     checked?: boolean;
-    radioOptions?: RadioOption[];
+    options?: SelectOption[];
 }
 
-export interface RadioOption {
+export interface SelectOption {
     value: string;
     label: string;
 }
@@ -62,7 +69,7 @@ const GlassInput: FC<GlassInputProps> = ({
     kind,
     ariaLabel,
     checked = false,
-    radioOptions,
+    options,
     label,
     ...rest
 }) => {
@@ -96,30 +103,20 @@ const GlassInput: FC<GlassInputProps> = ({
     if (kind === "checkbox") {
         return (
             <FormControlLabel
-                control={
-                    <Checkbox
-                        checked={checked}
-                        sx={{
-                            color: "white",
-                            "&.Mui-checked": {
-                                color: "#ffffff",
-                            },
-                        }}
-                    />
-                }
+                control={<Checkbox checked={checked} sx={checkboxStyles} />}
                 label={<Typography sx={{ color: "white" }}>{label}</Typography>}
             />
         );
     }
 
-    if (kind === "radio" && radioOptions) {
+    if (kind === "radio" && options) {
         return (
             <FormControl component="fieldset">
                 <FormLabel component="legend" sx={{ color: "white" }}>
                     {label}
                 </FormLabel>
                 <RadioGroup {...rest}>
-                    {radioOptions.map((option, index) => (
+                    {options.map((option, index) => (
                         <FormControlLabel
                             key={
                                 index +
@@ -129,16 +126,7 @@ const GlassInput: FC<GlassInputProps> = ({
                                 option.label
                             }
                             value={option.value}
-                            control={
-                                <Radio
-                                    sx={{
-                                        color: "white",
-                                        "&.Mui-checked": {
-                                            color: "#ffffff",
-                                        },
-                                    }}
-                                />
-                            }
+                            control={<Radio sx={radioStyles} />}
                             label={
                                 <Typography sx={{ color: "white" }}>
                                     {option.label}
@@ -151,67 +139,36 @@ const GlassInput: FC<GlassInputProps> = ({
         );
     }
 
-    if (kind === "select") {
+    if (kind === "select" && options) {
         return (
-            <FormControl
-                fullWidth
-                sx={{
-                    "& .MuiOutlinedInput-root": {
-                        backgroundColor: "rgba(255, 255, 255, 0.1)",
-                        "& fieldset": {
-                            borderColor: "rgba(255, 255, 255, 0.3)",
-                        },
-                        "&:hover fieldset": {
-                            borderColor: "rgba(255, 255, 255, 0.5)",
-                        },
-                        "&.Mui-focused fieldset": {
-                            borderColor: "rgba(255, 255, 255, 0.7)",
-                        },
-                    },
-                    "& .MuiInputBase-input": {
-                        color: "white",
-                    },
-                    "& .MuiInputLabel-root": {
-                        color: "white", // Changed to white
-                    },
-                    "& .MuiSelect-icon": {
-                        color: "white", // Changed to white
-                    },
-                }}
-            >
-                <InputLabel id="select-label" sx={{ color: "white" }}>
+            <FormControl fullWidth sx={selectFormControlStyles}>
+                <InputLabel id={rest.id} sx={{ color: "white" }}>
                     {label}
                 </InputLabel>
                 <Select
                     label={label}
                     MenuProps={{
                         PaperProps: {
-                            sx: {
-                                backdropFilter: "blur(10px)",
-                                backgroundColor: "rgba(0, 0, 0, 0.5)",
-                                border: "1px solid rgba(255, 255, 255, 0.3)",
-                                borderRadius: 2,
-                                boxShadow:
-                                    "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
-                                "& .MuiMenuItem-root": {
-                                    color: "white",
-                                    "&:hover": {
-                                        backgroundColor:
-                                            "rgba(255, 255, 255, 0.1)",
-                                    },
-                                },
-                            },
+                            sx: selectStyles,
                         },
                     }}
                     {...rest}
                     onChange={rest.onSelectChange}
                 >
-                    <MenuItem value="">
-                        <em>None</em>
-                    </MenuItem>
-                    <MenuItem value="optionA">Option A</MenuItem>
-                    <MenuItem value="optionB">Option B</MenuItem>
-                    <MenuItem value="optionC">Option C</MenuItem>
+                    {options.map((option, index) => (
+                        <MenuItem
+                            key={
+                                index +
+                                "-select-input-" +
+                                option.value +
+                                "-" +
+                                option.label
+                            }
+                            value={option.value}
+                        >
+                            <em>{option.label}</em>
+                        </MenuItem>
+                    ))}
                 </Select>
             </FormControl>
         );
