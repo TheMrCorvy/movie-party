@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 import ChatMessage from "../ChatMessage";
 import SendMessage from "../SendMessage";
 import { useChatLogic } from "./useChatLogic";
-import { chatBoxStyles, chatListStyles, dividerStyles } from "./styles";
+import styles from "./styles";
 
 export interface Message {
     name: string;
@@ -22,6 +22,8 @@ const Chat: FC = () => {
         handleInputChange,
         handleKeyPress,
     } = useChatLogic();
+
+    const { chatBoxStyles, chatListStyles, dividerStyles } = styles("light");
 
     return (
         <Box sx={chatBoxStyles}>

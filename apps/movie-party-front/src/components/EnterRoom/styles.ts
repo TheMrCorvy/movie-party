@@ -1,9 +1,15 @@
-import type { SxProps, Theme } from "@mui/material/styles";
+import type { StylesService } from "../../styles/types";
 
-export const mainContainer: SxProps<Theme> = {
-    height: "100vh",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
+const styles: StylesService = () => {
+    return {
+        mainContainer: {
+            height: "100vh",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+        },
+    };
 };
+
+export default styles;

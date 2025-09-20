@@ -7,7 +7,7 @@ import Container from "@mui/material/Container";
 
 import { Signals } from "@repo/type-definitions/rooms";
 import GlassContainer from "../GlassContainer";
-import { mainContainer } from "./styles";
+import styles from "./styles";
 import GlassButton from "../GlassButton";
 
 const CreateRoom: FC = () => {
@@ -22,6 +22,8 @@ const CreateRoom: FC = () => {
     const createRoom = () => {
         ws.emit(Signals.CREATE_ROOM);
     };
+
+    const { mainContainer } = styles();
 
     return (
         <Container maxWidth="xl" sx={mainContainer}>

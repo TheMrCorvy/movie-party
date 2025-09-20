@@ -1,12 +1,7 @@
 import { useEffect, useRef, type FC } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import {
-    videoContainerStyles,
-    videoStyles,
-    peerLabelStyles,
-    peerTextStyles,
-} from "./styles";
+import styles from "./styles";
 
 interface PeerVideoProps {
     stream: MediaStream;
@@ -21,6 +16,13 @@ const PeerVideo: FC<PeerVideoProps> = ({ stream, peerId }) => {
             videoRef.current.srcObject = stream;
         }
     }, [stream]);
+
+    const {
+        videoContainerStyles,
+        videoStyles,
+        peerLabelStyles,
+        peerTextStyles,
+    } = styles();
 
     return (
         <Box sx={videoContainerStyles}>

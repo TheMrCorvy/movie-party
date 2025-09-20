@@ -1,12 +1,5 @@
 import type { ChangeEvent, FC } from "react";
-import {
-    checkboxStyles,
-    radioStyles,
-    selectFormControlStyles,
-    selectStyles,
-    textArea,
-    textField,
-} from "./styles";
+import styles from "./styles";
 import {
     Checkbox,
     FormControl,
@@ -73,6 +66,15 @@ const GlassInput: FC<GlassInputProps> = ({
     label,
     ...rest
 }) => {
+    const {
+        textField,
+        textArea,
+        checkboxStyles,
+        radioStyles,
+        selectFormControlStyles,
+        selectStyles,
+    } = styles();
+
     if (kind === "text input") {
         return (
             <TextField

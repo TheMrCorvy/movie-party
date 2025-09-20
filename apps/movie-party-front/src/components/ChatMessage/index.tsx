@@ -11,18 +11,15 @@ import {
     generateMUIAvatarProps,
 } from "../../utils/avatarGenerator";
 import type { Message } from "../Chat";
-import {
-    listItemAvatar,
-    listItemBackground,
-    messageStyles,
-    nameStyles,
-} from "./styles";
+import styles from "./styles";
 
 interface ChatMessageProps {
     message: Message;
 }
 
 const ChatMessage: FC<ChatMessageProps> = ({ message }) => {
+    const { listItemBackground, listItemAvatar, nameStyles, messageStyles } =
+        styles();
     return (
         <Fragment>
             <ListItem alignItems="flex-start" sx={listItemBackground}>

@@ -1,7 +1,7 @@
 import { Stack } from "@mui/material";
 import type { FC } from "react";
 import SendIcon from "@mui/icons-material/Send";
-import { sendMessageContainerStyles } from "./styles";
+import styles from "./styles";
 import GlassButton from "../GlassButton";
 import GlassInput from "../GlassInput";
 
@@ -18,6 +18,7 @@ const SendMessage: FC<SendMessageProps> = ({
     handleKeyPress,
     handleSendMessage,
 }) => {
+    const { sendMessageContainerStyles } = styles();
     return (
         <Stack direction="row" spacing={1} sx={sendMessageContainerStyles}>
             <GlassInput

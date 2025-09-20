@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import type { FC } from "react";
-import { containerStyles } from "./styles";
+import styles from "./styles";
 
 export interface GlassContainerProps {
     height?: string | number;
@@ -13,6 +13,8 @@ const GlassContainer: FC<GlassContainerProps> = ({
     height,
     width,
 }) => {
+    const { containerStyles } = styles("light");
+
     return (
         <Box
             sx={{

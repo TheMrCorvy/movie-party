@@ -1,7 +1,14 @@
-import type { SxProps, Theme } from "@mui/material/styles";
+import { lightThemeBg } from "../../styles/components";
+import type { StylesService } from "../../styles/types";
 
-export const sendMessageContainerStyles: SxProps<Theme> = {
-    p: 2,
-    alignItems: "center",
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
+const styles: StylesService = () => {
+    return {
+        sendMessageContainerStyles: {
+            p: 2,
+            alignItems: "center",
+            backgroundColor: lightThemeBg,
+        },
+    };
 };
+
+export default styles;
