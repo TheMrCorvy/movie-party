@@ -13,6 +13,7 @@ import {
     peerVideosContainerStyles,
 } from "../styles/pages";
 import GlassContainer from "../components/GlassContainer";
+import GlassButton from "../components/GlassButton";
 
 const Room: FC = () => {
     const {
@@ -48,13 +49,9 @@ const Room: FC = () => {
                             Room ID: {roomId}
                         </Typography>
 
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={shareScreen}
-                        >
-                            Share screen
-                        </Button>
+                        <GlassButton onClick={shareScreen}>
+                            Compartir pantalla
+                        </GlassButton>
 
                         <Box sx={roomVideoSectionStyles}>
                             <Typography
