@@ -24,3 +24,28 @@ export const textField: SxProps<Theme> = {
         opacity: 1,
     },
 };
+
+export const textArea: SxProps<Theme> = {
+    "& .MuiOutlinedInput-root": {
+        backgroundColor: "rgba(255, 255, 255, 0.1)",
+        "& fieldset": {
+            borderColor: "rgba(255, 255, 255, 0.3)",
+        },
+        "&:hover fieldset": {
+            borderColor: "rgba(255, 255, 255, 0.5)",
+        },
+        "&.Mui-focused fieldset": {
+            borderColor: "rgba(255, 255, 255, 0.7)",
+        },
+    },
+    "& .MuiInputBase-input": {
+        color: "white",
+    },
+    "& .MuiInputLabel-root": {
+        color: "rgba(255, 255, 255, 0.7)",
+    },
+    "& .MuiInputBase-input::placeholder": {
+        color: "rgba(255, 255, 255, 0.7)",
+        opacity: 1,
+    },
+};
