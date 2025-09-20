@@ -1,5 +1,5 @@
 import type Peer from "peerjs";
-import type { PeerAction } from "../context/peerReducer";
+import type { PeerAction } from "../context/RoomContext/peerReducer";
 
 interface Participants {
     participants: string[];

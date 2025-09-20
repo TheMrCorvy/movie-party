@@ -3,7 +3,7 @@ import type Peer from "peerjs";
 import type { Dispatch, RefObject, SetStateAction } from "react";
 import { Socket } from "socket.io-client";
 import { Signals } from "@repo/type-definitions/rooms";
-import type { PeerAction } from "../context/peerReducer";
+import type { PeerAction } from "../context/RoomContext/peerReducer";
 import {
     initiateCameraCallsDuringScreenShare,
     cleanupCameraCalls,

@@ -1,4 +1,4 @@
-import type { PeerAction } from "../context/peerReducer";
+import type { PeerAction } from "../context/RoomContext/peerReducer";
 
 interface HandleIncomingCallParams {
     call: any;

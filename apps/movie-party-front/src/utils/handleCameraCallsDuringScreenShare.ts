@@ -1,7 +1,7 @@
 import type { MediaConnection } from "peerjs";
 import type Peer from "peerjs";
 import type { RefObject } from "react";
-import type { PeerAction } from "../context/peerReducer";
+import type { PeerAction } from "../context/RoomContext/peerReducer";
 
 interface HandleCameraCallsProps {
     me: Peer;
