@@ -1,5 +1,5 @@
 import { type FC } from "react";
-import { Button, Container, Grid, Box, Typography } from "@mui/material";
+import { Container, Grid, Box, Typography } from "@mui/material";
 import VideoPlayerComponent from "../components/VideoPlayerComponent";
 import PeerVideo from "../components/PeerVideo";
 import Chat from "../components/Chat";
