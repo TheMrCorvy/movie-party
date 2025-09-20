@@ -1,17 +1,10 @@
-import React, { createContext, useMemo, useState } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { CssBaseline, type PaletteMode } from "@mui/material";
 import getDesignTokens from "../../themes/theme";
+import { ThemeContext } from "./ThemeContext";
 
-export const ThemeContext = createContext({
-    toggleColorMode: () => {},
-});
-
-export const ThemeContextProvider = ({
-    children,
-}: {
-    children: React.ReactNode;
-}) => {
+export const ThemeContextProvider = ({ children }: { children: ReactNode }) => {
     const [mode, setMode] = useState<PaletteMode>("dark");
 
     const colorMode = useMemo(
