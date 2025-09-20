@@ -1,11 +1,9 @@
-import { IconButton, Stack, TextField } from "@mui/material";
+import { Stack } from "@mui/material";
 import type { FC } from "react";
 import SendIcon from "@mui/icons-material/Send";
-import {
-    messageInputStyles,
-    sendButtonStyles,
-    sendMessageContainerStyles,
-} from "./styles";
+import { sendMessageContainerStyles } from "./styles";
+import GlassButton from "../GlassButton";
+import GlassInput from "../GlassInput";
 
 export interface SendMessageProps {
     messageInput: string;
@@ -22,25 +20,19 @@ const SendMessage: FC<SendMessageProps> = ({
 }) => {
     return (
         <Stack direction="row" spacing={1} sx={sendMessageContainerStyles}>
-            <TextField
-                fullWidth
-                variant="outlined"
-                size="small"
+            <GlassInput
+                kind="text input"
                 placeholder="Escribe tu mensaje..."
                 value={messageInput}
                 onChange={handleInputChange}
                 onKeyDown={handleKeyPress}
-                aria-label="Message input"
-                sx={messageInputStyles}
+                ariaLabel="Message input"
+                type="text"
+                size="small"
             />
-            <IconButton
-                color="primary"
-                onClick={handleSendMessage}
-                aria-label="Send message"
-                sx={sendButtonStyles}
-            >
+            <GlassButton isIconBtn onClick={handleSendMessage}>
                 <SendIcon />
-            </IconButton>
+            </GlassButton>
         </Stack>
     );
 };

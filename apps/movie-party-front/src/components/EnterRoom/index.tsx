@@ -3,10 +3,12 @@ import { useContext } from "react";
 
 import { RoomContext } from "../../context/RoomContext";
 
-import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 
 import { Signals } from "@repo/type-definitions/rooms";
+import GlassContainer from "../GlassContainer";
+import { mainContainer } from "./styles";
+import GlassButton from "../GlassButton";
 
 const CreateRoom: FC = () => {
     const context = useContext(RoomContext);
@@ -22,19 +24,10 @@ const CreateRoom: FC = () => {
     };
 
     return (
-        <Container
-            maxWidth="xl"
-            sx={{
-                height: "100vh",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-            }}
-        >
-            <Button variant="contained" onClick={createRoom}>
-                Create Room
-            </Button>
+        <Container maxWidth="xl" sx={mainContainer}>
+            <GlassContainer>
+                <GlassButton onClick={createRoom}>Create Room</GlassButton>
+            </GlassContainer>
         </Container>
     );
 };

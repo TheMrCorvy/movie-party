@@ -9,10 +9,10 @@ import {
     roomGridContainerStyles,
     roomMainContentStyles,
     roomChatSectionStyles,
-    roomHeaderStyles,
     roomVideoSectionStyles,
     peerVideosContainerStyles,
 } from "../styles/pages";
+import GlassContainer from "../components/GlassContainer";
 
 const Room: FC = () => {
     const {
@@ -40,7 +40,7 @@ const Room: FC = () => {
                     }}
                     sx={roomMainContentStyles}
                 >
-                    <Box sx={roomHeaderStyles}>
+                    <GlassContainer width={"100%"}>
                         <Typography variant="h3" component="h1" gutterBottom>
                             Room
                         </Typography>
@@ -102,7 +102,7 @@ const Room: FC = () => {
                                 )}
                             </Box>
                         </Box>
-                    </Box>
+                    </GlassContainer>
                 </Grid>
                 <Grid
                     size={{

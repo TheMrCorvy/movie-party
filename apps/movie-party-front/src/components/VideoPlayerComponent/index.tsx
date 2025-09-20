@@ -15,7 +15,7 @@ const VideoPlayerComponent: FC<props> = ({ stream }) => {
     return (
         <video
             style={{
-                width: "700px",
+                maxHeight: "50vh",
                 objectFit: "cover",
             }}
             autoPlay

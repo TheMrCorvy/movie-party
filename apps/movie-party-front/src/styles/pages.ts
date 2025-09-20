@@ -15,6 +15,10 @@ export const roomMainContentStyles: SxProps<Theme> = {
     padding: "24px",
     overflowY: "auto",
     height: "100vh",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
 };
 
 export const roomChatSectionStyles: SxProps<Theme> = {
