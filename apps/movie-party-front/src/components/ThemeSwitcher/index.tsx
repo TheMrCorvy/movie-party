@@ -15,9 +15,9 @@ const ThemeSwitcher = () => {
         <Box sx={containerStyles}>
             <IconButton onClick={toggleColorMode} color="inherit">
                 {theme.palette.mode === "dark" ? (
-                    <Brightness4Icon />
+                    <Brightness4Icon data-testid="Brightness4Icon" />
                 ) : (
-                    <Brightness7Icon />
+                    <Brightness7Icon data-testid="Brightness7Icon" />
                 )}
             </IconButton>
         </Box>

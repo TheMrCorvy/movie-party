@@ -64,6 +64,7 @@ const GlassInput: FC<GlassInputProps> = ({
     checked = false,
     options,
     label,
+    onSelectChange,
     ...rest
 }) => {
     const {
@@ -105,7 +106,13 @@ const GlassInput: FC<GlassInputProps> = ({
     if (kind === "checkbox") {
         return (
             <FormControlLabel
-                control={<Checkbox checked={checked} sx={checkboxStyles} />}
+                control={
+                    <Checkbox
+                        checked={checked}
+                        sx={checkboxStyles}
+                        onChange={rest.onChange}
+                    />
+                }
                 label={<Typography sx={{ color: "white" }}>{label}</Typography>}
             />
         );
@@ -148,6 +155,7 @@ const GlassInput: FC<GlassInputProps> = ({
                     {label}
                 </InputLabel>
                 <Select
+                    labelId={rest.id}
                     label={label}
                     MenuProps={{
                         PaperProps: {
@@ -155,7 +163,7 @@ const GlassInput: FC<GlassInputProps> = ({
                         },
                     }}
                     {...rest}
-                    onChange={rest.onSelectChange}
+                    onChange={onSelectChange}
                 >
                     {options.map((option, index) => (
                         <MenuItem

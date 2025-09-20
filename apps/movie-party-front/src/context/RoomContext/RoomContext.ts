@@ -6,7 +6,7 @@ interface PeerState {
     stream: MediaStream;
 }
 
-interface RoomContextType {
+export interface RoomContextType {
     ws: Socket;
     me?: Peer;
     stream?: MediaStream;
