@@ -1,6 +1,6 @@
-import { RoomParams, Rooms } from ".";
+import { RoomParams } from ".";
 import type { Socket, Server as SocketIOServer } from "socket.io";
-import { Signals } from "@repo/type-definitions/rooms";
+import { Signals, Rooms } from "@repo/type-definitions/rooms";
 import { leaveRoom } from "./leaveRoom";
 
 export interface EnterRoomParams extends RoomParams {
@@ -43,12 +43,11 @@ export const enterRoom: EnterRoom = ({
         participants: rooms[roomId].participants,
     });
 
-    socket.to(roomId).emit(Signals.USER_JOINED, { peerId, peerName });
-
     console.log("user joined the room: ", { roomId, peerId, peerName });
 
     socket.on("disconnect", () => {
+        // sudden disconnection
         console.log("user left the room", peerId);
-        leaveRoom({ roomId, peerId, rooms, socket });
+        leaveRoom({ roomId, peerId, rooms, io });
     });
 };

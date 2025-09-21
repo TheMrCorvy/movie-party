@@ -1,15 +1,15 @@
-import { RoomParams, Rooms } from ".";
-import { Socket } from "socket.io";
-import { Signals } from "@repo/type-definitions/rooms";
+import { RoomParams } from ".";
+import type { Server as SocketIOServer } from "socket.io";
+import { Signals, Rooms } from "@repo/type-definitions/rooms";
 
 export interface LeaveRoomParams extends RoomParams {
     rooms: Rooms;
-    socket: Socket;
+    io: SocketIOServer;
 }
 
 export type LeaveRoom = (params: LeaveRoomParams) => void;
 
-export const leaveRoom: LeaveRoom = ({ peerId, roomId, rooms, socket }) => {
+export const leaveRoom: LeaveRoom = ({ peerId, roomId, rooms, io }) => {
     if (!rooms[roomId]) {
         console.log("User tryed to leave from a non existing room.");
         return;
@@ -25,5 +25,8 @@ export const leaveRoom: LeaveRoom = ({ peerId, roomId, rooms, socket }) => {
         return;
     }
 
-    socket.to(roomId).emit(Signals.USER_LEFT, peerId);
+    io.in(roomId).emit(Signals.GET_PARTICIPANTS, {
+        roomId,
+        participants: rooms[roomId].participants,
+    });
 };

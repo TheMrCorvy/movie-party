@@ -1,13 +1,21 @@
+import { Message, Participant } from "..";
+
 export enum Signals {
     "CREATE_ROOM" = "CREATE_ROOM",
     "ENTER_ROOM" = "ENTER_ROOM",
+    "LEAVE_ROOM" = "LEAVE_ROOM",
     "ROOM_CREATED" = "ROOM_CREATED",
-    "USER_JOINED" = "USER_JOINED",
-    "USER_LEFT" = "USER_LEFT",
     "GET_PARTICIPANTS" = "GET_PARTICIPANTS",
     "ROOM_NOT_FOUND" = "ROOM_NOT_FOUND",
     "START_SHARING" = "START_SHARING",
     "STOP_SHARING" = "STOP_SHARING",
     "STARTED_SHARING" = "STARTED_SHARING",
     "STOPPED_SHARING" = "STOPPED_SHARING",
+}
+
+export interface Rooms {
+    [roomId: string]: {
+        messages: Message[];
+        participants: Participant[];
+    };
 }

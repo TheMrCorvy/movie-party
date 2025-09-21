@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import { Rooms } from ".";
+import { Rooms } from "@repo/type-definitions/rooms";
 import { Socket } from "socket.io";
 import { Signals } from "@repo/type-definitions/rooms";
 
