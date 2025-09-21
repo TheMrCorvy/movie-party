@@ -6,11 +6,11 @@ import Room from "./pages/Room";
 import { ThemeContextProvider } from "./context/ThemeContext/ThemeContextProvider";
 import { Layout } from "./components/Layout";
 import JoinRoom from "./pages/JoinRoom";
-import { RoomProvider } from "./context/RoomContext/RoomContextProvider";
+import { RoomContextProvider } from "./context/RoomContext/RoomContextProvider";
 
 createRoot(document.getElementById("root")!).render(
     <StrictMode>
-        <RoomProvider>
+        <RoomContextProvider>
             <BrowserRouter>
                 <ThemeContextProvider>
                     <Routes>
@@ -25,6 +25,6 @@ createRoot(document.getElementById("root")!).render(
                     </Routes>
                 </ThemeContextProvider>
             </BrowserRouter>
-        </RoomProvider>
+        </RoomContextProvider>
     </StrictMode>
 );

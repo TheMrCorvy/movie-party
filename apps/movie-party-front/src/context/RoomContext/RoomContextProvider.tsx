@@ -21,7 +21,7 @@ const initialState: RoomState = {
     },
 };
 
-export const RoomProvider = ({ children }: { children: ReactNode }) => {
+export const RoomContextProvider = ({ children }: { children: ReactNode }) => {
     const [state, dispatch] = useReducer(roomReducer, initialState);
 
     return (
@@ -38,7 +38,7 @@ export const useRoom = () => {
     const context = useContext(RoomContext);
     const dispatch = useContext(RoomDispatchContext);
     if (!context || !dispatch) {
-        throw new Error("useRoom must be used within a RoomProvider");
+        throw new Error("useRoom must be used within a RoomContextProvider");
     }
     return {
         room: context.room,
