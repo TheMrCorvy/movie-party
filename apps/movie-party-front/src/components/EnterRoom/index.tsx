@@ -1,7 +1,7 @@
 import { ChangeEvent, type FC } from "react";
 import { useContext } from "react";
 
-import { RoomContext } from "../../context/RoomContext/RoomContext";
+// import { RoomContext } from "../../context/RoomContext/RoomContext";
 
 import Container from "@mui/material/Container";
 
@@ -11,14 +11,14 @@ import GlassButton from "../GlassButton";
 import GlassInput from "../GlassInput";
 
 const CreateRoom: FC = () => {
-    const context = useContext(RoomContext);
+    // const context = useContext(RoomContext);
 
-    if (!context) {
-        return <div>Loading...</div>;
-    }
+    // if (!context) {
+    //     return <div>Loading...</div>;
+    // }
 
     const createRoom = () => {
-        console.log(context.myName);
+        // console.log(context.myName);
     };
 
     const { mainContainer } = styles();
