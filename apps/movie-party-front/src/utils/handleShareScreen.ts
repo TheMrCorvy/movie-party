@@ -8,6 +8,7 @@ import {
     initiateCameraCallsDuringScreenShare,
     cleanupCameraCalls,
 } from "./handleCameraCallsDuringScreenShare";
+import { PeerState } from "../context/RoomContext/RoomContext";
 
 interface HandleShareScreenProps {
     me: Peer;
@@ -20,7 +21,7 @@ interface HandleShareScreenProps {
     roomId: string;
     dispatch: (payload: PeerAction) => void;
     cameraCalls: RefObject<MediaConnection[]>;
-    peers: Record<string, { stream: MediaStream }>;
+    peers: Record<string, PeerState>;
 }
 
 interface HandleSwitchStreamProps {
@@ -110,12 +111,15 @@ export const handleShareScreen = async ({
         ws.emit(Signals.START_SHARING, { peerId: me.id, roomId });
 
         if (cameraStream) {
-            const otherPeerIds = Object.keys(peers);
+            const otherPeerIds = Object.entries(peers);
 
             initiateCameraCallsDuringScreenShare({
                 me,
                 cameraStream,
-                participants: otherPeerIds,
+                participants: otherPeerIds.map((peerState) => ({
+                    id: peerState[0],
+                    name: peerState[1].peerName,
+                })),
                 dispatch,
                 cameraCalls,
             });

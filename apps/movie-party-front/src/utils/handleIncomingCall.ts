@@ -4,12 +4,14 @@ interface HandleIncomingCallParams {
     call: any;
     stream: MediaStream;
     dispatch: (payload: PeerAction) => void;
+    peerName: string;
 }
 
 const handleIncomingCall = ({
     call,
     stream,
     dispatch,
+    peerName,
 }: HandleIncomingCallParams) => {
     const isCameraCall =
         call.metadata?.streamType === "camera-during-screenshare";
@@ -27,7 +29,7 @@ const handleIncomingCall = ({
 
             dispatch({
                 type: "ADD_PEER",
-                payload: { peerId, stream: remoteStream },
+                payload: { peerId, stream: remoteStream, peerName },
             });
         });
 

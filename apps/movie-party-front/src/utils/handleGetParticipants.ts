@@ -1,8 +1,9 @@
 import type Peer from "peerjs";
 import type { PeerAction } from "../context/RoomContext/peerReducer";
+import { Participant } from "@repo/type-definitions";
 
 interface Participants {
-    participants: string[];
+    participants: Participant[];
     roomId: string;
     me: Peer;
     stream: MediaStream;
@@ -10,10 +11,10 @@ interface Participants {
 }
 
 const filterOtherParticipants = (
-    participants: string[],
+    participants: Participant[],
     meId: string
-): string[] => {
-    return participants.filter((peerId) => peerId !== meId);
+): Participant[] => {
+    return participants.filter((participant) => participant.id !== meId);
 };
 
 const handleGetParticipants = ({
@@ -29,8 +30,14 @@ const handleGetParticipants = ({
         return;
     }
 
-    otherParticipants.forEach((peerId) =>
-        handleCallSent({ peerId, me, stream, dispatch })
+    otherParticipants.forEach((participant) =>
+        handleCallSent({
+            peerId: participant.id,
+            me,
+            stream,
+            dispatch,
+            peerName: participant.name,
+        })
     );
 };
 
@@ -39,9 +46,16 @@ interface HandleCallParams {
     me: Peer;
     stream: MediaStream;
     dispatch: (payload: PeerAction) => void;
+    peerName: string;
 }
 
-const handleCallSent = ({ peerId, me, stream, dispatch }: HandleCallParams) => {
+const handleCallSent = ({
+    peerId,
+    me,
+    stream,
+    dispatch,
+    peerName,
+}: HandleCallParams) => {
     try {
         const call = me.call(peerId, stream, {
             metadata: { peerId: me.id },
@@ -55,7 +69,7 @@ const handleCallSent = ({ peerId, me, stream, dispatch }: HandleCallParams) => {
         call.on("stream", (peerStream) => {
             dispatch({
                 type: "ADD_PEER",
-                payload: { peerId, stream: peerStream },
+                payload: { peerId, stream: peerStream, peerName },
             });
         });
 

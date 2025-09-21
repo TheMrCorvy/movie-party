@@ -11,6 +11,7 @@ const styles: StylesService = () => {
             color: "rgba(255, 255, 255, 0.9)",
             fontSize: "0.75rem",
             fontWeight: 500,
+            textTransform: "capitalize",
         },
         peerLabelStyles: {
             padding: "8px",

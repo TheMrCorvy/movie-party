@@ -2,11 +2,12 @@ import type { MediaConnection } from "peerjs";
 import type Peer from "peerjs";
 import type { RefObject } from "react";
 import type { PeerAction } from "../context/RoomContext/peerReducer";
+import { Participant } from "@repo/type-definitions";
 
 interface HandleCameraCallsProps {
     me: Peer;
     cameraStream: MediaStream;
-    participants: string[];
+    participants: Participant[];
     dispatch: (payload: PeerAction) => void;
     cameraCalls: RefObject<MediaConnection[]>;
 }
@@ -24,7 +25,9 @@ export const initiateCameraCallsDuringScreenShare = ({
 }: HandleCameraCallsProps) => {
     cleanupCameraCalls({ cameraCalls });
 
-    const otherParticipants = participants.filter((peerId) => peerId !== me.id);
+    const otherParticipants = participants.filter(
+        (participant) => participant.id !== me.id
+    );
 
     if (otherParticipants.length === 0) {
         console.log(
@@ -33,9 +36,9 @@ export const initiateCameraCallsDuringScreenShare = ({
         return;
     }
 
-    otherParticipants.forEach((peerId) => {
+    otherParticipants.forEach((participant) => {
         try {
-            const call = me.call(peerId, cameraStream, {
+            const call = me.call(participant.id, cameraStream, {
                 metadata: {
                     peerId: me.id,
                     streamType: "camera-during-screenshare",
@@ -44,7 +47,7 @@ export const initiateCameraCallsDuringScreenShare = ({
 
             if (!call) {
                 console.error(
-                    `[Camera Calls] Failed to create camera call to peer ${peerId}`
+                    `[Camera Calls] Failed to create camera call to peer ${participant.id}`
                 );
                 return;
             }
@@ -55,14 +58,18 @@ export const initiateCameraCallsDuringScreenShare = ({
                 dispatch({
                     type: "ADD_PEER",
                     payload: {
-                        peerId: `${peerId}-camera`,
+                        peerId: `${participant.id}-camera`,
                         stream: peerStream,
+                        peerName: participant.name,
                     },
                 });
             });
 
             call.on("error", (err) => {
-                console.error(`[Camera Calls] Error with peer ${peerId}:`, err);
+                console.error(
+                    `[Camera Calls] Error with peer ${participant.name}:`,
+                    err
+                );
             });
 
             call.on("close", () => {
@@ -74,12 +81,12 @@ export const initiateCameraCallsDuringScreenShare = ({
 
                 dispatch({
                     type: "REMOVE_PEER",
-                    payload: { peerId: `${peerId}-camera` },
+                    payload: { peerId: `${participant.name}-camera` },
                 });
             });
         } catch (error) {
             console.error(
-                `[Camera Calls] Failed to initiate call to peer ${peerId}:`,
+                `[Camera Calls] Failed to initiate call to peer ${participant.name}:`,
                 error
             );
         }

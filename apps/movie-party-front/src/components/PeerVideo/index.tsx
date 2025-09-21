@@ -5,10 +5,10 @@ import styles from "./styles";
 
 interface PeerVideoProps {
     stream: MediaStream;
-    peerId: string;
+    peerName: string;
 }
 
-const PeerVideo: FC<PeerVideoProps> = ({ stream, peerId }) => {
+const PeerVideo: FC<PeerVideoProps> = ({ stream, peerName }) => {
     const videoRef = useRef<HTMLVideoElement>(null);
 
     useEffect(() => {
@@ -35,7 +35,7 @@ const PeerVideo: FC<PeerVideoProps> = ({ stream, peerId }) => {
             />
             <Box sx={peerLabelStyles}>
                 <Typography variant="caption" sx={peerTextStyles}>
-                    Peer: {peerId.substring(0, 8)}...
+                    Peer: {peerName.substring(0, 8)}
                 </Typography>
             </Box>
         </Box>

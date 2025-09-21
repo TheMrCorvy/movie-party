@@ -12,6 +12,7 @@ import handleIncomingCall from "../../utils/handleIncomingCall";
 import handleUserJoined from "../../utils/handleUserJoined";
 import handleRemovePeer from "../../utils/handleRemovePeer";
 import { handleShareScreen } from "../../utils/handleShareScreen";
+import { Participant } from "@repo/type-definitions";
 
 const WS = "http://localhost:4000";
 const ws = SocketIOClient(WS);
@@ -24,6 +25,11 @@ interface EnterRoomResponse {
     roomId: string;
 }
 
+interface GetParticipantsSignal {
+    participants: Participant[];
+    roomId: string;
+}
+
 export const RoomProvider: FC<RoomProviderProps> = ({ children }) => {
     const navigate = useNavigate();
     const [me, setMe] = useState<Peer>();
@@ -33,6 +39,7 @@ export const RoomProvider: FC<RoomProviderProps> = ({ children }) => {
     const callsRef = useRef<MediaConnection[]>([]);
     const cameraCalls = useRef<MediaConnection[]>([]);
     const [cameraStream, setCameraStream] = useState<MediaStream>();
+    const [myName, setMyName] = useState("");
 
     const enterRoom = ({ roomId }: EnterRoomResponse) => {
         navigate(`/room/${roomId}`);
@@ -41,28 +48,25 @@ export const RoomProvider: FC<RoomProviderProps> = ({ children }) => {
     useEffect(() => {
         if (!me || !stream) return;
 
-        ws.on(Signals.GET_PARTICIPANTS, ({ participants, roomId }) =>
+        const onGetParticipants = ({
+            participants,
+            roomId,
+        }: GetParticipantsSignal) => {
             handleGetParticipants({
                 participants,
                 roomId,
                 me,
                 stream,
                 dispatch,
-            })
-        );
+            });
+        };
+
+        ws.on(Signals.GET_PARTICIPANTS, onGetParticipants);
 
         return () => {
-            ws.off(Signals.GET_PARTICIPANTS, ({ participants, roomId }) =>
-                handleGetParticipants({
-                    participants,
-                    roomId,
-                    me,
-                    stream,
-                    dispatch,
-                })
-            );
+            ws.off(Signals.GET_PARTICIPANTS, onGetParticipants);
         };
-    }, [me, stream, peers]);
+    }, [me, stream]);
 
     useEffect(() => {
         const cleanupFunction = setMeUp({
@@ -86,9 +90,13 @@ export const RoomProvider: FC<RoomProviderProps> = ({ children }) => {
     useEffect(() => {
         if (!me || !stream) return;
 
-        ws.on(Signals.USER_JOINED, ({ peerId }) =>
-            handleUserJoined({ peerId, me })
-        );
+        ws.on(Signals.USER_JOINED, ({ peerId, peerName }) => {
+            handleUserJoined({ peerId, me, peerName });
+            const currentLocation = window.location.pathname.split("/");
+            if (currentLocation[1] === "join-room") {
+                enterRoom({ roomId: currentLocation[2] });
+            }
+        });
 
         me.on("call", (call) => {
             const isCameraCall =
@@ -111,16 +119,24 @@ export const RoomProvider: FC<RoomProviderProps> = ({ children }) => {
                     );
                 });
             }
+            const callerId = call.metadata?.peerId || call.peer;
+            const peerName = "";
 
-            handleIncomingCall({ call, stream, dispatch });
+            Object.entries(peers).forEach((peer) => {
+                if (peer[0] === callerId) {
+                    return peerName === peer[1].peerName;
+                }
+            });
+
+            handleIncomingCall({ call, stream, dispatch, peerName });
         });
 
         return () => {
-            ws.off(Signals.USER_JOINED, ({ peerId }) =>
-                handleUserJoined({ peerId, me })
+            ws.off(Signals.USER_JOINED, ({ peerId, peerName }) =>
+                handleUserJoined({ peerId, me, peerName })
             );
             me.off("call", (call) =>
-                handleIncomingCall({ call, stream, dispatch })
+                handleIncomingCall({ call, stream, dispatch, peerName: "" })
             );
         };
     }, [me, stream, peers]);
@@ -144,7 +160,16 @@ export const RoomProvider: FC<RoomProviderProps> = ({ children }) => {
 
     return (
         <RoomContext.Provider
-            value={{ ws, me, stream, peers, shareScreen, screenSharingId }}
+            value={{
+                ws,
+                me,
+                stream,
+                peers,
+                shareScreen,
+                screenSharingId,
+                myName,
+                setMyName,
+            }}
         >
             {children}
         </RoomContext.Provider>

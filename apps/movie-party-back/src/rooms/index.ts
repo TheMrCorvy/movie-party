@@ -1,73 +1,33 @@
 import { Socket, Server as SocketIOServer } from "socket.io";
-import { v4 as uuidv4 } from "uuid";
 import { Signals } from "@repo/type-definitions/rooms";
+import { Message, Participant } from "@repo/type-definitions";
+import { createRoom } from "./createRoom";
+import { enterRoom } from "./enterRoom";
+import { startSharing, stopSharing } from "./shareScreen";
 
-interface RoomParams {
+export interface RoomParams {
     roomId: string;
     peerId: string;
 }
 
-const rooms: Record<string, string[]> = {};
+export interface Rooms {
+    [roomId: string]: {
+        messages: Message[];
+        participants: Participant[];
+    };
+}
+
+const rooms: Rooms = {};
 
 export const roomHandler = (socket: Socket, io: SocketIOServer) => {
-    const createRoom = () => {
-        const roomId = uuidv4();
-        rooms[roomId] = [];
-        socket.emit(Signals.ROOM_CREATED, { roomId });
-        console.log("user created a room");
-    };
-
-    const enterRoom = ({ roomId, peerId }: RoomParams) => {
-        if (!rooms[roomId]) {
-            socket.emit(Signals.ROOM_NOT_FOUND);
-            return;
-        }
-
-        socket.join(roomId);
-
-        if (!rooms[roomId].includes(peerId)) {
-            rooms[roomId].push(peerId);
-        }
-
-        io.in(roomId).emit(Signals.GET_PARTICIPANTS, {
-            roomId,
-            participants: rooms[roomId],
-        });
-
-        socket.to(roomId).emit(Signals.USER_JOINED, { peerId });
-
-        console.log("user joined the room: ", { roomId, peerId });
-
-        socket.on("disconnect", () => {
-            console.log("user left the room", peerId);
-            leaveRoom({ roomId, peerId });
-        });
-    };
-
-    const leaveRoom = ({ peerId, roomId }: RoomParams) => {
-        rooms[roomId] = rooms[roomId]?.filter((id) => id !== peerId);
-
-        if (rooms[roomId]?.length === 0) {
-            delete rooms[roomId];
-            console.log("room deleted: ", roomId);
-            return;
-        }
-
-        socket.to(roomId).emit(Signals.USER_LEFT, peerId);
-    };
-
-    const startSharing = ({ roomId, peerId }: RoomParams) => {
-        io.in(roomId).emit(Signals.STARTED_SHARING, { peerId });
-        console.log("user started sharing: ", peerId);
-    };
-
-    const stopSharing = ({ roomId, peerId }: RoomParams) => {
-        io.in(roomId).emit(Signals.STOPPED_SHARING, { peerId });
-        console.log("user stopped sharing: ", peerId);
-    };
-
-    socket.on(Signals.CREATE_ROOM, createRoom);
-    socket.on(Signals.ENTER_ROOM, enterRoom);
-    socket.on(Signals.START_SHARING, startSharing);
-    socket.on(Signals.STOP_SHARING, stopSharing);
+    socket.on(Signals.CREATE_ROOM, () => createRoom({ rooms, socket }));
+    socket.on(Signals.ENTER_ROOM, ({ roomId, peerId, peerName }) =>
+        enterRoom({ roomId, peerId, peerName, rooms, io, socket })
+    );
+    socket.on(Signals.START_SHARING, ({ roomId, peerId }) =>
+        startSharing({ roomId, peerId, io, socket })
+    );
+    socket.on(Signals.STOP_SHARING, ({ roomId, peerId }) =>
+        stopSharing({ roomId, peerId, io })
+    );
 };

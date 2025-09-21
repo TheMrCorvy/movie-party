@@ -1,9 +1,11 @@
+import { AddPeerActionPayload } from "./peerReducer";
+
 const ADD_PEER = "ADD_PEER";
 const REMOVE_PEER = "REMOVE_PEER";
 
-const addPeerAction = (peerId: string, stream: MediaStream) => ({
+const addPeerAction = ({ peerId, stream, peerName }: AddPeerActionPayload) => ({
     type: ADD_PEER,
-    payload: { peerId, stream },
+    payload: { peerId, stream, peerName },
 });
 
 const removePeerAction = (peerId: string) => ({

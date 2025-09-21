@@ -2,8 +2,9 @@ import { createContext } from "react";
 import { Socket } from "socket.io-client";
 import Peer from "peerjs";
 
-interface PeerState {
+export interface PeerState {
     stream: MediaStream;
+    peerName: string;
 }
 
 export interface RoomContextType {
@@ -13,6 +14,8 @@ export interface RoomContextType {
     peers: Record<string, PeerState>;
     shareScreen: () => void;
     screenSharingId: string;
+    myName: string;
+    setMyName: (name: string) => void;
 }
 
 export const RoomContext = createContext<RoomContextType | null>(null);

@@ -18,6 +18,7 @@ export const useRoom = () => {
             context.ws.emit(Signals.ENTER_ROOM, {
                 roomId,
                 peerId: context.me.id,
+                peerName: context.myName,
             });
         }
     }, [roomId, context?.me?.id, context?.ws]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -72,6 +73,7 @@ export const useRoom = () => {
         ? {
               stream: context.stream as MediaStream,
               peerId: context.me!.id,
+              peerName: context.myName,
           }
         : null;
 

@@ -33,6 +33,8 @@ describe("CreateRoom Component", () => {
             peers: {},
             shareScreen: jest.fn(),
             screenSharingId: "",
+            myName: "",
+            setMyName: jest.fn(),
         };
 
         render(
@@ -60,6 +62,8 @@ describe("CreateRoom Component", () => {
             peers: {},
             shareScreen: jest.fn(),
             screenSharingId: "",
+            myName: "",
+            setMyName: jest.fn(),
         };
 
         render(

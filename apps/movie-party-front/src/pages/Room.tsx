@@ -31,6 +31,16 @@ const Room: FC = () => {
         return <div>Loading...</div>;
     }
 
+    const handleCopy = async () => {
+        try {
+            await navigator.clipboard.writeText(
+                "http://localhost:5173/join-room/" + roomId
+            );
+        } catch (err) {
+            console.error("Failed to copy text: ", err);
+        }
+    };
+
     return (
         <Container maxWidth="xl" sx={roomContainerStyles}>
             <Grid container sx={roomGridContainerStyles}>
@@ -53,13 +63,17 @@ const Room: FC = () => {
                             Compartir pantalla
                         </GlassButton>
 
+                        <GlassButton onClick={handleCopy}>
+                            Compartir sala
+                        </GlassButton>
+
                         <Box sx={roomVideoSectionStyles}>
                             <Typography
                                 variant="h5"
                                 component="h3"
                                 gutterBottom
                             >
-                                Your Video
+                                Tu cámara
                             </Typography>
                             {videoStream && (
                                 <VideoPlayerComponent stream={videoStream} />
@@ -72,7 +86,8 @@ const Room: FC = () => {
                                 component="h3"
                                 gutterBottom
                             >
-                                Connected Peers: {Object.keys(peers).length}
+                                Participantes conectados:{" "}
+                                {Object.keys(peers).length}
                             </Typography>
                             <Box sx={peerVideosContainerStyles}>
                                 {peersArr.length < 1 && !ownCamera ? (
@@ -82,7 +97,7 @@ const Room: FC = () => {
                                         {ownCamera && (
                                             <PeerVideo
                                                 key={ownCamera.peerId}
-                                                peerId={ownCamera.peerId}
+                                                peerName={ownCamera.peerName}
                                                 stream={ownCamera.stream}
                                             />
                                         )}
@@ -90,7 +105,7 @@ const Room: FC = () => {
                                             ([peerId, peer]) => (
                                                 <PeerVideo
                                                     key={peerId}
-                                                    peerId={peerId}
+                                                    peerName={peer.peerName}
                                                     stream={peer.stream}
                                                 />
                                             )

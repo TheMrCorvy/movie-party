@@ -1,11 +1,18 @@
 import { ADD_PEER, REMOVE_PEER } from "./peerActions";
+import { PeerState } from "./RoomContext";
 
-type PeersState = Record<string, { stream: MediaStream }>;
+type PeersState = Record<string, PeerState>;
+
+export interface AddPeerActionPayload {
+    peerId: string;
+    stream: MediaStream;
+    peerName: string;
+}
 
 export type PeerAction =
     | {
           type: typeof ADD_PEER;
-          payload: { peerId: string; stream: MediaStream };
+          payload: AddPeerActionPayload;
       }
     | { type: typeof REMOVE_PEER; payload: { peerId: string } };
 
@@ -17,7 +24,10 @@ export const peerReducer = (
         case ADD_PEER:
             return {
                 ...state,
-                [action.payload.peerId]: { stream: action.payload.stream },
+                [action.payload.peerId]: {
+                    stream: action.payload.stream,
+                    peerName: action.payload.peerName,
+                },
             };
 
         case REMOVE_PEER: {

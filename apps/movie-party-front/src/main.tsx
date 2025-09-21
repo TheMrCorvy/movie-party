@@ -6,6 +6,7 @@ import Home from "./pages/Home.tsx";
 import Room from "./pages/Room.tsx";
 import { ThemeContextProvider } from "./context/ThemeContext/ThemeContextProvider.tsx";
 import { Layout } from "./components/Layout.tsx";
+import JoinRoom from "./pages/JoinRoom.tsx";
 
 createRoot(document.getElementById("root")!).render(
     <StrictMode>
@@ -16,6 +17,10 @@ createRoot(document.getElementById("root")!).render(
                         <Route path="/" element={<Layout />}>
                             <Route index element={<Home />} />
                             <Route path="/room/:roomId" element={<Room />} />
+                            <Route
+                                path="/join-room/:roomId"
+                                element={<JoinRoom />}
+                            />
                         </Route>
                     </Routes>
                 </ThemeContextProvider>
