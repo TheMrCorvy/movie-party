@@ -13,7 +13,9 @@ export interface RoomParams {
 let rooms: Room[] = []; // eslint-disable-line prefer-const
 
 export const roomHandler = (socket: Socket, io: SocketIOServer) => {
-    socket.on(Signals.CREATE_ROOM, () => createRoom({ rooms, socket }));
+    socket.on(Signals.CREATE_ROOM, ({ peerName, peerId }) =>
+        createRoom({ rooms, socket, peerName, peerId })
+    );
     socket.on(Signals.ENTER_ROOM, ({ roomId, peerId, peerName }) =>
         enterRoom({ roomId, peerId, peerName, rooms, io, socket })
     );

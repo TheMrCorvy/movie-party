@@ -1,8 +1,11 @@
 import { Room } from "@repo/type-definitions/rooms";
 import { Socket } from "socket.io-client";
 
+export interface LocalRoom extends Room {
+    myId: string;
+}
 export interface RoomState {
-    room: Room;
+    room: LocalRoom;
     ws: Socket | null;
 }
 
@@ -14,7 +17,7 @@ export enum ActionTypes {
     "MESSAGE_RECEIVED" = "MESSAGE_RECEIVED",
 }
 
-export type RoomAction = { type: ActionTypes; payload: Room };
+export type RoomAction = { type: ActionTypes; payload: LocalRoom };
 
 // Reducer function to handle state updates
 export const roomReducer = (

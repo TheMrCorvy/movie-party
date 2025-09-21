@@ -24,6 +24,7 @@ const initialState: RoomState = {
         id: "",
         messages: [],
         participants: [],
+        myId: "",
     },
     ws,
 };

@@ -6,19 +6,26 @@ import { Signals } from "@repo/type-definitions/rooms";
 export interface CreateRoomParams {
     rooms: Room[];
     socket: Socket;
+    peerId: string;
+    peerName: string;
 }
 
 export type CreateRoom = (params: CreateRoomParams) => void;
 
-export const createRoom: CreateRoom = ({ rooms, socket }) => {
+export const createRoom: CreateRoom = ({ rooms, socket, peerId, peerName }) => {
     const roomId = uuidv4();
-
-    rooms.push({
+    const room = {
         id: roomId,
         messages: [],
-        participants: [],
-    });
+        participants: [
+            {
+                id: peerId,
+                name: peerName,
+            },
+        ],
+    };
+    rooms.push(room);
 
-    socket.emit(Signals.ROOM_CREATED, { roomId });
-    console.log("user created a room", rooms[0]);
+    socket.emit(Signals.ROOM_CREATED, { room });
+    console.log("user created a room", room);
 };

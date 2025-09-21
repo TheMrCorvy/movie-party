@@ -1,14 +1,19 @@
-import { ChangeEvent, type FC } from "react";
+import { ChangeEvent, useEffect, useState, type FC } from "react";
 import { useRoom } from "../../context/RoomContext/RoomContextProvider";
 import Container from "@mui/material/Container";
 import GlassContainer from "../GlassContainer";
 import styles from "./styles";
+
 import GlassButton from "../GlassButton";
 import GlassInput from "../GlassInput";
+import {
+    createRoomService,
+    roomWasCreated,
+} from "../../services/createRoomService";
 // import { ActionTypes } from "../../context/RoomContext/roomReducer";
-import { Signals } from "@repo/type-definitions/rooms";
 
 const CreateRoom: FC = () => {
+    const [myName, setMyName] = useState("");
     const { ws } = useRoom();
 
     const createRoom = () => {
@@ -16,11 +21,10 @@ const CreateRoom: FC = () => {
             console.log("websocket not found");
             return;
         }
-        // const newRoom = {
-        //     ...room,
-        //     id: "new-room-id",
-        // };
-        ws.emit(Signals.CREATE_ROOM);
+        createRoomService({
+            ws,
+            peerName: myName,
+        });
         // dispatch({ type: ActionTypes.SET_ROOM_ID, payload: newRoom });
     };
 
@@ -28,7 +32,20 @@ const CreateRoom: FC = () => {
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
+        setMyName(e.target.value);
     };
+
+    useEffect(() => {
+        // hay que escuchar por el evento room created
+        if (!ws) return;
+
+        const removeEventListener = roomWasCreated({
+            ws,
+            callback: (params: any) => console.log(params),
+        });
+
+        return () => removeEventListener();
+    }, [ws]);
 
     return (
         <Container maxWidth="xl" sx={mainContainer}>
