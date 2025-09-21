@@ -22,6 +22,7 @@ interface HandleShareScreenProps {
     dispatch: (payload: PeerAction) => void;
     cameraCalls: RefObject<MediaConnection[]>;
     peers: Record<string, PeerState>;
+    myName: string;
 }
 
 interface HandleSwitchStreamProps {
@@ -51,18 +52,19 @@ const switchStream = ({
             .getSenders()
             .find((s) => s.track?.kind === "video");
 
-        if (sender && videoTrack) {
-            sender.replaceTrack(videoTrack).catch((error) => {
-                console.error(
-                    `[Switch Stream] Error replacing track for peer ${call.peer}:`,
-                    error
-                );
-            });
-        } else {
+        if (!sender || !videoTrack) {
             console.warn(
                 `[Switch Stream] Could not replace track - sender: ${!!sender}, videoTrack: ${!!videoTrack}`
             );
+            return;
         }
+
+        sender.replaceTrack(videoTrack).catch((error) => {
+            console.error(
+                `[Switch Stream] Error replacing track for peer ${call.peer}:`,
+                error
+            );
+        });
     });
 };
 
@@ -78,7 +80,10 @@ export const handleShareScreen = async ({
     dispatch,
     cameraCalls,
     peers,
+    myName,
 }: HandleShareScreenProps) => {
+    console.log("handleShareScreen", myName);
+
     if (screenSharingId) {
         if (cameraStream) {
             switchStream({
@@ -94,51 +99,52 @@ export const handleShareScreen = async ({
 
         cleanupCameraCalls({ cameraCalls });
         setScreenSharingId("");
-    } else {
-        const displayStream = await navigator.mediaDevices.getDisplayMedia({
-            video: true,
-            audio: false,
-        });
-        switchStream({
-            newStream: displayStream,
-            isScreen: true,
-            setStream,
-            setScreenSharingId,
-            callsRef,
-            me,
-        });
-
-        ws.emit(Signals.START_SHARING, { peerId: me.id, roomId });
-
-        if (cameraStream) {
-            const otherPeerIds = Object.entries(peers);
-
-            initiateCameraCallsDuringScreenShare({
-                me,
-                cameraStream,
-                participants: otherPeerIds.map((peerState) => ({
-                    id: peerState[0],
-                    name: peerState[1].peerName,
-                })),
-                dispatch,
-                cameraCalls,
-            });
-        }
-
-        displayStream.getVideoTracks()[0].onended = () => {
-            if (cameraStream) {
-                switchStream({
-                    newStream: cameraStream,
-                    isScreen: false,
-                    setStream,
-                    setScreenSharingId,
-                    callsRef,
-                    me,
-                });
-                ws.emit(Signals.STOP_SHARING, { peerId: me.id, roomId });
-            }
-            cleanupCameraCalls({ cameraCalls });
-            setScreenSharingId("");
-        };
+        return;
     }
+
+    const displayStream = await navigator.mediaDevices.getDisplayMedia({
+        video: true,
+        audio: false,
+    });
+    switchStream({
+        newStream: displayStream,
+        isScreen: true,
+        setStream,
+        setScreenSharingId,
+        callsRef,
+        me,
+    });
+
+    ws.emit(Signals.START_SHARING, { peerId: me.id, roomId });
+
+    if (cameraStream) {
+        const otherPeerIds = Object.entries(peers);
+
+        initiateCameraCallsDuringScreenShare({
+            me,
+            cameraStream,
+            participants: otherPeerIds.map((peerState) => ({
+                id: peerState[0],
+                name: peerState[1].peerName,
+            })),
+            dispatch,
+            cameraCalls,
+        });
+    }
+
+    displayStream.getVideoTracks()[0].onended = () => {
+        if (cameraStream) {
+            switchStream({
+                newStream: cameraStream,
+                isScreen: false,
+                setStream,
+                setScreenSharingId,
+                callsRef,
+                me,
+            });
+            ws.emit(Signals.STOP_SHARING, { peerId: me.id, roomId });
+        }
+        cleanupCameraCalls({ cameraCalls });
+        setScreenSharingId("");
+    };
 };

@@ -1,4 +1,11 @@
-import { useEffect, useState, type FC, useReducer, useRef } from "react";
+import {
+    useEffect,
+    useState,
+    type FC,
+    useReducer,
+    useRef,
+    useContext,
+} from "react";
 import { useNavigate } from "react-router-dom";
 import SocketIOClient from "socket.io-client";
 import { RoomContext } from "./RoomContext";
@@ -119,14 +126,13 @@ export const RoomProvider: FC<RoomProviderProps> = ({ children }) => {
                     );
                 });
             }
-            const callerId = call.metadata?.peerId || call.peer;
-            const peerName = "";
 
-            Object.entries(peers).forEach((peer) => {
-                if (peer[0] === callerId) {
-                    return peerName === peer[1].peerName;
-                }
-            });
+            const callerId = call.metadata?.peerId || call.peer;
+
+            let peerName = "";
+            if (peers[callerId]) {
+                peerName = peers[callerId].peerName;
+            }
 
             handleIncomingCall({ call, stream, dispatch, peerName });
         });
@@ -139,7 +145,7 @@ export const RoomProvider: FC<RoomProviderProps> = ({ children }) => {
                 handleIncomingCall({ call, stream, dispatch, peerName: "" })
             );
         };
-    }, [me, stream, peers]);
+    }, [me, stream, peers]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const shareScreen = async () => {
         const roomId = window.location.pathname.split("/")[2];
@@ -155,6 +161,7 @@ export const RoomProvider: FC<RoomProviderProps> = ({ children }) => {
             dispatch,
             cameraCalls,
             peers,
+            myName,
         });
     };
 

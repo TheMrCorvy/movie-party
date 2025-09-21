@@ -56,15 +56,18 @@ export const useRoom = () => {
     const videoStream = video();
 
     const shouldShowOwnPeerVideo = () => {
-        if (context.screenSharingId) {
-            if (!context.me || !context.stream) {
-                return false;
-            }
+        // if (context.screenSharingId) {
+        //     if (!context.me || !context.stream) {
+        //         return false;
+        //     }
 
-            if (context.screenSharingId !== context.me.id) {
-                return true;
-            }
-        }
+        //     if (context.screenSharingId !== context.me.id) {
+        //         return true;
+        //     }
+        // }
+
+        // return false;
+        if (context.screenSharingId) return true;
 
         return false;
     };
