@@ -1,7 +1,9 @@
 import { Room } from "@repo/type-definitions/rooms";
+import { Socket } from "socket.io-client";
 
 export interface RoomState {
     room: Room;
+    ws: Socket | null;
 }
 
 export enum ActionTypes {
