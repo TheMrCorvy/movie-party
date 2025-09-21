@@ -1,11 +1,11 @@
 import { RoomParams } from ".";
 import type { Socket, Server as SocketIOServer } from "socket.io";
-import { Signals, Rooms } from "@repo/type-definitions/rooms";
+import { Signals, Room } from "@repo/type-definitions/rooms";
 import { leaveRoom } from "./leaveRoom";
 
 export interface EnterRoomParams extends RoomParams {
     peerName: string;
-    rooms: Rooms;
+    rooms: Room[];
     socket: Socket;
     io: SocketIOServer;
 }
@@ -20,19 +20,20 @@ export const enterRoom: EnterRoom = ({
     io,
     socket,
 }) => {
-    if (!rooms[roomId]) {
+    const room = rooms.find((room) => room.id === roomId);
+    if (!room) {
         socket.emit(Signals.ROOM_NOT_FOUND);
         return;
     }
 
     socket.join(roomId);
 
-    const participantIndex = rooms[roomId].participants.findIndex(
+    const participantIndex = room.participants.findIndex(
         (participant) => participant.id === peerId
     );
 
     if (participantIndex === -1) {
-        rooms[roomId].participants.push({
+        room.participants.push({
             id: peerId,
             name: peerName,
         });
@@ -40,7 +41,7 @@ export const enterRoom: EnterRoom = ({
 
     io.in(roomId).emit(Signals.GET_PARTICIPANTS, {
         roomId,
-        participants: rooms[roomId].participants,
+        participants: room.participants,
     });
 
     console.log("user joined the room: ", { roomId, peerId, peerName });

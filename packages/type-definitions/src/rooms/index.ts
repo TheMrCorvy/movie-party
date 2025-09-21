@@ -13,9 +13,8 @@ export enum Signals {
     "STOPPED_SHARING" = "STOPPED_SHARING",
 }
 
-export interface Rooms {
-    [roomId: string]: {
-        messages: Message[];
-        participants: Participant[];
-    };
+export interface Room {
+    id: string;
+    messages: Message[];
+    participants: Participant[];
 }

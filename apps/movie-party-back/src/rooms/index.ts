@@ -1,6 +1,6 @@
 import { Socket, Server as SocketIOServer } from "socket.io";
 import { Signals } from "@repo/type-definitions/rooms";
-import { Rooms } from "@repo/type-definitions/rooms";
+import { Room } from "@repo/type-definitions/rooms";
 import { createRoom } from "./createRoom";
 import { enterRoom } from "./enterRoom";
 import { leaveRoom } from "./leaveRoom";
@@ -10,7 +10,7 @@ export interface RoomParams {
     peerId: string;
 }
 
-const rooms: Rooms = {};
+let rooms: Room[] = []; // eslint-disable-line prefer-const
 
 export const roomHandler = (socket: Socket, io: SocketIOServer) => {
     socket.on(Signals.CREATE_ROOM, () => createRoom({ rooms, socket }));
