@@ -22,6 +22,7 @@ export const roomReducer = (
                 room: {
                     ...action.payload,
                     myId: action.payload.participants[0].id,
+                    participants: [],
                 },
             };
         case ActionTypes.UPDATE_PARTICIPANTS:

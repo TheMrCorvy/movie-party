@@ -7,13 +7,7 @@ const Home: FC = () => {
     const { room } = useRoom();
     const navigate = useNavigate();
     useEffect(() => {
-        if (
-            room.id &&
-            room.myId &&
-            room.participants.length === 1 &&
-            room.participants[0].id === room.myId &&
-            room.participants[0].name
-        ) {
+        if (room.id && room.myId && room.participants.length === 0) {
             navigate("/room/" + room.id);
         }
     }, [room, navigate]);

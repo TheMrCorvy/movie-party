@@ -47,7 +47,9 @@ const Room: FC = () => {
         return () => {
             unmountEventListener();
         };
-    }, [ws, room]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [ws]); // eslint-disable-line react-hooks/exhaustive-deps
+
+    useEffect(() => console.log(room), [room]);
 
     const handleCopy = async () => {
         try {
