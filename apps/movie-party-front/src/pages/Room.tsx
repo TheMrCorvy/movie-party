@@ -9,7 +9,6 @@ import {
 } from "../styles/pages";
 import GlassContainer from "../components/GlassContainer";
 import { useRoom } from "../context/RoomContext/RoomContextProvider";
-import { enterRoomService } from "../services/enterRoomService";
 import {
     UpdateParticipantsCallback,
     updateParticipantsService,
@@ -30,15 +29,6 @@ const Room: FC = () => {
     };
 
     useEffect(() => {
-        enterRoomService({
-            peerId: room.myId,
-            peerName:
-                room.participants.find((peer) => peer.id === room.myId)?.name ||
-                "Invitado",
-            roomId: room.id,
-            ws,
-        });
-
         const unmountEventListener = updateParticipantsService({
             ws,
             callback: handleParticipantsUpdate,

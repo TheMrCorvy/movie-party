@@ -1,4 +1,4 @@
-import { Room, Signals } from "@repo/type-definitions/rooms";
+import { Signals } from "@repo/type-definitions/rooms";
 import { Socket } from "socket.io-client";
 export interface EnterRoomServiceParams {
     ws: Socket | null;
@@ -25,7 +25,7 @@ export const enterRoomService: EnterRoomService = ({
 };
 
 export interface VerifyRoomServiceCallbackParams {
-    room: Room | undefined;
+    roomExists: boolean;
 }
 
 export interface VerifyRoomServiceParams {

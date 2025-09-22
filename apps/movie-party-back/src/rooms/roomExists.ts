@@ -10,8 +10,10 @@ export interface RoomExistsParams {
 export const roomExists = ({ roomId, rooms, io }: RoomExistsParams) => {
     const room = rooms.find((r) => r.id === roomId);
     if (room) {
-        io.emit(Signals.ROOM_EXISTS, { room });
+        io.emit(Signals.ROOM_EXISTS, { roomExists: true });
+        console.log("Room exists.");
     } else {
-        io.emit(Signals.ROOM_NOT_FOUND, { room: undefined });
+        io.emit(Signals.ROOM_NOT_FOUND, { roomExists: false });
+        console.log("Room doesn't exist.");
     }
 };

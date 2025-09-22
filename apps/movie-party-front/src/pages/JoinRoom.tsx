@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, type FC } from "react";
+import { ChangeEvent, useEffect, useState, type FC } from "react";
 
 import Container from "@mui/material/Container";
 
@@ -8,10 +8,13 @@ import GlassInput from "../components/GlassInput";
 import { useRoom } from "../context/RoomContext/RoomContextProvider";
 import { verifyRoom } from "../services/enterRoomService";
 import { useParams } from "react-router-dom";
+import { Typography } from "@mui/material";
 
 const JoinRoom: FC = () => {
     const { ws } = useRoom();
     const { roomId } = useParams();
+    const [myName, setMyName] = useState("");
+    const [roomExists, setRoomExists] = useState(false);
 
     useEffect(() => {
         if (!roomId) {
@@ -21,13 +24,20 @@ const JoinRoom: FC = () => {
         const unmountEventListeners = verifyRoom({
             roomId,
             ws,
-            callback: (params) => console.log(params.room),
+            callback: (res) => setRoomExists(res.roomExists),
         });
 
         return () => {
             unmountEventListeners();
         };
     }, [ws, roomId]);
+
+    const handleEnterRoom = () => {
+        if (!roomExists) {
+            return;
+        }
+        console.log(myName);
+    };
 
     return (
         <Container maxWidth="xl">
@@ -38,12 +48,13 @@ const JoinRoom: FC = () => {
                     size="small"
                     onChange={(e: ChangeEvent<HTMLInputElement>) => {
                         e.preventDefault();
-                        console.log(e.target.value);
+                        setMyName(e.target.value);
                     }}
                 />
-                <GlassButton onClick={() => console.log("create room")}>
-                    Create Room
-                </GlassButton>
+                <GlassButton onClick={handleEnterRoom}>Enter Room</GlassButton>
+                <Typography>
+                    Room Exists: {roomExists ? "True" : "False"}
+                </Typography>
             </GlassContainer>
         </Container>
     );
