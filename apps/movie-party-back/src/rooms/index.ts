@@ -4,6 +4,7 @@ import { Room } from "@repo/type-definitions/rooms";
 import { createRoom } from "./createRoom";
 import { enterRoom } from "./enterRoom";
 import { leaveRoom } from "./leaveRoom";
+import { roomExists } from "./roomExists";
 
 export interface RoomParams {
     roomId: string;
@@ -24,4 +25,7 @@ export const roomHandler = (socket: Socket, io: SocketIOServer) => {
         console.log("user left the room", peerId);
         leaveRoom({ roomId, peerId, rooms, io });
     });
+    socket.on(Signals.DOES_ROOM_EXISTS, ({ roomId }) =>
+        roomExists({ rooms, roomId, io })
+    );
 };

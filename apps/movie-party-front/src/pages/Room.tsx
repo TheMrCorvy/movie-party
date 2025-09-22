@@ -15,6 +15,7 @@ import {
     updateParticipantsService,
 } from "../services/updateParticipantsService";
 import { ActionTypes } from "../context/RoomContext/roomActions";
+import GlassButton from "../components/GlassButton";
 
 const Room: FC = () => {
     const { ws, room, dispatch } = useRoom();
@@ -48,6 +49,16 @@ const Room: FC = () => {
         };
     }, [ws, room]); // eslint-disable-line react-hooks/exhaustive-deps
 
+    const handleCopy = async () => {
+        try {
+            await navigator.clipboard.writeText(
+                "http://localhost:5173/join-room/" + room.id
+            );
+        } catch (err) {
+            console.error("Failed to copy text: ", err);
+        }
+    };
+
     return (
         <Container maxWidth="xl" sx={roomContainerStyles}>
             <Grid container sx={roomGridContainerStyles}>
@@ -62,6 +73,9 @@ const Room: FC = () => {
                         <Typography variant="h3" component="h1" gutterBottom>
                             Room page
                         </Typography>
+                        <GlassButton onClick={handleCopy}>
+                            Compartir sala
+                        </GlassButton>
                     </GlassContainer>
                 </Grid>
                 <Grid
