@@ -11,7 +11,8 @@ import {
     roomWasCreated,
 } from "../../services/createRoomService";
 import { Room } from "@repo/type-definitions/rooms";
-import { ActionTypes, LocalRoom } from "../../context/RoomContext/roomReducer";
+import { ActionTypes } from "../../context/RoomContext/roomActions";
+import { LocalRoom } from "../../context/RoomContext/roomReducer";
 
 interface CreateRoomCallbackParams {
     room: Room;

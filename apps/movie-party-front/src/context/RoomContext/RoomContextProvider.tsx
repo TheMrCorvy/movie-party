@@ -4,12 +4,10 @@ import {
     useContext,
     useReducer,
     Dispatch,
-    useEffect,
 } from "react";
 import { roomReducer, RoomState } from "./roomReducer";
-import type { RoomAction } from "./roomReducer";
+import type { RoomAction } from "./roomActions";
 import SocketIOClient from "socket.io-client";
-import { Signals } from "@repo/type-definitions/rooms";
 
 const WS = "http://localhost:4000";
 const ws = SocketIOClient(WS);
@@ -31,14 +29,6 @@ const initialState: RoomState = {
 
 export const RoomContextProvider = ({ children }: { children: ReactNode }) => {
     const [state, dispatch] = useReducer(roomReducer, initialState);
-
-    useEffect(() => {
-        ws.on(Signals.ROOM_CREATED, (params) => console.log(params));
-
-        return () => {
-            ws.off(Signals.ROOM_CREATED, (params) => console.log(params));
-        };
-    }, []);
 
     return (
         <RoomContext.Provider value={state}>

@@ -1,4 +1,4 @@
-import { type FC } from "react";
+import { useEffect, type FC } from "react";
 import { Container, Grid, Typography } from "@mui/material";
 import Chat from "../components/Chat";
 import {
@@ -8,8 +8,46 @@ import {
     roomChatSectionStyles,
 } from "../styles/pages";
 import GlassContainer from "../components/GlassContainer";
+import { useRoom } from "../context/RoomContext/RoomContextProvider";
+import { enterRoomService } from "../services/enterRoomService";
+import {
+    UpdateParticipantsCallback,
+    updateParticipantsService,
+} from "../services/updateParticipantsService";
+import { ActionTypes } from "../context/RoomContext/roomActions";
 
 const Room: FC = () => {
+    const { ws, room, dispatch } = useRoom();
+
+    const handleParticipantsUpdate = (params: UpdateParticipantsCallback) => {
+        if (room.id === params.roomId) {
+            dispatch({
+                type: ActionTypes.UPDATE_PARTICIPANTS,
+                payload: params.participants,
+            });
+        }
+    };
+
+    useEffect(() => {
+        enterRoomService({
+            peerId: room.myId,
+            peerName:
+                room.participants.find((peer) => peer.id === room.myId)?.name ||
+                "Invitado",
+            roomId: room.id,
+            ws,
+        });
+
+        const unmountEventListener = updateParticipantsService({
+            ws,
+            callback: handleParticipantsUpdate,
+        });
+
+        return () => {
+            unmountEventListener();
+        };
+    }, [ws, room]); // eslint-disable-line react-hooks/exhaustive-deps
+
     return (
         <Container maxWidth="xl" sx={roomContainerStyles}>
             <Grid container sx={roomGridContainerStyles}>
