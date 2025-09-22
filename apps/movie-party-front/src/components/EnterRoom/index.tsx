@@ -10,18 +10,12 @@ import {
     createRoomService,
     roomWasCreated,
 } from "../../services/createRoomService";
-import { Room } from "@repo/type-definitions/rooms";
 import { ActionTypes } from "../../context/RoomContext/roomActions";
 import { LocalRoom } from "../../context/RoomContext/roomReducer";
-import { enterRoomService } from "../../services/enterRoomService";
-
-interface CreateRoomCallbackParams {
-    room: Room;
-}
 
 const CreateRoom: FC = () => {
     const [myName, setMyName] = useState("");
-    const { ws, dispatch, room } = useRoom();
+    const { ws, dispatch } = useRoom();
     const { mainContainer } = styles();
 
     const createRoom = () => {
@@ -34,21 +28,6 @@ const CreateRoom: FC = () => {
             peerName: myName,
         });
     };
-
-    // const joinRoom = (params: CreateRoomCallbackParams) => {
-    //     // enterRoomService({
-    //     //     peerId: room.myId,
-    //     //     peerName: myName,
-    //     //     roomId: room.id,
-    //     //     ws,
-    //     // });
-    //     console.log(params);
-
-    //     dispatch({
-    //         type: ActionTypes.SET_ROOM,
-    //         payload: params.room as LocalRoom,
-    //     });
-    // };
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
