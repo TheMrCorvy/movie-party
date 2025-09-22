@@ -10,25 +10,28 @@ import {
     createRoomService,
     roomWasCreated,
 } from "../../services/createRoomService";
-// import { ActionTypes } from "../../context/RoomContext/roomReducer";
+import { Room } from "@repo/type-definitions/rooms";
+import { ActionTypes, LocalRoom } from "../../context/RoomContext/roomReducer";
+
+interface CreateRoomCallbackParams {
+    room: Room;
+}
 
 const CreateRoom: FC = () => {
     const [myName, setMyName] = useState("");
-    const { ws } = useRoom();
+    const { ws, dispatch } = useRoom();
+    const { mainContainer } = styles();
 
     const createRoom = () => {
         if (!ws) {
-            console.log("websocket not found");
+            console.error("Websocket not found");
             return;
         }
         createRoomService({
             ws,
             peerName: myName,
         });
-        // dispatch({ type: ActionTypes.SET_ROOM_ID, payload: newRoom });
     };
-
-    const { mainContainer } = styles();
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
@@ -36,16 +39,19 @@ const CreateRoom: FC = () => {
     };
 
     useEffect(() => {
-        // hay que escuchar por el evento room created
         if (!ws) return;
 
         const removeEventListener = roomWasCreated({
             ws,
-            callback: (params: any) => console.log(params),
+            callback: (params: CreateRoomCallbackParams) =>
+                dispatch({
+                    type: ActionTypes.SET_ROOM,
+                    payload: params.room as LocalRoom,
+                }),
         });
 
         return () => removeEventListener();
-    }, [ws]);
+    }, [ws]); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <Container maxWidth="xl" sx={mainContainer}>

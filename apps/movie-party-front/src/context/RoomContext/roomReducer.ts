@@ -10,7 +10,7 @@ export interface RoomState {
 }
 
 export enum ActionTypes {
-    "SET_ROOM_ID" = "SET_ROOM_ID",
+    "SET_ROOM" = "SET_ROOM",
     "ADD_PEER" = "ADD_PEER",
     "REMOVE_PEER" = "REMOVE_PEER",
     "SEND_MESSAGE" = "SEND_MESSAGE",
@@ -25,8 +25,14 @@ export const roomReducer = (
     action: RoomAction
 ): RoomState => {
     switch (action.type) {
-        case "SET_ROOM_ID":
-            return { ...state, room: action.payload };
+        case "SET_ROOM":
+            return {
+                ...state,
+                room: {
+                    ...action.payload,
+                    myId: action.payload.participants[0].id,
+                },
+            };
         default:
             return state;
     }
