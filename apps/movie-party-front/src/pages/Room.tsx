@@ -39,8 +39,6 @@ const Room: FC = () => {
         };
     }, [ws]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    useEffect(() => console.log(room), [room]);
-
     const handleCopy = async () => {
         try {
             await navigator.clipboard.writeText(

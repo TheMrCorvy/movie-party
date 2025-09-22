@@ -32,6 +32,16 @@ export const roomReducer = (
                     participants: action.payload,
                 },
             };
+        case ActionTypes.JOIN_ROOM:
+            return {
+                ...state,
+                room: {
+                    ...state.room,
+                    myId: action.payload.myId,
+                    participants: action.payload.participants,
+                    id: action.payload.roomId,
+                },
+            };
         default:
             return state;
     }
