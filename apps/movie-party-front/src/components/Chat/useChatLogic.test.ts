@@ -51,10 +51,11 @@ describe("useChatLogic Hook", () => {
         });
 
         expect(result.current.messages.length).toBe(2);
-        expect(result.current.messages[1]).toEqual({
-            name: "Yo",
-            message: "A new test message",
-        });
+        const newMessage = result.current.messages[1];
+        expect(newMessage.peerName).toBe("Yo");
+        expect(newMessage.message).toBe("A new test message");
+        expect(typeof newMessage.id).toBe("string");
+        expect(typeof newMessage.peerId).toBe("string");
         expect(result.current.messageInput).toBe("");
     });
 

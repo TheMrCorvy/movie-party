@@ -47,7 +47,7 @@ export interface GlassInputProps {
     onClick?: () => void;
     spellCheck?: boolean;
     kind: "text input" | "text area" | "checkbox" | "radio" | "select";
-    ariaLabel?: string;
+    "aria-label"?: string;
     size?: "small" | "medium";
     checked?: boolean;
     options?: SelectOption[];
@@ -60,7 +60,7 @@ export interface SelectOption {
 
 const GlassInput: FC<GlassInputProps> = ({
     kind,
-    ariaLabel,
+    "aria-label": ariaLabel,
     checked = false,
     options,
     label,
@@ -163,6 +163,7 @@ const GlassInput: FC<GlassInputProps> = ({
                         },
                     }}
                     {...rest}
+                    value={rest.value || ""}
                     onChange={onSelectChange}
                 >
                     {options.map((option, index) => (

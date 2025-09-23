@@ -11,7 +11,7 @@ import {
     generateAvatar,
     generateMUIAvatarProps,
 } from "../../utils/avatarGenerator";
-import type { Message } from "../Chat";
+import { type Message } from "@repo/type-definitions";
 import styles from "./styles";
 
 interface ChatMessageProps {
@@ -26,17 +26,17 @@ const ChatMessage: FC<ChatMessageProps> = ({ message }) => {
         <Fragment>
             <ListItem alignItems="flex-start" sx={listItemBackground}>
                 <ListItemAvatar>
-                    {message.name === "Yo" ? (
+                    {message.peerName === "Yo" ? (
                         <Avatar
-                            alt={message.name}
-                            {...generateMUIAvatarProps(message.name)} // The styles for my avatar are inside the function
+                            alt={message.peerName}
+                            {...generateMUIAvatarProps(message.peerName)} // The styles for my avatar are inside the function
                         />
                     ) : (
                         <Avatar
                             sx={listItemAvatar}
-                            alt={message.name}
+                            alt={message.peerName}
                             src={generateAvatar({
-                                name: message.name,
+                                name: message.peerName,
                                 size: 40,
                             })}
                         />
@@ -49,7 +49,7 @@ const ChatMessage: FC<ChatMessageProps> = ({ message }) => {
                             variant="subtitle1"
                             sx={nameStyles}
                         >
-                            {message.name}
+                            {message.peerName}
                         </Typography>
                     }
                     secondary={

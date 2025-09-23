@@ -28,7 +28,7 @@ const SendMessage: FC<SendMessageProps> = ({
                 value={messageInput}
                 onChange={handleInputChange}
                 onKeyDown={handleKeyPress}
-                ariaLabel="Message input"
+                aria-label="Message input"
                 type="text"
                 size="small"
             />

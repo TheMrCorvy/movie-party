@@ -5,6 +5,7 @@ import {
     generateAvatar,
     generateMUIAvatarProps,
 } from "../../utils/avatarGenerator";
+import { Message } from "@repo/type-definitions";
 
 jest.mock("../../utils/avatarGenerator", () => ({
     generateAvatar: jest.fn(),
@@ -23,8 +24,10 @@ describe("ChatMessage Component", () => {
     });
 
     it("should render the message content and name correctly", () => {
-        const mockMessage = {
-            name: "Jane Doe",
+        const mockMessage: Message = {
+            id: "1",
+            peerId: "2",
+            peerName: "Jane Doe",
             message: "This is a test message.",
         };
 
@@ -39,8 +42,10 @@ describe("ChatMessage Component", () => {
     });
 
     it('should call generateMUIAvatarProps when the message is from "Yo"', () => {
-        const myMessage = {
-            name: "Yo",
+        const myMessage: Message = {
+            id: "2",
+            peerId: "3",
+            peerName: "Yo",
             message: "This is my own message.",
         };
 
@@ -64,8 +69,10 @@ describe("ChatMessage Component", () => {
     });
 
     it("should call generateAvatar when the message is from another user", () => {
-        const otherUserMessage = {
-            name: "John Smith",
+        const otherUserMessage: Message = {
+            id: "3",
+            peerId: "4",
+            peerName: "John Smith",
             message: "A message from another user.",
         };
 
