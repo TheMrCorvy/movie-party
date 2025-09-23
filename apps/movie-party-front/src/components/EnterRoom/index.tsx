@@ -11,7 +11,6 @@ import {
     roomWasCreated,
 } from "../../services/createRoomService";
 import { ActionTypes } from "../../context/RoomContext/roomActions";
-import { LocalRoom } from "../../context/RoomContext/roomReducer";
 
 const CreateRoom: FC = () => {
     const [myName, setMyName] = useState("");
