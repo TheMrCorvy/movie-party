@@ -1,8 +1,8 @@
 import { type FC } from "react";
-import EnterRoom from "../components/EnterRoom";
+import CreateRoom from "../components/CreateRoom";
 
 const Home: FC = () => {
-    return <EnterRoom />;
+    return <CreateRoom />;
 };
 
 export default Home;

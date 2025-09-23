@@ -32,4 +32,5 @@ export const leaveRoom: LeaveRoom = ({ peerId, roomId, rooms, io }) => {
         participants: room.participants,
     });
     console.log("User left: ", peerId);
+    console.log("New room: ", room);
 };

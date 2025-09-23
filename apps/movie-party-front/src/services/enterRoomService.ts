@@ -26,6 +26,7 @@ export const enterRoomService: EnterRoomService = ({
 
 export interface VerifyRoomServiceCallbackParams {
     roomExists: boolean;
+    password: boolean;
 }
 
 export interface VerifyRoomServiceParams {

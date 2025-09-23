@@ -1,69 +1,50 @@
-import { ChangeEvent, useEffect, useState, type FC } from "react";
-import { useRoom } from "../../context/RoomContext/RoomContextProvider";
-import Container from "@mui/material/Container";
-import GlassContainer from "../GlassContainer";
-import styles from "./styles";
-
-import GlassButton from "../GlassButton";
+import { ChangeEvent, FC, useState } from "react";
 import GlassInput from "../GlassInput";
-import {
-    createRoomService,
-    roomWasCreated,
-} from "../../services/createRoomService";
-import { ActionTypes } from "../../context/RoomContext/roomActions";
+import GlassButton from "../GlassButton";
+import { Typography } from "@mui/material";
+import { stringIsEmpty } from "@repo/shared-utils";
+import { enterRoomService } from "../../services/enterRoomService";
+import { useRoom } from "../../context/RoomContext/RoomContextProvider";
 
-const CreateRoom: FC = () => {
+export interface EnterRoomParams {
+    roomExists: boolean;
+}
+
+const EnterRoom: FC<EnterRoomParams> = ({ roomExists }) => {
     const [myName, setMyName] = useState("");
-    const { ws, dispatch } = useRoom();
-    const { mainContainer } = styles();
 
-    const createRoom = () => {
-        if (!ws) {
-            console.error("Websocket not found");
+    const { ws, room } = useRoom();
+
+    const handleEnterRoom = () => {
+        if (!roomExists || stringIsEmpty(myName)) {
             return;
         }
-        createRoomService({
-            ws,
+
+        enterRoomService({
+            peerId: room.myId,
             peerName: myName,
-        });
-    };
-
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        e.preventDefault();
-        setMyName(e.target.value);
-    };
-
-    useEffect(() => {
-        if (!ws) return;
-
-        const removeEventListener = roomWasCreated({
+            roomId: room.id,
             ws,
-            callback: (params) =>
-                dispatch({
-                    type: ActionTypes.SET_ROOM,
-                    payload: {
-                        ...params.room,
-                        myId: params.room.participants[0].id,
-                    },
-                }),
         });
-
-        return () => removeEventListener();
-    }, [ws]); // eslint-disable-line react-hooks/exhaustive-deps
+    };
 
     return (
-        <Container maxWidth="xl" sx={mainContainer}>
-            <GlassContainer>
-                <GlassInput
-                    type="text"
-                    kind="text input"
-                    size="small"
-                    onChange={handleChange}
-                />
-                <GlassButton onClick={createRoom}>Create Room</GlassButton>
-            </GlassContainer>
-        </Container>
+        <>
+            <GlassInput
+                type="text"
+                kind="text input"
+                size="small"
+                onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                    e.preventDefault();
+                    setMyName(e.target.value);
+                }}
+            />
+            <GlassButton onClick={handleEnterRoom}>Enter Room</GlassButton>
+            <Typography>
+                Room Exists: {roomExists ? "True" : "False"}
+            </Typography>
+        </>
     );
 };
 
-export default CreateRoom;
+export default EnterRoom;

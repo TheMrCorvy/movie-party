@@ -12,13 +12,13 @@ export const roomExists = ({ roomId, rooms, io }: RoomExistsParams) => {
     if (room) {
         io.emit(Signals.ROOM_EXISTS, {
             roomExists: true,
-            hasPassword: room.password ? true : false,
+            password: room.password ? true : false,
         });
         console.log("Room exists.");
     } else {
         io.emit(Signals.ROOM_NOT_FOUND, {
             roomExists: false,
-            hasPassword: false,
+            password: false,
         });
         console.log("Room doesn't exist.");
     }

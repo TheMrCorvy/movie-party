@@ -1,27 +1,34 @@
-import { Outlet, useNavigate } from "react-router-dom";
-import { Box } from "@mui/material";
-import { useEffect, type FC } from "react";
-import ThemeSwitcher from "./ThemeSwitcher";
-import { useRoom } from "../context/RoomContext/RoomContextProvider";
-import { updateParticipantsService } from "../services/updateParticipantsService";
-import { ActionTypes } from "../context/RoomContext/roomActions";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useRoom } from "../../context/RoomContext/RoomContextProvider";
+import { updateParticipantsService } from "../../services/updateParticipantsService";
+import { ActionTypes } from "../../context/RoomContext/roomActions";
+import { roomWasCreated } from "../../services/createRoomService";
 
-const pageIsRoom = window.location.pathname.split("/")[1] === "room";
+export interface UseLayoutPops {
+    pageIsRoom: boolean;
+}
 
-export const Layout: FC = () => {
+const useLayout = ({ pageIsRoom }: UseLayoutPops) => {
     const { room, ws, dispatch } = useRoom();
     const navigate = useNavigate();
 
     useEffect(() => {
-        const unmountEventListener = updateParticipantsService({
+        const roomWasCreatedEvent = roomWasCreated({
+            ws,
+            callback: (params) =>
+                dispatch({
+                    type: ActionTypes.SET_ROOM,
+                    payload: {
+                        ...params.room,
+                        myId: params.room.participants[0].id,
+                    },
+                }),
+        });
+
+        const updateParticipantsEvent = updateParticipantsService({
             ws,
             callback: (params) => {
-                console.log({
-                    params,
-                    localRoomId: room.id,
-                    pageIsRoom,
-                    page: window.location.pathname.split("/"),
-                });
                 if (room.id === params.roomId && pageIsRoom) {
                     dispatch({
                         type: ActionTypes.UPDATE_PARTICIPANTS,
@@ -47,9 +54,10 @@ export const Layout: FC = () => {
         });
 
         return () => {
-            unmountEventListener();
+            updateParticipantsEvent();
+            roomWasCreatedEvent();
         };
-    }, [ws, dispatch, room.id, room.myId]);
+    }, [ws, dispatch, room.id, room.myId, pageIsRoom]);
 
     useEffect(() => {
         const imInTheRoom = room.participants.find(
@@ -66,11 +74,7 @@ export const Layout: FC = () => {
         ) {
             navigate("/room/" + room.id);
         }
-    }, [room, navigate]);
-    return (
-        <Box sx={{ display: "flex", flexDirection: "column" }}>
-            <ThemeSwitcher />
-            <Outlet />
-        </Box>
-    );
+    }, [room, navigate, pageIsRoom]);
 };
+
+export default useLayout;

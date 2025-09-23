@@ -34,6 +34,7 @@ export const createRoom: CreateRoom = ({
     };
     rooms.push(room);
 
+    socket.join(roomId);
     socket.emit(Signals.ROOM_CREATED, { room });
     console.log("user created a room", room);
 
