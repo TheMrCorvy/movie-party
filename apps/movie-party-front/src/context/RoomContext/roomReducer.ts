@@ -1,6 +1,7 @@
 import { Room } from "@repo/type-definitions/rooms";
 import { Socket } from "socket.io-client";
 import { ActionTypes, RoomAction } from "./roomActions";
+import { putMeFirst } from "../../utils/putMeFirst";
 
 export interface LocalRoom extends Room {
     myId: string;
@@ -10,7 +11,6 @@ export interface RoomState {
     ws: Socket | null;
 }
 
-// Reducer function to handle state updates
 export const roomReducer = (
     state: RoomState,
     action: RoomAction
@@ -29,7 +29,10 @@ export const roomReducer = (
                 ...state,
                 room: {
                     ...state.room,
-                    participants: action.payload,
+                    participants: putMeFirst({
+                        participants: action.payload,
+                        myId: state.room.myId,
+                    }),
                 },
             };
         case ActionTypes.JOIN_ROOM:
@@ -38,7 +41,10 @@ export const roomReducer = (
                 room: {
                     ...state.room,
                     myId: action.payload.myId,
-                    participants: action.payload.participants,
+                    participants: putMeFirst({
+                        participants: action.payload.participants,
+                        myId: action.payload.myId,
+                    }),
                     id: action.payload.roomId,
                 },
             };
