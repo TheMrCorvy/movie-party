@@ -1,4 +1,4 @@
-import { useEffect, type FC } from "react";
+import { type FC } from "react";
 import { Container, Grid, Typography } from "@mui/material";
 import Chat from "../components/Chat";
 import {
@@ -9,35 +9,38 @@ import {
 } from "../styles/pages";
 import GlassContainer from "../components/GlassContainer";
 import { useRoom } from "../context/RoomContext/RoomContextProvider";
-import {
-    UpdateParticipantsCallback,
-    updateParticipantsService,
-} from "../services/updateParticipantsService";
-import { ActionTypes } from "../context/RoomContext/roomActions";
+// import {
+//     UpdateParticipantsCallback,
+//     updateParticipantsService,
+// } from "../services/updateParticipantsService";
+// import { ActionTypes } from "../context/RoomContext/roomActions";
 import GlassButton from "../components/GlassButton";
+import PeerVideo from "../components/PeerVideo";
 
 const Room: FC = () => {
-    const { ws, room, dispatch } = useRoom();
+    // const { ws, room, dispatch } = useRoom();
+    const { room } = useRoom();
 
-    const handleParticipantsUpdate = (params: UpdateParticipantsCallback) => {
-        if (room.id === params.roomId) {
-            dispatch({
-                type: ActionTypes.UPDATE_PARTICIPANTS,
-                payload: params.participants,
-            });
-        }
-    };
+    // const handleParticipantsUpdate = (params: UpdateParticipantsCallback) => {
+    //     console.log(params);
+    //     if (room.id === params.roomId) {
+    //         dispatch({
+    //             type: ActionTypes.UPDATE_PARTICIPANTS,
+    //             payload: params.participants,
+    //         });
+    //     }
+    // };
 
-    useEffect(() => {
-        const unmountEventListener = updateParticipantsService({
-            ws,
-            callback: handleParticipantsUpdate,
-        });
+    // useEffect(() => {
+    //     const unmountEventListener = updateParticipantsService({
+    //         ws,
+    //         callback: handleParticipantsUpdate,
+    //     });
 
-        return () => {
-            unmountEventListener();
-        };
-    }, [ws]); // eslint-disable-line react-hooks/exhaustive-deps
+    //     return () => {
+    //         unmountEventListener();
+    //     };
+    // }, [ws]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleCopy = async () => {
         try {
@@ -66,6 +69,23 @@ const Room: FC = () => {
                         <GlassButton onClick={handleCopy}>
                             Compartir sala
                         </GlassButton>
+                        <GlassContainer
+                            height={"5rem"}
+                            width={"100%"}
+                            direction="row"
+                        >
+                            <>
+                                {room.participants.map((participant) => (
+                                    <PeerVideo
+                                        key={`peer-video-${participant.id}`}
+                                        peerName={participant.name}
+                                        isMyCamera={
+                                            participant.id === room.myId
+                                        }
+                                    />
+                                ))}
+                            </>
+                        </GlassContainer>
                     </GlassContainer>
                 </Grid>
                 <Grid
