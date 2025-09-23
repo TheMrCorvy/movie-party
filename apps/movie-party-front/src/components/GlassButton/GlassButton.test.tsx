@@ -22,7 +22,7 @@ describe("GlassButton Component", () => {
     it("should render an IconButton when isIconBtn is true", () => {
         render(
             <ThemeProvider theme={theme}>
-                <GlassButton onClick={jest.fn()} isIconBtn>
+                <GlassButton onClick={jest.fn()} variant="icon-btn">
                     <SendIcon />
                 </GlassButton>
             </ThemeProvider>
@@ -52,7 +52,7 @@ describe("GlassButton Component", () => {
 
         render(
             <ThemeProvider theme={theme}>
-                <GlassButton onClick={handleClick} isIconBtn>
+                <GlassButton onClick={handleClick} variant="icon-btn">
                     <SendIcon />
                 </GlassButton>
             </ThemeProvider>

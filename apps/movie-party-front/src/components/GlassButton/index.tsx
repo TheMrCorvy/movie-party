@@ -5,18 +5,18 @@ import styles from "./styles";
 export interface GlassButtonProps {
     onClick: () => void;
     children: ReactNode;
-    isIconBtn?: boolean;
+    variant?: "icon-btn" | "btn";
     border?: boolean;
 }
 
 const GlassButton: FC<GlassButtonProps> = ({
     onClick,
     children,
-    isIconBtn = false,
+    variant = "btn",
     border,
 }) => {
     const { glassiconButton, glassButton } = styles();
-    if (isIconBtn) {
+    if (variant === "icon-btn") {
         return (
             <IconButton
                 color="primary"

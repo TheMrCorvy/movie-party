@@ -32,7 +32,7 @@ const SendMessage: FC<SendMessageProps> = ({
                 type="text"
                 size="small"
             />
-            <GlassButton isIconBtn onClick={handleSendMessage}>
+            <GlassButton variant="icon-btn" onClick={handleSendMessage}>
                 <SendIcon />
             </GlassButton>
         </Stack>
