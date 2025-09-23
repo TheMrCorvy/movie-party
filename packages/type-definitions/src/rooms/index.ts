@@ -15,4 +15,6 @@ export interface Room {
     id: string;
     messages: Message[];
     participants: Participant[];
+    password?: string;
+    screenSharing?: MediaStream;
 }
