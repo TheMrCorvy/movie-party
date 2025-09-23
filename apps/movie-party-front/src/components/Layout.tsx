@@ -9,11 +9,11 @@ export const Layout: FC = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        console.log(room);
         const pageIsRoom = window.location.pathname.split("/")[1] === "room";
         const imInTheRoom = room.participants.find(
             (participant) => participant.id === room.myId
         );
+
         if (
             room.id &&
             room.myId &&
