@@ -6,7 +6,8 @@ import {
     type KeyboardEvent,
 } from "react";
 import { generateMockMessages } from "./generateMockMessages";
-import type { Message } from "./index";
+import { Message } from "@repo/type-definitions";
+import generateId from "../../utils/generateId";
 
 const initialMockMessages: Message[] = generateMockMessages(1);
 
@@ -25,8 +26,10 @@ export const useChatLogic = () => {
     const handleSendMessage = () => {
         if (messageInput.trim()) {
             const newMessage: Message = {
-                name: "Yo",
+                peerName: "Yo",
                 message: messageInput.trim(),
+                id: generateId(),
+                peerId: generateId(), // temp
             };
             setMessages((prevMessages) => [...prevMessages, newMessage]);
             setMessageInput("");

@@ -8,11 +8,6 @@ import { useChatLogic } from "./useChatLogic";
 import styles from "./styles";
 import { useTheme } from "@mui/material/styles";
 
-export interface Message {
-    name: string;
-    message: string;
-}
-
 const Chat: FC = () => {
     const {
         messages,
@@ -33,7 +28,7 @@ const Chat: FC = () => {
             <List ref={listRef} sx={chatListStyles}>
                 {messages.map((message, index) => (
                     <ChatMessage
-                        key={index + "-chat-message-" + message.name}
+                        key={index + "-chat-message-" + message.peerName}
                         message={message}
                     />
                 ))}
