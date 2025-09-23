@@ -6,16 +6,16 @@ import GlassContainer from "../components/GlassContainer";
 import GlassButton from "../components/GlassButton";
 import GlassInput from "../components/GlassInput";
 import { useRoom } from "../context/RoomContext/RoomContextProvider";
-import { enterRoomService, verifyRoom } from "../services/enterRoomService";
+import {
+    enterRoomService,
+    verifyRoom,
+    VerifyRoomServiceCallbackParams,
+} from "../services/enterRoomService";
 import { useParams } from "react-router-dom";
 import { Typography } from "@mui/material";
 import generateId from "../utils/generateId";
-import {
-    updateParticipantsService,
-    type UpdateParticipantsCallback,
-} from "../services/updateParticipantsService";
-import { ActionTypes } from "../context/RoomContext/roomActions";
 import stringIsEmpty from "../utils/stringIsEmpty";
+import { ActionTypes } from "../context/RoomContext/roomActions";
 
 const JoinRoom: FC = () => {
     const { ws, dispatch } = useRoom();
@@ -42,17 +42,20 @@ const JoinRoom: FC = () => {
         });
     };
 
-    const handleParticipantsUpdate = (params: UpdateParticipantsCallback) => {
-        if (roomId !== params.roomId || stringIsEmpty(myId)) {
+    const roomWasVerified = (params: VerifyRoomServiceCallbackParams) => {
+        setRoomExists(params.roomExists);
+
+        if (!roomId || !params.roomExists) {
             return;
         }
 
         dispatch({
-            type: ActionTypes.JOIN_ROOM,
+            type: ActionTypes.SET_ROOM,
             payload: {
-                participants: params.participants,
+                id: roomId,
+                participants: [],
+                messages: [],
                 myId,
-                roomId,
             },
         });
     };
@@ -69,18 +72,11 @@ const JoinRoom: FC = () => {
         const unmountVerifyRoomEventListener = verifyRoom({
             roomId,
             ws,
-            callback: (params) => setRoomExists(params.roomExists),
+            callback: roomWasVerified,
         });
-
-        const unmountUpdateParticipantsEventListener =
-            updateParticipantsService({
-                ws,
-                callback: handleParticipantsUpdate,
-            });
 
         return () => {
             unmountVerifyRoomEventListener();
-            unmountUpdateParticipantsEventListener();
         };
     }, [ws, roomId, myId, myName]); // eslint-disable-line react-hooks/exhaustive-deps
 

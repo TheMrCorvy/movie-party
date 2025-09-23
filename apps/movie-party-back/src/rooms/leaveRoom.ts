@@ -26,6 +26,7 @@ export const leaveRoom: LeaveRoom = ({ peerId, roomId, rooms, io }) => {
         return;
     }
 
+    console.log("Emitting get participants...");
     io.in(roomId).emit(Signals.GET_PARTICIPANTS, {
         roomId,
         participants: room.participants,

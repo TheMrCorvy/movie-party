@@ -8,39 +8,12 @@ import {
     roomChatSectionStyles,
 } from "../styles/pages";
 import GlassContainer from "../components/GlassContainer";
-import { useRoom } from "../context/RoomContext/RoomContextProvider";
-// import {
-//     UpdateParticipantsCallback,
-//     updateParticipantsService,
-// } from "../services/updateParticipantsService";
-// import { ActionTypes } from "../context/RoomContext/roomActions";
 import GlassButton from "../components/GlassButton";
 import PeerVideo from "../components/PeerVideo";
+import { useRoom } from "../context/RoomContext/RoomContextProvider";
 
 const Room: FC = () => {
-    // const { ws, room, dispatch } = useRoom();
     const { room } = useRoom();
-
-    // const handleParticipantsUpdate = (params: UpdateParticipantsCallback) => {
-    //     console.log(params);
-    //     if (room.id === params.roomId) {
-    //         dispatch({
-    //             type: ActionTypes.UPDATE_PARTICIPANTS,
-    //             payload: params.participants,
-    //         });
-    //     }
-    // };
-
-    // useEffect(() => {
-    //     const unmountEventListener = updateParticipantsService({
-    //         ws,
-    //         callback: handleParticipantsUpdate,
-    //     });
-
-    //     return () => {
-    //         unmountEventListener();
-    //     };
-    // }, [ws]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleCopy = async () => {
         try {

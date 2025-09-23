@@ -26,8 +26,6 @@ export const enterRoom: EnterRoom = ({
         return;
     }
 
-    socket.join(roomId);
-
     const participantIndex = room.participants.findIndex(
         (participant) => participant.id === peerId
     );
@@ -37,8 +35,11 @@ export const enterRoom: EnterRoom = ({
             id: peerId,
             name: peerName,
         });
+
+        socket.join(roomId);
     }
 
+    console.log("Emitting get participants...");
     io.in(roomId).emit(Signals.GET_PARTICIPANTS, {
         roomId,
         participants: room.participants,
@@ -46,9 +47,9 @@ export const enterRoom: EnterRoom = ({
 
     console.log("user joined the room: ", { roomId, peerId, peerName });
 
-    socket.on("disconnect", () => {
+    socket.on("disconnect", (reason) => {
         // sudden disconnection
-        console.log("user left the room", peerId);
+        console.log(`${peerName} left the room, reason: ${reason}`);
         leaveRoom({ roomId, peerId, rooms, io });
     });
 };

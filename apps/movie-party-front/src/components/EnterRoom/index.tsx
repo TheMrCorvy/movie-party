@@ -42,7 +42,10 @@ const CreateRoom: FC = () => {
             callback: (params) =>
                 dispatch({
                     type: ActionTypes.SET_ROOM,
-                    payload: params.room as LocalRoom,
+                    payload: {
+                        ...params.room,
+                        myId: params.room.participants[0].id,
+                    },
                 }),
         });
 

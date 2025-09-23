@@ -21,7 +21,6 @@ export const roomReducer = (
                 ...state,
                 room: {
                     ...action.payload,
-                    myId: action.payload.participants[0].id,
                 },
             };
         case ActionTypes.UPDATE_PARTICIPANTS:
@@ -32,6 +31,7 @@ export const roomReducer = (
                     participants: putMeFirst({
                         participants: action.payload,
                         myId: state.room.myId,
+                        oldVersionOfMe: state.room.participants[0],
                     }),
                 },
             };
@@ -46,6 +46,17 @@ export const roomReducer = (
                         myId: action.payload.myId,
                     }),
                     id: action.payload.roomId,
+                },
+            };
+        case ActionTypes.START_MY_CAMERA:
+            return {
+                ...state,
+                room: {
+                    ...state.room,
+                    participants: state.room.participants.map((p, i) => ({
+                        ...p,
+                        stream: i === 0 ? action.payload.stream : p.stream,
+                    })),
                 },
             };
         default:
