@@ -1,5 +1,5 @@
 import { Message } from "@repo/type-definitions";
-import generateId from "../../utils/generateId";
+import { generateId } from "@repo/shared-utils";
 
 export const generateMockMessages = (count: number): Message[] => {
     return Array.from({ length: count }, (_, index) => ({

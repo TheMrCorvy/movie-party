@@ -1,8 +1,8 @@
-import { v4 as uuidv4 } from "uuid";
 import { Room } from "@repo/type-definitions/rooms";
 import { Socket, Server as SocketIOServer } from "socket.io";
 import { Signals } from "@repo/type-definitions/rooms";
 import { leaveRoom } from "./leaveRoom";
+import { generateId } from "@repo/shared-utils";
 
 export interface CreateRoomParams {
     rooms: Room[];
@@ -21,7 +21,7 @@ export const createRoom: CreateRoom = ({
     peerName,
     io,
 }) => {
-    const roomId = uuidv4();
+    const roomId = generateId();
     const room = {
         id: roomId,
         messages: [],

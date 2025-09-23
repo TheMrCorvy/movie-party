@@ -1,5 +1,6 @@
 import { Participant } from "@repo/type-definitions";
-import stringIsEmpty from "./stringIsEmpty";
+
+import { stringIsEmpty } from "@repo/shared-utils";
 
 export interface PutMeFirstParams {
     participants: Participant[];

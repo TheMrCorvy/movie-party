@@ -1,7 +1,7 @@
 import { Signals } from "@repo/type-definitions/rooms";
 import { Socket } from "socket.io-client";
-import generateId from "../utils/generateId";
-import stringIsEmpty from "../utils/stringIsEmpty";
+
+import { generateId, stringIsEmpty } from "@repo/shared-utils";
 
 export interface CreateRoomServiceParams {
     ws: Socket;

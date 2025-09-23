@@ -7,7 +7,8 @@ import {
 } from "react";
 import { generateMockMessages } from "./generateMockMessages";
 import { Message } from "@repo/type-definitions";
-import generateId from "../../utils/generateId";
+
+import { generateId } from "@repo/shared-utils";
 
 const initialMockMessages: Message[] = generateMockMessages(1);
 

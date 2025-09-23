@@ -1,4 +1,10 @@
-const stringIsEmpty = (str: string) => {
+import { v4 } from "uuid";
+
+export const generateId = () => {
+    return v4();
+};
+
+export const stringIsEmpty = (str: string) => {
     return (
         str === null ||
         !str ||
@@ -6,5 +12,3 @@ const stringIsEmpty = (str: string) => {
         str.trim().length === 0
     );
 };
-
-export default stringIsEmpty;

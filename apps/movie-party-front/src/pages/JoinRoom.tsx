@@ -13,8 +13,8 @@ import {
 } from "../services/enterRoomService";
 import { useParams } from "react-router-dom";
 import { Typography } from "@mui/material";
-import generateId from "../utils/generateId";
-import stringIsEmpty from "../utils/stringIsEmpty";
+
+import { generateId, stringIsEmpty } from "@repo/shared-utils";
 import { ActionTypes } from "../context/RoomContext/roomActions";
 
 const JoinRoom: FC = () => {
