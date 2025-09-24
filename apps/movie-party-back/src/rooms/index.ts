@@ -5,13 +5,14 @@ import { createRoom } from "./createRoom";
 import { enterRoom } from "./enterRoom";
 import { leaveRoom } from "./leaveRoom";
 import { roomExists } from "./roomExists";
+import { sendReceiveMessages } from "./sendReceiveMessages";
 
 export interface RoomParams {
     roomId: string;
     peerId: string;
 }
 
-let rooms: Room[] = []; // eslint-disable-line prefer-const
+const rooms: Room[] = [];
 
 export const roomHandler = (socket: Socket, io: SocketIOServer) => {
     socket.on(Signals.CREATE_ROOM, ({ peerName, peerId }) =>
@@ -27,5 +28,8 @@ export const roomHandler = (socket: Socket, io: SocketIOServer) => {
     });
     socket.on(Signals.DOES_ROOM_EXISTS, ({ roomId }) =>
         roomExists({ rooms, roomId, io })
+    );
+    socket.on(Signals.SEND_MESSAGE, ({ roomId, message }) =>
+        sendReceiveMessages({ roomId, message, rooms, io })
     );
 };
