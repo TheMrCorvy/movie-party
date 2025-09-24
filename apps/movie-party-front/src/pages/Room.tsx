@@ -43,7 +43,7 @@ const Room: FC = () => {
                             Compartir sala
                         </GlassButton>
                         <GlassContainer
-                            height={"5rem"}
+                            height={"auto"}
                             width={"100%"}
                             direction="row"
                         >
