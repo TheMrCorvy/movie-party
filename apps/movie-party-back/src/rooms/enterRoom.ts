@@ -46,7 +46,6 @@ export const enterRoom: EnterRoom = ({
     });
 
     console.log("user joined the room: ", { roomId, peerId, peerName });
-    console.log("New room: ", room);
 
     socket.on("disconnect", (reason) => {
         // sudden disconnection
