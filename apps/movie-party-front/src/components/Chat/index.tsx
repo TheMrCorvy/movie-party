@@ -12,7 +12,6 @@ const Chat: FC = () => {
     const {
         messages,
         messageInput,
-        listRef,
         messagesEndRef,
         handleSendMessage,
         handleInputChange,
@@ -23,10 +22,12 @@ const Chat: FC = () => {
         theme.palette.mode
     );
 
+    const sortedMessages = messages.sort((a, b) => a.index - b.index);
+
     return (
         <Box sx={chatBoxStyles}>
-            <List ref={listRef} sx={chatListStyles}>
-                {messages.map((message, index) => (
+            <List sx={chatListStyles}>
+                {sortedMessages.map((message, index) => (
                     <ChatMessage
                         key={index + "-chat-message-" + message.peerName}
                         message={message}

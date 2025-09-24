@@ -5,24 +5,42 @@ import {
     type ChangeEvent,
     type KeyboardEvent,
 } from "react";
-import { generateMockMessages } from "./generateMockMessages";
 import { Message } from "@repo/type-definitions";
 
 import { generateId } from "@repo/shared-utils";
-
-const initialMockMessages: Message[] = generateMockMessages(1);
+import { useRoom } from "../../context/RoomContext/RoomContextProvider";
+import {
+    messageReceivedService,
+    sendMessageService,
+} from "../../services/messagesService";
+import { ActionTypes } from "../../context/RoomContext/roomActions";
 
 export const useChatLogic = () => {
-    const [messages, setMessages] = useState<Message[]>(initialMockMessages);
+    const { ws, room, dispatch } = useRoom();
     const [messageInput, setMessageInput] = useState("");
     const listRef = useRef<HTMLUListElement>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+        const unmountMessageReceived = messageReceivedService({
+            ws,
+            callback: ({ messageReceived }) =>
+                dispatch({
+                    type: ActionTypes.MESSAGE_RECEIVED,
+                    payload: messageReceived,
+                }),
+        });
+
+        return () => {
+            unmountMessageReceived();
+        };
+    }, [ws, dispatch]);
+
+    useEffect(() => {
         if (messagesEndRef.current) {
             messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
         }
-    }, [messages]);
+    }, [room.messages]);
 
     const handleSendMessage = () => {
         if (messageInput.trim()) {
@@ -30,10 +48,11 @@ export const useChatLogic = () => {
                 peerName: "Yo",
                 message: messageInput.trim(),
                 id: generateId(),
-                peerId: generateId(), // temp
+                peerId: room.myId,
             };
-            setMessages((prevMessages) => [...prevMessages, newMessage]);
+
             setMessageInput("");
+            sendMessageService({ message: newMessage, roomId: room.id, ws });
         }
     };
 
@@ -48,14 +67,13 @@ export const useChatLogic = () => {
     };
 
     return {
-        messages,
+        messages: room.messages,
         messageInput,
         listRef,
         messagesEndRef,
         handleSendMessage,
         handleInputChange,
         handleKeyPress,
-        setMessages,
         setMessageInput,
     };
 };
