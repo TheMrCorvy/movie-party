@@ -1,10 +1,11 @@
-import { Participant } from "@repo/type-definitions";
+import { MessageWithIndex, Participant } from "@repo/type-definitions";
 import { Signals } from "@repo/type-definitions/rooms";
 import { Socket } from "socket.io-client";
 
 export interface UpdateParticipantsCallback {
     roomId: string;
     participants: Participant[];
+    messages: MessageWithIndex[];
 }
 
 export interface UpdateParticipantsParam {

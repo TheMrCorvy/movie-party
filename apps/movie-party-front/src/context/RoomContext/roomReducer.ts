@@ -46,6 +46,7 @@ export const roomReducer = (
                         myId: action.payload.myId,
                     }),
                     id: action.payload.roomId,
+                    messages: action.payload.messages,
                 },
             };
         case ActionTypes.MESSAGE_RECEIVED:

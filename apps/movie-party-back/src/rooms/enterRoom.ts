@@ -43,6 +43,7 @@ export const enterRoom: EnterRoom = ({
     io.in(roomId).emit(Signals.GET_PARTICIPANTS, {
         roomId,
         participants: room.participants,
+        messages: room.messages,
     });
 
     console.log("user joined the room: ", { roomId, peerId, peerName });

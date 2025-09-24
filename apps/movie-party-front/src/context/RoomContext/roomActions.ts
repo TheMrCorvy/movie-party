@@ -25,6 +25,7 @@ export interface JoinRoomAction {
         participants: Participant[];
         myId: string;
         roomId: string;
+        messages: MessageWithIndex[];
     };
 }
 

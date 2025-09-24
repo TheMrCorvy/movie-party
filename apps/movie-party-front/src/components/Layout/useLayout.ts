@@ -44,6 +44,7 @@ const useLayout = ({ pageIsRoom }: UseLayoutPops) => {
                             participants: params.participants,
                             myId: room.myId,
                             roomId: params.roomId,
+                            messages: params.messages,
                         },
                     });
                     return;
