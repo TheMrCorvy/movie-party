@@ -1,4 +1,4 @@
-import { Message, Participant } from "..";
+import { MessageWithIndex, Participant } from "..";
 
 export enum Signals {
     "CREATE_ROOM" = "CREATE_ROOM",
@@ -9,11 +9,14 @@ export enum Signals {
     "DOES_ROOM_EXISTS" = "DOES_ROOM_EXISTS",
     "ROOM_NOT_FOUND" = "ROOM_NOT_FOUND",
     "ROOM_EXISTS" = "ROOM_EXISTS",
+    "SEND_MESSAGE" = "SEND_MESSAGE",
+    "MESSAGE_RECEIVED" = "MESSAGE_RECEIVED",
+    "ERROR" = "ERROR",
 }
 
 export interface Room {
     id: string;
-    messages: Message[];
+    messages: MessageWithIndex[];
     participants: Participant[];
     password?: string;
     screenSharing?: MediaStream;

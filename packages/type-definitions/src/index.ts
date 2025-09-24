@@ -13,6 +13,10 @@ export interface Message {
     id: string;
 }
 
+export interface MessageWithIndex extends Message {
+    index: number;
+}
+
 export interface Poll {
     id: string;
     amountOfVotes: number;
