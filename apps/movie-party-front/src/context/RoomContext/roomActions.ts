@@ -1,11 +1,10 @@
-import { Participant } from "@repo/type-definitions";
+import { MessageWithIndex, Participant } from "@repo/type-definitions";
 import { LocalRoom } from "./roomReducer";
 
 export enum ActionTypes {
     "SET_ROOM" = "SET_ROOM",
     "JOIN_ROOM" = "JOIN_ROOM",
     "UPDATE_PARTICIPANTS" = "UPDATE_PARTICIPANTS",
-    "SEND_MESSAGE" = "SEND_MESSAGE",
     "MESSAGE_RECEIVED" = "MESSAGE_RECEIVED",
     "START_MY_CAMERA" = "START_MY_CAMERA",
 }
@@ -36,8 +35,14 @@ export interface StartMyCameraAction {
     };
 }
 
+export interface MessageReceivedAction {
+    type: ActionTypes.MESSAGE_RECEIVED;
+    payload: MessageWithIndex;
+}
+
 export type RoomAction =
     | SetRoomAction
     | UpdateParticipantsAction
     | JoinRoomAction
-    | StartMyCameraAction;
+    | StartMyCameraAction
+    | MessageReceivedAction;

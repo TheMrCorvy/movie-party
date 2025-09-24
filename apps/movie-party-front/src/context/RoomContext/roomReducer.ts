@@ -48,6 +48,14 @@ export const roomReducer = (
                     id: action.payload.roomId,
                 },
             };
+        case ActionTypes.MESSAGE_RECEIVED:
+            return {
+                ...state,
+                room: {
+                    ...state.room,
+                    messages: [...state.room.messages, action.payload],
+                },
+            };
         case ActionTypes.START_MY_CAMERA:
             return {
                 ...state,
