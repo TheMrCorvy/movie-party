@@ -1,7 +1,7 @@
 export interface Participant {
     id: string;
     name: string;
-    stream?: MediaStream;
+    stream?: MediaStream | null;
 }
 
 export interface Message {

@@ -13,7 +13,7 @@ import PeerVideo from "../components/PeerVideo";
 import { useRoom } from "../context/RoomContext/RoomContextProvider";
 
 const Room: FC = () => {
-    const { room } = useRoom();
+    const { room, dispatch } = useRoom();
 
     const handleCopy = async () => {
         try {
@@ -52,9 +52,12 @@ const Room: FC = () => {
                                     <PeerVideo
                                         key={`peer-video-${participant.id}`}
                                         peerName={participant.name}
+                                        stream={participant.stream}
                                         isMyCamera={
                                             participant.id === room.myId
                                         }
+                                        dispatch={dispatch}
+                                        peerId={participant.id}
                                     />
                                 ))}
                             </>

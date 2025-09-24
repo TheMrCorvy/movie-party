@@ -68,6 +68,29 @@ export const roomReducer = (
                     })),
                 },
             };
+        case ActionTypes.TOGGLE_PARTICIPANT_CAMERA:
+            return {
+                ...state,
+                room: {
+                    ...state.room,
+                    participants: putMeFirst({
+                        participants: state.room.participants.map(
+                            (participant) => {
+                                if (participant.id !== action.payload.peerId) {
+                                    return participant;
+                                }
+
+                                return {
+                                    ...participant,
+                                    stream: action.payload.stream,
+                                };
+                            }
+                        ),
+                        myId: state.room.myId,
+                    }),
+                },
+            };
+
         default:
             return state;
     }
