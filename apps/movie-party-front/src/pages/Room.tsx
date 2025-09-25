@@ -21,9 +21,10 @@ import {
 } from "../services/peerConnectionService";
 import { Participant } from "@repo/type-definitions";
 import { ActionTypes } from "../context/RoomContext/roomActions";
+import { listenPeerToggledCamera } from "../services/peerCameraService";
 
 const Room: FC = () => {
-    const { room, dispatch } = useRoom();
+    const { room, dispatch, ws } = useRoom();
     const peer = useMemo(
         () => peerConnectionService({ myId: room.myId }),
         [room.myId]
@@ -40,16 +41,37 @@ const Room: FC = () => {
     };
 
     useEffect(() => {
+        const unmountListenEvent = listenPeerToggledCamera({
+            ws,
+            callback: ({ cameraStatus, peerId }) => {
+                if (!cameraStatus) {
+                    dispatch({
+                        type: ActionTypes.TOGGLE_PARTICIPANT_CAMERA,
+                        payload: {
+                            peerId: peerId,
+                            stream: null,
+                        },
+                    });
+                }
+            },
+        });
+
+        return () => {
+            unmountListenEvent();
+        };
+    }, [ws]); // eslint-disable-line react-hooks/exhaustive-deps
+
+    useEffect(() => {
         const removePeerEventListeners = listenPeerEventsService({
             me: room.participants.find(
                 (participant) => participant.id === room.myId
             ) as Participant,
-            onCallEvent: (params) =>
+            onCallEvent: ({ remoteStream, peerId }) =>
                 dispatch({
                     type: ActionTypes.TOGGLE_PARTICIPANT_CAMERA,
                     payload: {
-                        stream: params.remoteStream,
-                        peerId: params.peerId,
+                        stream: remoteStream,
+                        peerId: peerId,
                     },
                 }),
             onPeerClose: defaultPeerClose,

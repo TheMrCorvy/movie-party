@@ -31,6 +31,7 @@ export interface ListenPeerToggledCameraParams {
 
 export interface ListenPeerToggledCameraCallbackParams {
     peerId: string;
+    cameraStatus: boolean;
 }
 
 export type ListenPeerToggledCamera = (
