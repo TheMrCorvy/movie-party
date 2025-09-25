@@ -1,4 +1,4 @@
-import { type FC } from "react";
+import { useEffect, type FC } from "react";
 import { Container, Grid, Typography } from "@mui/material";
 import Chat from "../components/Chat";
 import {
@@ -11,9 +11,10 @@ import GlassContainer from "../components/GlassContainer";
 import GlassButton from "../components/GlassButton";
 import PeerVideo from "../components/PeerVideo";
 import { useRoom } from "../context/RoomContext/RoomContextProvider";
+import { listenPeerToggledCamera } from "../services/peerCameraService";
 
 const Room: FC = () => {
-    const { room, dispatch } = useRoom();
+    const { room, ws } = useRoom();
 
     const handleCopy = async () => {
         try {
@@ -24,6 +25,17 @@ const Room: FC = () => {
             console.error("Failed to copy text: ", err);
         }
     };
+
+    useEffect(() => {
+        const unmountListenEvent = listenPeerToggledCamera({
+            ws,
+            callback: (params) => console.log(params),
+        });
+
+        return () => {
+            unmountListenEvent();
+        };
+    }, [ws]);
 
     return (
         <Container maxWidth="xl" sx={roomContainerStyles}>
@@ -56,8 +68,6 @@ const Room: FC = () => {
                                         isMyCamera={
                                             participant.id === room.myId
                                         }
-                                        dispatch={dispatch}
-                                        peerId={participant.id}
                                     />
                                 ))}
                             </>

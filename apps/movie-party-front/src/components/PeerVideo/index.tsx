@@ -1,29 +1,24 @@
-import { Dispatch, useEffect, useRef, useState, type FC } from "react";
+import { useEffect, useRef, useState, type FC } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import styles from "./styles";
 import GlassButton from "../GlassButton";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import VideocamOffIcon from "@mui/icons-material/VideocamOff";
-import { ActionTypes, RoomAction } from "../../context/RoomContext/roomActions";
+import { ActionTypes } from "../../context/RoomContext/roomActions";
+import { emitToggleCamera } from "../../services/peerCameraService";
+import { useRoom } from "../../context/RoomContext/RoomContextProvider";
 
 interface PeerVideoProps {
     stream?: MediaStream | null;
     peerName: string;
-    peerId: string;
     isMyCamera: boolean;
-    dispatch: Dispatch<RoomAction>;
 }
 
-const PeerVideo: FC<PeerVideoProps> = ({
-    stream,
-    peerName,
-    isMyCamera,
-    dispatch,
-    peerId,
-}) => {
+const PeerVideo: FC<PeerVideoProps> = ({ stream, peerName, isMyCamera }) => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const [cameraIsOn, setCameraIsOn] = useState(false);
+    const { dispatch, room, ws } = useRoom();
 
     useEffect(() => {
         if (videoRef.current) {
@@ -45,9 +40,15 @@ const PeerVideo: FC<PeerVideoProps> = ({
             dispatch({
                 type: ActionTypes.TOGGLE_PARTICIPANT_CAMERA,
                 payload: {
-                    peerId,
+                    peerId: room.myId,
                     stream: null,
                 },
+            });
+            emitToggleCamera({
+                roomId: room.id,
+                peerId: room.myId,
+                cameraStatus: false,
+                ws,
             });
         } else {
             try {
@@ -59,9 +60,15 @@ const PeerVideo: FC<PeerVideoProps> = ({
                 dispatch({
                     type: ActionTypes.TOGGLE_PARTICIPANT_CAMERA,
                     payload: {
-                        peerId,
+                        peerId: room.myId,
                         stream: camStream,
                     },
+                });
+                emitToggleCamera({
+                    roomId: room.id,
+                    peerId: room.myId,
+                    cameraStatus: true,
+                    ws,
                 });
             } catch (error) {
                 console.error("getUserMedia error:", error);
