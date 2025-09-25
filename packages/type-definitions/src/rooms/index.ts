@@ -12,6 +12,7 @@ export enum Signals {
     "SEND_MESSAGE" = "SEND_MESSAGE",
     "MESSAGE_RECEIVED" = "MESSAGE_RECEIVED",
     "ERROR" = "ERROR",
+    "PEER_TOGGLED_CAMERA" = "PEER_TOGGLED_CAMERA",
 }
 
 export interface Room {
