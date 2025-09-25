@@ -6,6 +6,7 @@ import { enterRoom } from "./enterRoom";
 import { leaveRoom } from "./leaveRoom";
 import { roomExists } from "./roomExists";
 import { sendReceiveMessages } from "./sendReceiveMessages";
+import { togglePeerCamera } from "./togglePeerCamera";
 
 export interface RoomParams {
     roomId: string;
@@ -31,5 +32,8 @@ export const roomHandler = (socket: Socket, io: SocketIOServer) => {
     );
     socket.on(Signals.SEND_MESSAGE, ({ roomId, message }) =>
         sendReceiveMessages({ roomId, message, rooms, io })
+    );
+    socket.on(Signals.PEER_TOGGLED_CAMERA, ({ roomId, peerId, cameraStatus }) =>
+        togglePeerCamera({ roomId, peerId, io, cameraStatus })
     );
 };
