@@ -32,6 +32,16 @@ export const roomReducer = (
                         participants: action.payload,
                         myId: state.room.myId,
                         oldVersionOfMe: state.room.participants[0],
+                    }).map((updatedParticipant) => {
+                        const roomP = state.room.participants.find(
+                            (p) => p.id === updatedParticipant.id
+                        );
+
+                        if (roomP === undefined) {
+                            return updatedParticipant;
+                        }
+
+                        return roomP;
                     }),
                 },
             };
