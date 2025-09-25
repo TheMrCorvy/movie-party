@@ -1,4 +1,4 @@
-import { useEffect, type FC } from "react";
+import { useEffect, useMemo, type FC } from "react";
 import { Container, Grid, Typography } from "@mui/material";
 import Chat from "../components/Chat";
 import {
@@ -11,10 +11,23 @@ import GlassContainer from "../components/GlassContainer";
 import GlassButton from "../components/GlassButton";
 import PeerVideo from "../components/PeerVideo";
 import { useRoom } from "../context/RoomContext/RoomContextProvider";
-import { listenPeerToggledCamera } from "../services/peerCameraService";
+import {
+    defaultPeerClose,
+    defaultPeerDesconnected,
+    defaultPeerError,
+    defaultPeerOpenEvent,
+    listenPeerEventsService,
+    peerConnectionService,
+} from "../services/peerConnectionService";
+import { Participant } from "@repo/type-definitions";
+import { ActionTypes } from "../context/RoomContext/roomActions";
 
 const Room: FC = () => {
-    const { room, ws } = useRoom();
+    const { room, dispatch } = useRoom();
+    const peer = useMemo(
+        () => peerConnectionService({ myId: room.myId }),
+        [room.myId]
+    );
 
     const handleCopy = async () => {
         try {
@@ -27,15 +40,29 @@ const Room: FC = () => {
     };
 
     useEffect(() => {
-        const unmountListenEvent = listenPeerToggledCamera({
-            ws,
-            callback: (params) => console.log(params),
+        const removePeerEventListeners = listenPeerEventsService({
+            me: room.participants.find(
+                (participant) => participant.id === room.myId
+            ) as Participant,
+            onCallEvent: (params) =>
+                dispatch({
+                    type: ActionTypes.TOGGLE_PARTICIPANT_CAMERA,
+                    payload: {
+                        stream: params.remoteStream,
+                        peerId: params.peerId,
+                    },
+                }),
+            onPeerClose: defaultPeerClose,
+            onPeerError: defaultPeerError,
+            onPeerOpen: () => defaultPeerOpenEvent(peer),
+            onPeerDisconnect: () => defaultPeerDesconnected(peer),
+            peerConnection: peer,
         });
 
         return () => {
-            unmountListenEvent();
+            removePeerEventListeners();
         };
-    }, [ws]);
+    }, [peer, room.participants]); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <Container maxWidth="xl" sx={roomContainerStyles}>
@@ -68,6 +95,7 @@ const Room: FC = () => {
                                         isMyCamera={
                                             participant.id === room.myId
                                         }
+                                        me={peer}
                                     />
                                 ))}
                             </>

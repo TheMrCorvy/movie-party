@@ -8,23 +8,48 @@ import VideocamOffIcon from "@mui/icons-material/VideocamOff";
 import { ActionTypes } from "../../context/RoomContext/roomActions";
 import { emitToggleCamera } from "../../services/peerCameraService";
 import { useRoom } from "../../context/RoomContext/RoomContextProvider";
+import Peer from "peerjs";
+import { startCall } from "../../services/callsService";
+import fakeTimeout from "../../utils/fakeTimeout";
 
 interface PeerVideoProps {
     stream?: MediaStream | null;
     peerName: string;
     isMyCamera: boolean;
+    me: Peer;
 }
 
-const PeerVideo: FC<PeerVideoProps> = ({ stream, peerName, isMyCamera }) => {
+const PeerVideo: FC<PeerVideoProps> = ({
+    stream,
+    peerName,
+    isMyCamera,
+    me,
+}) => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const [cameraIsOn, setCameraIsOn] = useState(false);
     const { dispatch, room, ws } = useRoom();
+    const otherParticipants = [...room.participants].filter(
+        (participant) => participant.id !== room.myId
+    );
 
     useEffect(() => {
         if (videoRef.current) {
             videoRef.current.srcObject = stream || null;
         }
-    }, [stream]);
+
+        if (cameraIsOn && stream && me) {
+            startCall({
+                callback: (params) =>
+                    dispatch({
+                        type: ActionTypes.TOGGLE_PARTICIPANT_CAMERA,
+                        payload: params,
+                    }),
+                otherParticipants,
+                me,
+                stream: stream,
+            });
+        }
+    }, [stream, me, cameraIsOn]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const {
         videoContainerStyles,
@@ -50,29 +75,31 @@ const PeerVideo: FC<PeerVideoProps> = ({ stream, peerName, isMyCamera }) => {
                 cameraStatus: false,
                 ws,
             });
-        } else {
-            try {
-                const camStream = await navigator.mediaDevices.getUserMedia({
-                    video: true,
-                    audio: false,
-                });
-                setCameraIsOn(true);
-                dispatch({
-                    type: ActionTypes.TOGGLE_PARTICIPANT_CAMERA,
-                    payload: {
-                        peerId: room.myId,
-                        stream: camStream,
-                    },
-                });
-                emitToggleCamera({
-                    roomId: room.id,
+            return;
+        }
+
+        try {
+            const camStream = await navigator.mediaDevices.getUserMedia({
+                video: true,
+                audio: false,
+            });
+            dispatch({
+                type: ActionTypes.TOGGLE_PARTICIPANT_CAMERA,
+                payload: {
                     peerId: room.myId,
-                    cameraStatus: true,
-                    ws,
-                });
-            } catch (error) {
-                console.error("getUserMedia error:", error);
-            }
+                    stream: camStream,
+                },
+            });
+            emitToggleCamera({
+                roomId: room.id,
+                peerId: room.myId,
+                cameraStatus: true,
+                ws,
+            });
+
+            fakeTimeout(2000).then(() => setCameraIsOn(true));
+        } catch (error) {
+            console.error("getUserMedia error:", error);
         }
     };
 
