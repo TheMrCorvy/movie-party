@@ -24,6 +24,7 @@ import { ActionTypes } from "../context/RoomContext/roomActions";
 import { listenPeerToggledCamera } from "../services/peerCameraService";
 import { newPeerJoinedListener } from "../services/updateParticipantsService";
 import ScreenPlayer from "../components/ScreenPlayer";
+import { copyToClipboard } from "../utils/accessUserHardware";
 
 const Room: FC = () => {
     const { room, dispatch, ws } = useRoom();
@@ -34,13 +35,11 @@ const Room: FC = () => {
     const [remoteScreen, setremoteScreen] = useState<MediaStream | null>(null);
 
     const handleCopy = async () => {
-        try {
-            await navigator.clipboard.writeText(
-                "http://localhost:5173/join-room/" + room.id
-            );
-        } catch (err) {
-            console.error("Failed to copy text: ", err);
-        }
+        const text = "http://localhost:5173/join-room/" + room.id;
+        await copyToClipboard({
+            callback: (params) => console.log(params),
+            text,
+        });
     };
 
     useEffect(() => {
