@@ -1,6 +1,5 @@
 import { MessageWithIndex, Participant } from "@repo/type-definitions";
 import { LocalRoom } from "./roomReducer";
-import Peer from "peerjs";
 
 export enum ActionTypes {
     "SET_ROOM" = "SET_ROOM",
