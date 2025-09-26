@@ -11,6 +11,7 @@ import { useRoom } from "../../context/RoomContext/RoomContextProvider";
 import Peer from "peerjs";
 import { startCall } from "../../services/callsService";
 import fakeTimeout from "../../utils/fakeTimeout";
+import { getUserCamera, stopUserCamera } from "../../utils/accessUserHardware";
 
 interface PeerVideoProps {
     stream?: MediaStream | null;
@@ -60,7 +61,8 @@ const PeerVideo: FC<PeerVideoProps> = ({
 
     const toggleCamera = async () => {
         if (cameraIsOn) {
-            stream?.getTracks().forEach((track) => track.stop());
+            stopUserCamera(stream);
+
             setCameraIsOn(false);
             dispatch({
                 type: ActionTypes.TOGGLE_PARTICIPANT_CAMERA,
@@ -79,10 +81,7 @@ const PeerVideo: FC<PeerVideoProps> = ({
         }
 
         try {
-            const camStream = await navigator.mediaDevices.getUserMedia({
-                video: true,
-                audio: false,
-            });
+            const camStream = await getUserCamera();
             dispatch({
                 type: ActionTypes.TOGGLE_PARTICIPANT_CAMERA,
                 payload: {

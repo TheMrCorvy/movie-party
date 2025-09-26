@@ -2,9 +2,11 @@ import { useEffect, useRef, useState, type FC } from "react";
 import GlassButton from "../GlassButton";
 import { useRoom } from "../../context/RoomContext/RoomContextProvider";
 import { ActionTypes } from "../../context/RoomContext/roomActions";
+import { screenShareServcie } from "../../services/screenSharingService";
+import { getUserScreen } from "../../utils/accessUserHardware";
 
-const VideoPlayerComponent: FC = () => {
-    const { room, dispatch } = useRoom();
+const ScreenPlayer: FC = () => {
+    const { room, dispatch, ws } = useRoom();
     const [screenStream, setScreenStream] = useState<MediaStream>();
     const videoref = useRef<HTMLVideoElement>(null);
 
@@ -24,10 +26,7 @@ const VideoPlayerComponent: FC = () => {
             return;
         }
 
-        const displayStream = await navigator.mediaDevices.getDisplayMedia({
-            video: true,
-            audio: false, // to do: implement FF
-        });
+        const displayStream = await getUserScreen();
 
         setScreenStream(displayStream);
         dispatch({
@@ -37,8 +36,22 @@ const VideoPlayerComponent: FC = () => {
     };
 
     useEffect(() => {
-        console.log(room.peerSharingScreen);
-    }, [room.peerSharingScreen]);
+        const removeScreenSharingEventListener = screenShareServcie({
+            roomId: room.id,
+            peerId: room.myId,
+            ws,
+            status: screenStream ? true : false,
+            callback: (params) =>
+                dispatch({
+                    type: ActionTypes.TOGGLE_SCREEN_SHARING,
+                    payload: params.status ? params.peerId : "",
+                }),
+        });
+
+        return () => {
+            removeScreenSharingEventListener();
+        };
+    }, [screenStream, ws]); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <>
@@ -54,7 +67,12 @@ const VideoPlayerComponent: FC = () => {
             )}
             <GlassButton
                 onClick={shareScreen}
-                disabled={screenStream && room.myId !== room.peerSharingScreen}
+                disabled={
+                    room.peerSharingScreen &&
+                    room.myId !== room.peerSharingScreen
+                        ? true
+                        : false
+                }
             >
                 {screenStream && room.myId === room.peerSharingScreen
                     ? "Dejar de compartir pantalla"
@@ -63,4 +81,4 @@ const VideoPlayerComponent: FC = () => {
         </>
     );
 };
-export default VideoPlayerComponent;
+export default ScreenPlayer;
