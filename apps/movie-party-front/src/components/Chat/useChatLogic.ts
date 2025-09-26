@@ -45,7 +45,7 @@ export const useChatLogic = () => {
     const handleSendMessage = () => {
         if (messageInput.trim()) {
             const newMessage: Message = {
-                peerName: "Yo",
+                peerName: room.participants[0].name,
                 message: messageInput.trim(),
                 id: generateId(),
                 peerId: room.myId,
@@ -75,5 +75,6 @@ export const useChatLogic = () => {
         handleInputChange,
         handleKeyPress,
         setMessageInput,
+        myId: room.myId,
     };
 };

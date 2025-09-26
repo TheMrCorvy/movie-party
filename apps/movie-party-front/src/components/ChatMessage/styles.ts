@@ -18,6 +18,7 @@ const styles: StylesService = (theme = "light") => {
             fontWeight: 700,
             color: "text.primary",
             fontSize: 18,
+            textTransform: "capitalize",
         },
         listItemBackground: {
             px: 2,

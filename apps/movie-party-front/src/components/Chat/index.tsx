@@ -16,6 +16,7 @@ const Chat: FC = () => {
         handleSendMessage,
         handleInputChange,
         handleKeyPress,
+        myId,
     } = useChatLogic();
     const theme = useTheme();
     const { chatBoxStyles, chatListStyles, dividerStyles } = styles(
@@ -31,6 +32,7 @@ const Chat: FC = () => {
                     <ChatMessage
                         key={index + "-chat-message-" + message.peerName}
                         message={message}
+                        myId={myId}
                     />
                 ))}
                 <div ref={messagesEndRef} />

@@ -16,9 +16,10 @@ import styles from "./styles";
 
 interface ChatMessageProps {
     message: Message;
+    myId: string;
 }
 
-const ChatMessage: FC<ChatMessageProps> = ({ message }) => {
+const ChatMessage: FC<ChatMessageProps> = ({ message, myId }) => {
     const theme = useTheme();
     const { listItemBackground, listItemAvatar, nameStyles, messageStyles } =
         styles(theme.palette.mode);
@@ -26,7 +27,7 @@ const ChatMessage: FC<ChatMessageProps> = ({ message }) => {
         <Fragment>
             <ListItem alignItems="flex-start" sx={listItemBackground}>
                 <ListItemAvatar>
-                    {message.peerName === "Yo" ? (
+                    {message.peerId === myId ? (
                         <Avatar
                             alt={message.peerName}
                             {...generateMUIAvatarProps(message.peerName)} // The styles for my avatar are inside the function
@@ -49,7 +50,7 @@ const ChatMessage: FC<ChatMessageProps> = ({ message }) => {
                             variant="subtitle1"
                             sx={nameStyles}
                         >
-                            {message.peerName}
+                            {message.peerId === myId ? "Yo" : message.peerName}
                         </Typography>
                     }
                     secondary={
