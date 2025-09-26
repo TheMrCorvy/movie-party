@@ -33,7 +33,7 @@ describe("ChatMessage Component", () => {
 
         render(
             <ThemeProvider theme={theme}>
-                <ChatMessage message={mockMessage} />
+                <ChatMessage myId="" message={mockMessage} />
             </ThemeProvider>
         );
 
@@ -56,7 +56,7 @@ describe("ChatMessage Component", () => {
 
         render(
             <ThemeProvider theme={theme}>
-                <ChatMessage message={myMessage} />
+                <ChatMessage myId="" message={myMessage} />
             </ThemeProvider>
         );
 
@@ -82,7 +82,7 @@ describe("ChatMessage Component", () => {
 
         render(
             <ThemeProvider theme={theme}>
-                <ChatMessage message={otherUserMessage} />
+                <ChatMessage myId="" message={otherUserMessage} />
             </ThemeProvider>
         );
 
