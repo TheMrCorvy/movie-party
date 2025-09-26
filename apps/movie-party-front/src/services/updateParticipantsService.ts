@@ -1,5 +1,6 @@
 import { MessageWithIndex, Participant } from "@repo/type-definitions";
 import { Signals } from "@repo/type-definitions/rooms";
+import Peer from "peerjs";
 import { Socket } from "socket.io-client";
 
 export interface UpdateParticipantsCallback {
@@ -25,7 +26,7 @@ export const updateParticipantsService: UpdateParticipantsService = ({
         ws.on(Signals.GET_PARTICIPANTS, callback);
 
         return () => {
-            websocketOff(ws);
+            ws.off(Signals.GET_PARTICIPANTS);
         };
     }
 
@@ -34,6 +35,34 @@ export const updateParticipantsService: UpdateParticipantsService = ({
     };
 };
 
-const websocketOff = (ws: Socket) => {
-    ws.off(Signals.GET_PARTICIPANTS);
+export interface NewPeerJoinedParams {
+    ws: Socket | null;
+    peer: Peer | null;
+    me: Participant;
+}
+
+export type NewPeerJoined = (params: NewPeerJoinedParams) => () => void;
+
+export const newPeerJoinedListener: NewPeerJoined = ({ ws, peer, me }) => {
+    if (ws) {
+        ws.on(Signals.NEW_PEER_JOINED, ({ peerId, peerName }) => {
+            if (!peer) {
+                console.error("No peer available...");
+                return;
+            }
+
+            if (me.stream) {
+                console.log("Calling: ", peerName);
+                peer.call(peerId, me.stream);
+            }
+        });
+
+        return () => {
+            ws.off(Signals.NEW_PEER_JOINED);
+        };
+    }
+
+    return () => {
+        console.log("Nothing to unmount.");
+    };
 };

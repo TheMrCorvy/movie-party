@@ -22,9 +22,10 @@ import {
 import { Participant } from "@repo/type-definitions";
 import { ActionTypes } from "../context/RoomContext/roomActions";
 import { listenPeerToggledCamera } from "../services/peerCameraService";
+import { newPeerJoinedListener } from "../services/updateParticipantsService";
 
 const Room: FC = () => {
-    const { room, dispatch, ws, peer } = useRoom();
+    const { room, dispatch, ws } = useRoom();
     const peerConnection = useMemo(
         () => peerConnectionService({ myId: room.myId }),
         [room.myId]
@@ -87,14 +88,16 @@ const Room: FC = () => {
     }, [peerConnection, room.participants]); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
-        if (!peer && peerConnection) {
-            console.log("re-render", room);
-            dispatch({
-                type: ActionTypes.SETUP_PEER_ACTION,
-                payload: peerConnection,
-            });
-        }
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+        const removeEventListener = newPeerJoinedListener({
+            me: room.participants[0],
+            peer: peerConnection,
+            ws,
+        });
+
+        return () => {
+            removeEventListener();
+        };
+    }, [ws, room.participants, peerConnection, room.myId]);
 
     return (
         <Container maxWidth="xl" sx={roomContainerStyles}>
