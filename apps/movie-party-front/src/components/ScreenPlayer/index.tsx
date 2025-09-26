@@ -4,8 +4,15 @@ import { useRoom } from "../../context/RoomContext/RoomContextProvider";
 import { ActionTypes } from "../../context/RoomContext/roomActions";
 import { screenShareServcie } from "../../services/screenSharingService";
 import { getUserScreen, stopAllTracks } from "../../utils/accessUserHardware";
+import Peer from "peerjs";
+import { startCall } from "../../services/callsService";
 
-const ScreenPlayer: FC = () => {
+export interface ScreenPlayerProps {
+    me: Peer;
+    remoteScreen?: MediaStream | null;
+}
+
+const ScreenPlayer: FC<ScreenPlayerProps> = ({ me, remoteScreen }) => {
     const { room, dispatch, ws } = useRoom();
     const [screenStream, setScreenStream] = useState<MediaStream>();
     const videoref = useRef<HTMLVideoElement>(null);
@@ -13,8 +20,14 @@ const ScreenPlayer: FC = () => {
     useEffect(() => {
         if (videoref.current && screenStream) {
             videoref.current.srcObject = screenStream;
+            return;
         }
-    }, [screenStream]);
+
+        if (videoref.current && remoteScreen && !screenStream) {
+            videoref.current.srcObject = remoteScreen;
+            return;
+        }
+    }, [screenStream, remoteScreen]);
 
     const shareScreen = async () => {
         if (screenStream) {
@@ -33,6 +46,16 @@ const ScreenPlayer: FC = () => {
         dispatch({
             type: ActionTypes.TOGGLE_SCREEN_SHARING,
             payload: room.myId,
+        });
+
+        startCall({
+            me,
+            callback: (params) => console.log(params),
+            otherParticipants: room.participants.filter(
+                (p) => p.id !== room.myId
+            ),
+            stream: displayStream,
+            streamType: "screen",
         });
     };
 
@@ -56,7 +79,7 @@ const ScreenPlayer: FC = () => {
 
     return (
         <>
-            {screenStream && (
+            {(screenStream || remoteScreen) && (
                 <video
                     style={{
                         maxHeight: "45vh",

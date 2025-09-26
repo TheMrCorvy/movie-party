@@ -48,6 +48,7 @@ const PeerVideo: FC<PeerVideoProps> = ({
                 otherParticipants,
                 me,
                 stream: stream,
+                streamType: "camera",
             });
         }
     }, [stream, me, cameraIsOn]); // eslint-disable-line react-hooks/exhaustive-deps

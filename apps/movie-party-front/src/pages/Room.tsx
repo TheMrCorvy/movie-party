@@ -1,4 +1,4 @@
-import { useEffect, useMemo, type FC } from "react";
+import { useEffect, useMemo, useState, type FC } from "react";
 import { Container, Grid, Typography } from "@mui/material";
 import Chat from "../components/Chat";
 import {
@@ -31,6 +31,7 @@ const Room: FC = () => {
         () => peerConnectionService({ myId: room.myId }),
         [room.myId]
     );
+    const [remoteScreen, setremoteScreen] = useState<MediaStream | null>(null);
 
     const handleCopy = async () => {
         try {
@@ -68,14 +69,20 @@ const Room: FC = () => {
             me: room.participants.find(
                 (participant) => participant.id === room.myId
             ) as Participant,
-            onCallEvent: ({ remoteStream, peerId }) =>
+            onCallEvent: ({ remoteStream, peerId, streamType }) => {
+                if (streamType === "screen") {
+                    setremoteScreen(remoteStream);
+                    return;
+                }
+
                 dispatch({
                     type: ActionTypes.TOGGLE_PARTICIPANT_CAMERA,
                     payload: {
                         stream: remoteStream,
                         peerId: peerId,
                     },
-                }),
+                });
+            },
             onPeerClose: defaultPeerClose,
             onPeerError: defaultPeerError,
             onPeerOpen: () => defaultPeerOpenEvent(peerConnection),
@@ -117,7 +124,10 @@ const Room: FC = () => {
                         <GlassButton onClick={handleCopy}>
                             Compartir sala
                         </GlassButton>
-                        <ScreenPlayer />
+                        <ScreenPlayer
+                            remoteScreen={remoteScreen}
+                            me={peerConnection}
+                        />
                         <GlassContainer
                             height={"auto"}
                             width={"100%"}

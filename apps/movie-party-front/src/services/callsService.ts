@@ -1,11 +1,14 @@
 import { Participant } from "@repo/type-definitions";
 import Peer, { MediaConnection } from "peerjs";
 
+export type StreamType = "camera" | "screen";
+
 export interface StartCallParams {
     me: Peer;
     otherParticipants: Participant[];
     callback: (params: StartCallCallbackParams) => void;
     stream: MediaStream;
+    streamType: StreamType;
 }
 
 export interface StartCallCallbackParams {
@@ -20,13 +23,14 @@ export const startCall: StartCall = ({
     me,
     stream,
     callback,
+    streamType = "camera",
 }) => {
     otherParticipants.forEach((participant) => {
         try {
             const call = me.call(participant.id, stream as MediaStream, {
                 metadata: {
                     peerId: me.id,
-                    streamType: "camera",
+                    streamType,
                 },
             });
 
@@ -79,12 +83,14 @@ export interface AnswerCallParams {
 export interface AnswerCallCallbackParams {
     remoteStream: MediaStream | null;
     peerId: string;
+    streamType: StreamType;
 }
 
 export type AnswerCall = (params: AnswerCallParams) => () => void;
 
 export const answerCall: AnswerCall = ({ call, stream, callback }) => {
     const callerId = call.metadata?.peerId || call.peer;
+    const streamType = call.metadata?.streamType || "camera";
 
     try {
         call.answer(stream);
@@ -92,6 +98,7 @@ export const answerCall: AnswerCall = ({ call, stream, callback }) => {
             callback({
                 remoteStream,
                 peerId: callerId,
+                streamType,
             });
         });
 
@@ -103,6 +110,7 @@ export const answerCall: AnswerCall = ({ call, stream, callback }) => {
             callback({
                 remoteStream: null,
                 peerId: callerId,
+                streamType,
             });
         });
 
