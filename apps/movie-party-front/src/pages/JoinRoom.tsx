@@ -42,6 +42,7 @@ const JoinRoom: FC = () => {
                 messages: [],
                 myId: generateId(),
                 password: params.password ? "Introducir contraseña..." : "", // to do implement password setup
+                peerSharingScreen: "",
             },
         });
     };
