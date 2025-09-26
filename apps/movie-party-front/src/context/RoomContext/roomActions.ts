@@ -52,16 +52,10 @@ export interface ToggleParticipantCameraAction {
     };
 }
 
-export interface SetupPeerAction {
-    type: ActionTypes.SETUP_PEER_ACTION;
-    payload: Peer;
-}
-
 export type RoomAction =
     | SetRoomAction
     | UpdateParticipantsAction
     | JoinRoomAction
     | StartMyCameraAction
     | MessageReceivedAction
-    | ToggleParticipantCameraAction
-    | SetupPeerAction;
+    | ToggleParticipantCameraAction;
