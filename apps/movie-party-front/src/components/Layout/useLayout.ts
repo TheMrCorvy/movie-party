@@ -45,6 +45,7 @@ const useLayout = ({ pageIsRoom }: UseLayoutPops) => {
                             myId: room.myId,
                             roomId: params.roomId,
                             messages: params.messages,
+                            peerSharingScreen: params.peerSharingScreen,
                         },
                     });
                     return;

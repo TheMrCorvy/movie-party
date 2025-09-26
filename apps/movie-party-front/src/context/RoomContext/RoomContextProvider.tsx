@@ -23,6 +23,7 @@ const initialState: RoomState = {
         messages: [],
         participants: [],
         myId: "",
+        peerSharingScreen: "",
     },
     ws,
 };

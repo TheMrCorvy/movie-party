@@ -60,7 +60,6 @@ export const listenPeerEventsService: ListenPeerEventsService = ({
     peerConnection.on("open", () => onPeerOpen(peerConnection));
     peerConnection.on("error", onPeerError);
     peerConnection.on("disconnected", () => onPeerDisconnect(peerConnection));
-
     peerConnection.on("close", onPeerClose);
     peerConnection.on("call", (call) => {
         console.log("Incoming call", call);

@@ -49,11 +49,7 @@ export const verifyRoom: VerifyRoomService = ({ roomId, ws, callback }) => {
     ws.on(Signals.ROOM_NOT_FOUND, callback);
 
     return () => {
-        removeEventListener(ws);
+        ws.off(Signals.ROOM_EXISTS);
+        ws.off(Signals.ROOM_NOT_FOUND);
     };
-};
-
-const removeEventListener = (ws: Socket) => {
-    ws.off(Signals.ROOM_EXISTS);
-    ws.off(Signals.ROOM_NOT_FOUND);
 };

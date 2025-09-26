@@ -57,6 +57,7 @@ export const roomReducer = (
                     }),
                     id: action.payload.roomId,
                     messages: action.payload.messages,
+                    peerSharingScreen: action.payload.peerSharingScreen,
                 },
             };
         case ActionTypes.MESSAGE_RECEIVED:
@@ -98,6 +99,14 @@ export const roomReducer = (
                         ),
                         myId: state.room.myId,
                     }),
+                },
+            };
+        case ActionTypes.TOGGLE_SCREEN_SHARING:
+            return {
+                ...state,
+                room: {
+                    ...state.room,
+                    peerSharingScreen: action.payload,
                 },
             };
 

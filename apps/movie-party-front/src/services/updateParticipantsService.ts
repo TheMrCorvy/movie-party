@@ -7,6 +7,7 @@ export interface UpdateParticipantsCallback {
     roomId: string;
     participants: Participant[];
     messages: MessageWithIndex[];
+    peerSharingScreen: string;
 }
 
 export interface UpdateParticipantsParam {

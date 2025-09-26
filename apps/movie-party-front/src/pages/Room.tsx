@@ -23,6 +23,7 @@ import { Participant } from "@repo/type-definitions";
 import { ActionTypes } from "../context/RoomContext/roomActions";
 import { listenPeerToggledCamera } from "../services/peerCameraService";
 import { newPeerJoinedListener } from "../services/updateParticipantsService";
+import VideoPlayerComponent from "../components/VideoPlayerComponent";
 
 const Room: FC = () => {
     const { room, dispatch, ws } = useRoom();
@@ -116,6 +117,7 @@ const Room: FC = () => {
                         <GlassButton onClick={handleCopy}>
                             Compartir sala
                         </GlassButton>
+                        <VideoPlayerComponent />
                         <GlassContainer
                             height={"auto"}
                             width={"100%"}

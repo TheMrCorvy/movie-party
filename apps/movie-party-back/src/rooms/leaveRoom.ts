@@ -30,6 +30,8 @@ export const leaveRoom: LeaveRoom = ({ peerId, roomId, rooms, io }) => {
     io.in(roomId).emit(Signals.GET_PARTICIPANTS, {
         roomId,
         participants: room.participants,
+        messages: room.messages,
+        peerSharingScreen: room.peerSharingScreen,
     });
     console.log("User left: ", peerId);
 };

@@ -44,6 +44,7 @@ export const enterRoom: EnterRoom = ({
         roomId,
         participants: room.participants,
         messages: room.messages,
+        peerSharingScreen: room.peerSharingScreen,
     });
 
     socket.to(roomId).emit(Signals.NEW_PEER_JOINED, { peerId, peerName });

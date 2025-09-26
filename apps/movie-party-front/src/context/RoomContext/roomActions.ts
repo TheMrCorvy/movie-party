@@ -9,6 +9,7 @@ export enum ActionTypes {
     "START_MY_CAMERA" = "START_MY_CAMERA",
     "TOGGLE_PARTICIPANT_CAMERA" = "TOGGLE_PARTICIPANT_CAMERA",
     "SETUP_PEER_ACTION" = "SETUP_PEER_ACTION",
+    "TOGGLE_SCREEN_SHARING" = "TOGGLE_SCREEN_SHARING",
 }
 
 export interface SetRoomAction {
@@ -28,6 +29,7 @@ export interface JoinRoomAction {
         myId: string;
         roomId: string;
         messages: MessageWithIndex[];
+        peerSharingScreen: string;
     };
 }
 
@@ -51,10 +53,16 @@ export interface ToggleParticipantCameraAction {
     };
 }
 
+export interface ToggleScreenSharing {
+    type: ActionTypes.TOGGLE_SCREEN_SHARING;
+    payload: string;
+}
+
 export type RoomAction =
     | SetRoomAction
     | UpdateParticipantsAction
     | JoinRoomAction
     | StartMyCameraAction
     | MessageReceivedAction
-    | ToggleParticipantCameraAction;
+    | ToggleParticipantCameraAction
+    | ToggleScreenSharing;

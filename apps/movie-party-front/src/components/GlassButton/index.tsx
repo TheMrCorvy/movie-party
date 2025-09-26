@@ -7,6 +7,7 @@ export interface GlassButtonProps {
     children: ReactNode;
     variant?: "icon-btn" | "btn";
     border?: boolean;
+    disabled?: boolean;
 }
 
 const GlassButton: FC<GlassButtonProps> = ({
@@ -14,6 +15,7 @@ const GlassButton: FC<GlassButtonProps> = ({
     children,
     variant = "btn",
     border,
+    disabled,
 }) => {
     const { glassiconButton, glassButton } = styles();
     if (variant === "icon-btn") {
@@ -23,6 +25,7 @@ const GlassButton: FC<GlassButtonProps> = ({
                 onClick={onClick}
                 aria-label="Send message"
                 sx={glassiconButton}
+                disabled={disabled}
             >
                 {children}
             </IconButton>
@@ -32,6 +35,7 @@ const GlassButton: FC<GlassButtonProps> = ({
         <Button
             variant="contained"
             onClick={onClick}
+            disabled={disabled}
             sx={{
                 ...glassButton,
                 border: border ? '"1px solid rgba(255, 255, 255, 0.3)"' : "",

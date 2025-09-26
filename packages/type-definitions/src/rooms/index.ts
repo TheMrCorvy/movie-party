@@ -14,6 +14,7 @@ export enum Signals {
     "ERROR" = "ERROR",
     "PEER_TOGGLED_CAMERA" = "PEER_TOGGLED_CAMERA",
     "NEW_PEER_JOINED" = "NEW_PEER_JOINED",
+    "SCREEN_SHARING" = "SCREEN_SHARING",
 }
 
 export interface Room {
@@ -22,4 +23,5 @@ export interface Room {
     participants: Participant[];
     password?: string;
     screenSharing?: MediaStream;
+    peerSharingScreen: string; //id of the peer
 }
