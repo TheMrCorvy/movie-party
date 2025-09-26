@@ -3,7 +3,7 @@ import GlassButton from "../GlassButton";
 import { useRoom } from "../../context/RoomContext/RoomContextProvider";
 import { ActionTypes } from "../../context/RoomContext/roomActions";
 import { screenShareServcie } from "../../services/screenSharingService";
-import { getUserScreen } from "../../utils/accessUserHardware";
+import { getUserScreen, stopAllTracks } from "../../utils/accessUserHardware";
 
 const ScreenPlayer: FC = () => {
     const { room, dispatch, ws } = useRoom();
@@ -23,6 +23,7 @@ const ScreenPlayer: FC = () => {
                 type: ActionTypes.TOGGLE_SCREEN_SHARING,
                 payload: "",
             });
+            stopAllTracks(screenStream);
             return;
         }
 

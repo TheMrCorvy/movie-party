@@ -12,7 +12,7 @@ export const getUserCamera = async (): Promise<MediaStream> => {
     });
 };
 
-export const stopUserCamera = (stream?: MediaStream | null) => {
+export const stopAllTracks = (stream?: MediaStream | null) => {
     if (!stream) return;
 
     return stream.getTracks().forEach((track) => track.stop());
