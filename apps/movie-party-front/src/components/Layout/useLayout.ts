@@ -34,6 +34,8 @@ const useLayout = ({ pageIsRoom }: UseLayoutPops) => {
                         type: ActionTypes.UPDATE_PARTICIPANTS,
                         payload: params.participants,
                     });
+
+                    // llamar a todos los participantes
                     return;
                 }
 

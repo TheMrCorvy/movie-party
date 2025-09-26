@@ -34,6 +34,7 @@ export const enterRoom: EnterRoom = ({
         room.participants.push({
             id: peerId,
             name: peerName,
+            index: room.participants.length - 1,
         });
 
         socket.join(roomId);
