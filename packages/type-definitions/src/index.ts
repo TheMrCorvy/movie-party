@@ -2,7 +2,6 @@ export interface Participant {
     id: string;
     name: string;
     stream?: MediaStream | null;
-    index: number;
 }
 
 export interface Message {

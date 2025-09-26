@@ -26,7 +26,7 @@ export const startCall: StartCall = ({
             const call = me.call(participant.id, stream as MediaStream, {
                 metadata: {
                     peerId: me.id,
-                    streamType: "camera-during-screenshare",
+                    streamType: "camera",
                 },
             });
 

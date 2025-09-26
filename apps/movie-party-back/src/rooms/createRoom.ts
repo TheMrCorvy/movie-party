@@ -29,7 +29,6 @@ export const createRoom: CreateRoom = ({
             {
                 id: peerId,
                 name: peerName,
-                index: 0,
             },
         ],
     };
