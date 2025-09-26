@@ -46,6 +46,8 @@ export const enterRoom: EnterRoom = ({
         messages: room.messages,
     });
 
+    socket.to(roomId).emit(Signals.NEW_PEER_JOINED, { peerId, peerName });
+
     console.log("user joined the room: ", { roomId, peerId, peerName });
 
     socket.on("disconnect", (reason) => {

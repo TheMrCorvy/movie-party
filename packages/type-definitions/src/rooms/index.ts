@@ -13,6 +13,7 @@ export enum Signals {
     "MESSAGE_RECEIVED" = "MESSAGE_RECEIVED",
     "ERROR" = "ERROR",
     "PEER_TOGGLED_CAMERA" = "PEER_TOGGLED_CAMERA",
+    "NEW_PEER_JOINED" = "NEW_PEER_JOINED",
 }
 
 export interface Room {
