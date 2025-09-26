@@ -16,7 +16,7 @@ interface PeerVideoProps {
     stream?: MediaStream | null;
     peerName: string;
     isMyCamera: boolean;
-    me: Peer;
+    me: Peer | null;
 }
 
 const PeerVideo: FC<PeerVideoProps> = ({

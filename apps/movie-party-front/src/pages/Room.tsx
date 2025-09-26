@@ -24,8 +24,8 @@ import { ActionTypes } from "../context/RoomContext/roomActions";
 import { listenPeerToggledCamera } from "../services/peerCameraService";
 
 const Room: FC = () => {
-    const { room, dispatch, ws } = useRoom();
-    const peer = useMemo(
+    const { room, dispatch, ws, peer } = useRoom();
+    const peerConnection = useMemo(
         () => peerConnectionService({ myId: room.myId }),
         [room.myId]
     );
@@ -76,15 +76,25 @@ const Room: FC = () => {
                 }),
             onPeerClose: defaultPeerClose,
             onPeerError: defaultPeerError,
-            onPeerOpen: () => defaultPeerOpenEvent(peer),
-            onPeerDisconnect: () => defaultPeerDesconnected(peer),
-            peerConnection: peer,
+            onPeerOpen: () => defaultPeerOpenEvent(peerConnection),
+            onPeerDisconnect: () => defaultPeerDesconnected(peerConnection),
+            peerConnection: peerConnection,
         });
 
         return () => {
             removePeerEventListeners();
         };
-    }, [peer, room.participants]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [peerConnection, room.participants]); // eslint-disable-line react-hooks/exhaustive-deps
+
+    useEffect(() => {
+        if (!peer && peerConnection) {
+            console.log("re-render", room);
+            dispatch({
+                type: ActionTypes.SETUP_PEER_ACTION,
+                payload: peerConnection,
+            });
+        }
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <Container maxWidth="xl" sx={roomContainerStyles}>
@@ -117,7 +127,7 @@ const Room: FC = () => {
                                         isMyCamera={
                                             participant.id === room.myId
                                         }
-                                        me={peer}
+                                        me={peerConnection}
                                     />
                                 ))}
                             </>

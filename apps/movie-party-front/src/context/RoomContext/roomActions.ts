@@ -1,5 +1,6 @@
 import { MessageWithIndex, Participant } from "@repo/type-definitions";
 import { LocalRoom } from "./roomReducer";
+import Peer from "peerjs";
 
 export enum ActionTypes {
     "SET_ROOM" = "SET_ROOM",
@@ -8,6 +9,7 @@ export enum ActionTypes {
     "MESSAGE_RECEIVED" = "MESSAGE_RECEIVED",
     "START_MY_CAMERA" = "START_MY_CAMERA",
     "TOGGLE_PARTICIPANT_CAMERA" = "TOGGLE_PARTICIPANT_CAMERA",
+    "SETUP_PEER_ACTION" = "SETUP_PEER_ACTION",
 }
 
 export interface SetRoomAction {
@@ -50,10 +52,16 @@ export interface ToggleParticipantCameraAction {
     };
 }
 
+export interface SetupPeerAction {
+    type: ActionTypes.SETUP_PEER_ACTION;
+    payload: Peer;
+}
+
 export type RoomAction =
     | SetRoomAction
     | UpdateParticipantsAction
     | JoinRoomAction
     | StartMyCameraAction
     | MessageReceivedAction
-    | ToggleParticipantCameraAction;
+    | ToggleParticipantCameraAction
+    | SetupPeerAction;

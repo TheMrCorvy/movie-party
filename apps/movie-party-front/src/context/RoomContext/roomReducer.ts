@@ -2,6 +2,7 @@ import { Room } from "@repo/type-definitions/rooms";
 import { Socket } from "socket.io-client";
 import { ActionTypes, RoomAction } from "./roomActions";
 import { putMeFirst } from "../../utils/putMeFirst";
+import Peer from "peerjs";
 
 export interface LocalRoom extends Room {
     myId: string;
@@ -9,6 +10,7 @@ export interface LocalRoom extends Room {
 export interface RoomState {
     room: LocalRoom;
     ws: Socket | null;
+    peer: Peer | null;
 }
 
 export const roomReducer = (
@@ -99,6 +101,11 @@ export const roomReducer = (
                         myId: state.room.myId,
                     }),
                 },
+            };
+        case ActionTypes.SETUP_PEER_ACTION:
+            return {
+                ...state,
+                peer: action.payload,
             };
 
         default:
