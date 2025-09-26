@@ -22,7 +22,7 @@ export const createRoom: CreateRoom = ({
     io,
 }) => {
     const roomId = generateId();
-    const room = {
+    const room: Room = {
         id: roomId,
         messages: [],
         participants: [
@@ -31,6 +31,7 @@ export const createRoom: CreateRoom = ({
                 name: peerName,
             },
         ],
+        peerSharingScreen: "",
     };
     rooms.push(room);
 
