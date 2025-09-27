@@ -4,6 +4,10 @@
         ".": {
             "types": "./src/index.ts",
             "default": "./src/index.ts"
+        },
+        "./feature-flags": {
+            "types": "./src/featreFlags.ts",
+            "default": "./src/featreFlags.ts"
         }
     },
     "devDependencies": {

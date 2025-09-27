@@ -6,30 +6,30 @@
             "dependsOn": ["^build"],
             "inputs": ["$TURBO_DEFAULT$", ".env*"],
             "outputs": [".next/**", "!.next/cache/**", "dist/**", "build/**"],
-            "env": ["PORT"]
+            "env": ["PORT", "FEATURE_FLAGS"]
         },
         "lint": {
             "dependsOn": ["^lint"],
-            "env": ["PORT"]
+            "env": ["PORT", "FEATURE_FLAGS"]
         },
         "check-types": {
             "dependsOn": ["^check-types"],
-            "env": ["PORT"]
+            "env": ["PORT", "FEATURE_FLAGS"]
         },
         "dev": {
             "cache": false,
             "persistent": true,
-            "env": ["PORT"]
+            "env": ["PORT", "FEATURE_FLAGS"]
         },
         "test": {
             "dependsOn": ["^build"],
             "inputs": ["$TURBO_DEFAULT$", ".env*"],
-            "env": ["PORT"]
+            "env": ["PORT", "FEATURE_FLAGS"]
         },
         "test:coverage": {
             "dependsOn": ["^build"],
             "inputs": ["$TURBO_DEFAULT$", ".env*"],
-            "env": ["PORT"]
+            "env": ["PORT", "FEATURE_FLAGS"]
         },
         "clean": {
             "cache": false
