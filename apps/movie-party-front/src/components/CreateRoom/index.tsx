@@ -7,6 +7,7 @@ import styles from "./styles";
 import GlassButton from "../GlassButton";
 import GlassInput from "../GlassInput";
 import { createRoomService } from "../../services/createRoomService";
+import { logData } from "@repo/shared-utils/log-data";
 
 const CreateRoom: FC = () => {
     const [myName, setMyName] = useState("");
@@ -14,6 +15,12 @@ const CreateRoom: FC = () => {
     const { mainContainer } = styles();
 
     const createRoomSubmit = () => {
+        logData({
+            data: "Creating room...",
+            layer: "room_ws",
+            timeStamp: true,
+            type: "info",
+        });
         createRoomService({
             ws,
             peerName: myName,

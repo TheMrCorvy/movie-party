@@ -1,3 +1,4 @@
+import { logData } from "@repo/shared-utils/log-data";
 import { Participant } from "@repo/type-definitions";
 import Peer, { MediaConnection } from "peerjs";
 
@@ -25,6 +26,18 @@ export const startCall: StartCall = ({
     callback,
     streamType = "camera",
 }) => {
+    logData({
+        title: "Starting call to everyone else in the room",
+        type: "info",
+        layer: "camera_caller",
+        timeStamp: true,
+        data: {
+            otherParticipants,
+            me,
+            stream,
+            streamType,
+        },
+    });
     otherParticipants.forEach((participant) => {
         try {
             const call = me.call(participant.id, stream as MediaStream, {
@@ -35,12 +48,17 @@ export const startCall: StartCall = ({
             });
 
             if (!call) {
-                console.error(
-                    `[Camera Calls] Failed to create camera call to peer ${participant.id}`
-                );
-                console.log(call);
-                console.log(me);
-                console.log(stream);
+                logData({
+                    type: "error",
+                    title: `Failed to create camera call to peer ${participant.id}`,
+                    timeStamp: true,
+                    layer: "camera_caller",
+                    data: {
+                        call,
+                        me,
+                        stream,
+                    },
+                });
                 return;
             }
 
@@ -52,10 +70,13 @@ export const startCall: StartCall = ({
             });
 
             call.on("error", (err) => {
-                console.error(
-                    `[Camera Calls] Error with peer ${participant.name}:`,
-                    err
-                );
+                logData({
+                    type: "error",
+                    title: `Error with peer ${participant.name}`,
+                    timeStamp: true,
+                    layer: "camera_caller",
+                    data: err,
+                });
             });
 
             call.on("close", () => {
@@ -65,10 +86,13 @@ export const startCall: StartCall = ({
                 });
             });
         } catch (error) {
-            console.error(
-                `[Camera Calls] Failed to initiate call to peer ${participant.name}:`,
-                error
-            );
+            logData({
+                type: "error",
+                title: `Failed to initiate call to peer ${participant.name}`,
+                timeStamp: true,
+                layer: "camera_caller",
+                data: error,
+            });
         }
     });
 };
@@ -92,9 +116,27 @@ export const answerCall: AnswerCall = ({ call, stream, callback }) => {
     const callerId = call.metadata?.peerId || call.peer;
     const streamType = call.metadata?.streamType || "camera";
 
+    logData({
+        title: "Listening to call event",
+        data: {
+            call,
+            stream,
+        },
+        timeStamp: true,
+        type: "info",
+        layer: "camera",
+    });
+
     try {
         call.answer(stream);
         call.on("stream", (remoteStream: MediaStream) => {
+            logData({
+                title: "Received stream from another user",
+                data: { remoteStream, streamType },
+                timeStamp: true,
+                type: "info",
+                layer: "camera",
+            });
             callback({
                 remoteStream,
                 peerId: callerId,
@@ -103,10 +145,25 @@ export const answerCall: AnswerCall = ({ call, stream, callback }) => {
         });
 
         call.on("error", (err: any) => {
-            console.error(`[Incoming Call] Error from peer ${callerId}:`, err);
+            logData({
+                type: "error",
+                title: `[Incoming Call] Error from peer ${callerId}`,
+                data: err,
+                layer: "camera",
+                timeStamp: true,
+            });
         });
 
         call.on("close", () => {
+            logData({
+                title: "Someone stopped their camera " + callerId,
+                type: "info",
+                layer: "camera_receiver",
+                timeStamp: true,
+                data: {
+                    streamType,
+                },
+            });
             callback({
                 remoteStream: null,
                 peerId: callerId,
@@ -120,13 +177,25 @@ export const answerCall: AnswerCall = ({ call, stream, callback }) => {
             call.off("stream");
         };
     } catch (error) {
-        console.error("[Incoming Call] Failed to answer call:", error);
+        logData({
+            timeStamp: true,
+            type: "error",
+            title: "[Incoming Call] Failed to answer call",
+            layer: "camera",
+            data: error,
+        });
 
         return () => {
-            console.log(
-                "Something during the setup of call events went wrong..."
-            );
-            console.log("Nothing to unmount.");
+            logData({
+                title: "Nothing to unmount",
+                type: "warn",
+                data: {
+                    message:
+                        "Something during the setup of call events went wrong...",
+                },
+                layer: "camera",
+                timeStamp: true,
+            });
         };
     }
 };

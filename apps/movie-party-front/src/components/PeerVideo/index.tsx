@@ -12,6 +12,7 @@ import Peer from "peerjs";
 import { startCall } from "../../services/callsService";
 import fakeTimeout from "../../utils/fakeTimeout";
 import { getUserCamera, stopAllTracks } from "../../utils/accessUserHardware";
+import { logData } from "@repo/shared-utils/log-data";
 
 interface PeerVideoProps {
     stream?: MediaStream | null;
@@ -34,17 +35,40 @@ const PeerVideo: FC<PeerVideoProps> = ({
     );
 
     useEffect(() => {
+        logData({
+            title: "Re-render in PeerVideo",
+            layer: "camera",
+            timeStamp: true,
+            data: { stream, me, cameraIsOn },
+            type: "info",
+        });
         if (videoRef.current) {
             videoRef.current.srcObject = stream || null;
         }
 
         if (cameraIsOn && stream && me) {
+            logData({
+                title: "I am calling everyone",
+                layer: "camera_caller",
+                timeStamp: true,
+                data: { stream, me, cameraIsOn },
+                type: "info",
+            });
+
             startCall({
-                callback: (params) =>
+                callback: (params) => {
+                    logData({
+                        title: "Someone answered the call",
+                        timeStamp: true,
+                        data: params,
+                        layer: "camera_receiver",
+                        type: "info",
+                    });
                     dispatch({
                         type: ActionTypes.TOGGLE_PARTICIPANT_CAMERA,
                         payload: params,
-                    }),
+                    });
+                },
                 otherParticipants,
                 me,
                 stream: stream,

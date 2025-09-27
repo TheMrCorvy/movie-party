@@ -4,6 +4,7 @@ import { useRoom } from "../../context/RoomContext/RoomContextProvider";
 import { updateParticipantsService } from "../../services/updateParticipantsService";
 import { ActionTypes } from "../../context/RoomContext/roomActions";
 import { roomWasCreated } from "../../services/createRoomService";
+import { logData } from "@repo/shared-utils/log-data";
 
 export interface UseLayoutPops {
     pageIsRoom: boolean;
@@ -16,20 +17,35 @@ const useLayout = ({ pageIsRoom }: UseLayoutPops) => {
     useEffect(() => {
         const roomWasCreatedEvent = roomWasCreated({
             ws,
-            callback: (params) =>
+            callback: (params) => {
+                logData({
+                    title: "Room was created",
+                    data: params,
+                    timeStamp: true,
+                    type: "info",
+                    layer: "room_ws",
+                });
                 dispatch({
                     type: ActionTypes.SET_ROOM,
                     payload: {
                         ...params.room,
                         myId: params.room.participants[0].id,
                     },
-                }),
+                });
+            },
         });
 
         const updateParticipantsEvent = updateParticipantsService({
             ws,
             callback: (params) => {
                 if (room.id === params.roomId && pageIsRoom) {
+                    logData({
+                        title: "Updating participants",
+                        data: params,
+                        timeStamp: true,
+                        type: "info",
+                        layer: "participants_update",
+                    });
                     dispatch({
                         type: ActionTypes.UPDATE_PARTICIPANTS,
                         payload: params.participants,
@@ -38,6 +54,13 @@ const useLayout = ({ pageIsRoom }: UseLayoutPops) => {
                 }
 
                 if (room.id === params.roomId && !pageIsRoom) {
+                    logData({
+                        title: "Joined the room",
+                        data: params,
+                        timeStamp: true,
+                        type: "info",
+                        layer: "room_ws",
+                    });
                     dispatch({
                         type: ActionTypes.JOIN_ROOM,
                         payload: {
@@ -74,8 +97,24 @@ const useLayout = ({ pageIsRoom }: UseLayoutPops) => {
             !pageIsRoom &&
             imInTheRoom.name
         ) {
+            logData({
+                title: "I am in the room",
+                data: imInTheRoom,
+                timeStamp: true,
+                type: "info",
+                layer: "room_ws",
+            });
             navigate("/room/" + room.id);
+            return;
         }
+
+        logData({
+            title: "I'm not in the room",
+            data: room.participants,
+            timeStamp: true,
+            type: "info",
+            layer: "room_ws",
+        });
     }, [room, navigate, pageIsRoom]);
 };
 

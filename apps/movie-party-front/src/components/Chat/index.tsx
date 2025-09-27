@@ -7,6 +7,7 @@ import SendMessage from "../SendMessage";
 import { useChatLogic } from "./useChatLogic";
 import styles from "./styles";
 import { useTheme } from "@mui/material/styles";
+import { logData } from "@repo/shared-utils/log-data";
 
 const Chat: FC = () => {
     const {
@@ -24,6 +25,14 @@ const Chat: FC = () => {
     );
 
     const sortedMessages = messages.sort((a, b) => a.index - b.index);
+
+    logData({
+        title: "Chat component",
+        data: "Re-rendering",
+        layer: "messages",
+        timeStamp: true,
+        type: "info",
+    });
 
     return (
         <Box sx={chatBoxStyles}>

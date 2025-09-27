@@ -1,4 +1,5 @@
 import { stringIsEmpty } from "@repo/shared-utils";
+import { logData } from "@repo/shared-utils/log-data";
 import { Message, MessageWithIndex } from "@repo/type-definitions";
 import { Signals } from "@repo/type-definitions/rooms";
 import { Socket } from "socket.io-client";
@@ -17,7 +18,17 @@ export const sendMessageService: SendMessageService = ({
     roomId,
 }) => {
     if (!ws) {
-        console.error("Couldn't send message. Websocket not found...");
+        logData({
+            title: "Couldn't send message. Websocket not found",
+            type: "warn",
+            data: {
+                message,
+                ws,
+                roomId,
+            },
+            layer: "messages",
+            timeStamp: true,
+        });
         return;
     }
 
@@ -28,7 +39,17 @@ export const sendMessageService: SendMessageService = ({
         stringIsEmpty(message.peerId) ||
         stringIsEmpty(message.peerName)
     ) {
-        console.error("Couldn't send empty message...");
+        logData({
+            title: "Couldn't send empty message",
+            type: "error",
+            data: {
+                message,
+                ws,
+                roomId,
+            },
+            layer: "messages",
+            timeStamp: true,
+        });
     }
 
     ws.emit(Signals.SEND_MESSAGE, { message, roomId });
@@ -57,7 +78,16 @@ export const messageReceivedService: MessageReceivedService = ({
 }) => {
     if (!ws) {
         return () => {
-            console.log("Nothing to unmount.");
+            logData({
+                title: "Nothing to unmount",
+                type: "warn",
+                data: {
+                    message:
+                        "Something during the setup of the events went wrong...",
+                },
+                layer: "room_ws",
+                timeStamp: true,
+            });
         };
     }
 

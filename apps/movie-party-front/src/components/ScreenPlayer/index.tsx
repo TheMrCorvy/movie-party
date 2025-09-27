@@ -6,6 +6,7 @@ import { screenShareServcie } from "../../services/screenSharingService";
 import { getUserScreen, stopAllTracks } from "../../utils/accessUserHardware";
 import Peer from "peerjs";
 import { startCall } from "../../services/callsService";
+import { logData } from "@repo/shared-utils/log-data";
 
 export interface ScreenPlayerProps {
     me: Peer;
@@ -20,11 +21,25 @@ const ScreenPlayer: FC<ScreenPlayerProps> = ({ me, remoteScreen }) => {
     useEffect(() => {
         if (videoref.current && screenStream) {
             videoref.current.srcObject = screenStream;
+            logData({
+                title: "Local stream received",
+                layer: "screen_sharing",
+                timeStamp: true,
+                type: "info",
+                data: screenStream,
+            });
             return;
         }
 
         if (videoref.current && remoteScreen && !screenStream) {
             videoref.current.srcObject = remoteScreen;
+            logData({
+                title: "Remote stream received",
+                layer: "screen_sharing",
+                timeStamp: true,
+                type: "info",
+                data: remoteScreen,
+            });
             return;
         }
     }, [screenStream, remoteScreen]);
@@ -37,20 +52,51 @@ const ScreenPlayer: FC<ScreenPlayerProps> = ({ me, remoteScreen }) => {
                 payload: "",
             });
             stopAllTracks(screenStream);
+            logData({
+                title: "Stopped screen sharing",
+                layer: "screen_sharing",
+                timeStamp: true,
+                type: "info",
+                data: remoteScreen,
+            });
             return;
         }
 
         const displayStream = await getUserScreen();
 
         setScreenStream(displayStream);
+
+        logData({
+            title: "Started screen sharing",
+            layer: "screen_sharing",
+            timeStamp: true,
+            type: "info",
+            data: screenStream,
+        });
+
         dispatch({
             type: ActionTypes.TOGGLE_SCREEN_SHARING,
             payload: room.myId,
         });
 
+        logData({
+            title: "Sending screen",
+            layer: "screen_sharing_sender",
+            timeStamp: true,
+            type: "info",
+            data: screenStream,
+        });
+
         startCall({
             me,
-            callback: (params) => console.log(params),
+            callback: (params) =>
+                logData({
+                    title: "Someone answered the screen-sharing call",
+                    data: params,
+                    layer: "screen_sharing_receiver",
+                    timeStamp: true,
+                    type: "info",
+                }),
             otherParticipants: room.participants.filter(
                 (p) => p.id !== room.myId
             ),
@@ -65,11 +111,22 @@ const ScreenPlayer: FC<ScreenPlayerProps> = ({ me, remoteScreen }) => {
             peerId: room.myId,
             ws,
             status: screenStream ? true : false,
-            callback: (params) =>
+            callback: (params) => {
+                logData({
+                    layer: "screen_sharing",
+                    title: "Received notification from ws server",
+                    type: "info",
+                    timeStamp: true,
+                    data: {
+                        ...params,
+                        info: "This notification came from the ws socket backend and means that someone started sharing their screen.",
+                    },
+                });
                 dispatch({
                     type: ActionTypes.TOGGLE_SCREEN_SHARING,
                     payload: params.status ? params.peerId : "",
-                }),
+                });
+            },
         });
 
         return () => {

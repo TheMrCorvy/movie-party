@@ -25,6 +25,7 @@ import { listenPeerToggledCamera } from "../services/peerCameraService";
 import { newPeerJoinedListener } from "../services/updateParticipantsService";
 import ScreenPlayer from "../components/ScreenPlayer";
 import { copyToClipboard } from "../utils/accessUserHardware";
+import { logData } from "@repo/shared-utils/log-data";
 
 const Room: FC = () => {
     const { room, dispatch, ws } = useRoom();
@@ -37,7 +38,14 @@ const Room: FC = () => {
     const handleCopy = async () => {
         const text = "http://localhost:5173/join-room/" + room.id;
         await copyToClipboard({
-            callback: (params) => console.log(params),
+            callback: (params) =>
+                logData({
+                    title: "Copied invitation",
+                    data: params,
+                    type: "info",
+                    timeStamp: true,
+                    layer: "access_user_hardware",
+                }),
             text,
         });
     };
@@ -47,6 +55,13 @@ const Room: FC = () => {
             ws,
             callback: ({ cameraStatus, peerId }) => {
                 if (!cameraStatus) {
+                    logData({
+                        title: "Peer turned off their camera",
+                        layer: "camera_receiver",
+                        type: "info",
+                        timeStamp: true,
+                        data: { cameraStatus, peerId },
+                    });
                     dispatch({
                         type: ActionTypes.TOGGLE_PARTICIPANT_CAMERA,
                         payload: {
@@ -70,10 +85,24 @@ const Room: FC = () => {
             ) as Participant,
             onCallEvent: ({ remoteStream, peerId, streamType }) => {
                 if (streamType === "screen") {
+                    logData({
+                        title: "Received remote screen stream",
+                        data: { remoteStream, peerId, streamType },
+                        timeStamp: true,
+                        type: "info",
+                        layer: "screen_sharing_receiver",
+                    });
                     setremoteScreen(remoteStream);
                     return;
                 }
 
+                logData({
+                    title: "Received remote camera stream",
+                    data: { remoteStream, peerId, streamType },
+                    timeStamp: true,
+                    type: "info",
+                    layer: "camera_receiver",
+                });
                 dispatch({
                     type: ActionTypes.TOGGLE_PARTICIPANT_CAMERA,
                     payload: {

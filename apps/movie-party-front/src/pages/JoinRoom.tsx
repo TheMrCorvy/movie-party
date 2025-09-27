@@ -14,6 +14,7 @@ import { Typography } from "@mui/material";
 import { generateId } from "@repo/shared-utils";
 import { ActionTypes } from "../context/RoomContext/roomActions";
 import EnterRoom from "../components/EnterRoom";
+import { logData } from "@repo/shared-utils/log-data";
 
 const JoinRoom: FC = () => {
     const { ws, dispatch } = useRoom();
@@ -28,6 +29,14 @@ const JoinRoom: FC = () => {
         if (!roomId || !params.roomExists || roomExists.hasBeenSet) {
             return;
         }
+
+        logData({
+            title: "Room exists verification received",
+            data: params,
+            timeStamp: true,
+            type: "info",
+            layer: "room_ws",
+        });
 
         setRoomExists({
             hasBeenSet: true,
@@ -51,6 +60,12 @@ const JoinRoom: FC = () => {
         if (!roomId || roomExists.hasBeenSet) {
             return;
         }
+
+        logData({
+            title: "Listening to verify room event",
+            type: "info",
+            layer: "room_ws",
+        });
 
         const unmountVerifyRoomEventListener = verifyRoom({
             roomId,

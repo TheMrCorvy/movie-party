@@ -1,6 +1,7 @@
 import Peer, { PeerError } from "peerjs";
 import { answerCall, AnswerCallCallbackParams } from "./callsService";
 import { Participant } from "@repo/type-definitions";
+import { logData } from "@repo/shared-utils/log-data";
 
 export interface PeerConnectionServiceParams {
     myId: string;
@@ -62,7 +63,13 @@ export const listenPeerEventsService: ListenPeerEventsService = ({
     peerConnection.on("disconnected", () => onPeerDisconnect(peerConnection));
     peerConnection.on("close", onPeerClose);
     peerConnection.on("call", (call) => {
-        console.log("Incoming call", call);
+        logData({
+            title: "Incoming call",
+            data: call,
+            type: "info",
+            timeStamp: true,
+            layer: "camera_receiver",
+        });
         removeCallListeners = answerCall({
             call,
             stream: me.stream as MediaStream,
@@ -82,19 +89,44 @@ export const listenPeerEventsService: ListenPeerEventsService = ({
 };
 
 export const defaultPeerOpenEvent = (peer: Peer) => {
-    console.log("Peer opened.", peer);
+    logData({
+        title: "Peer opened",
+        data: peer,
+        type: "info",
+        timeStamp: true,
+        layer: "camera",
+    });
 };
 
 export const defaultPeerError = (err: PeerError<PeerErrorTypes>) => {
-    console.error("❌ PeerJS error:", err);
-    console.error("Error type:", err.type);
+    logData({
+        timeStamp: true,
+        title: "❌ PeerJS error",
+        data: {
+            ...err,
+            type: err.type,
+        },
+        layer: "camera",
+        type: "info",
+    });
 };
 
 export const defaultPeerClose = () => {
-    console.log("🔴 PeerJS connection closed");
+    logData({
+        title: "🔴 PeerJS connection closed",
+        timeStamp: true,
+        type: "info",
+        layer: "camera",
+    });
 };
 
 export const defaultPeerDesconnected = (peer: Peer) => {
     peer.reconnect();
-    console.log("Peer is reconnecting...");
+    logData({
+        title: "Peer is reconnecting",
+        type: "warn",
+        layer: "camera",
+        timeStamp: true,
+        data: peer,
+    });
 };

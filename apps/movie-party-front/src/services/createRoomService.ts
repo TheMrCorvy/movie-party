@@ -2,6 +2,7 @@ import { Signals } from "@repo/type-definitions/rooms";
 import { Socket } from "socket.io-client";
 
 import { generateId, stringIsEmpty } from "@repo/shared-utils";
+import { logData } from "@repo/shared-utils/log-data";
 
 export interface CreateRoomServiceParams {
     ws: Socket | null;
@@ -13,10 +14,30 @@ export const createRoomService = ({
     peerName,
 }: CreateRoomServiceParams) => {
     if (!peerName || stringIsEmpty(peerName)) {
-        throw new Error("Peer name was not found.");
+        logData({
+            title: "Peer name was not found",
+            type: "error",
+            data: {
+                message:
+                    "Something during the setup of the events went wrong...",
+                peerName,
+            },
+            layer: "room_ws",
+            timeStamp: true,
+        });
     }
     if (!ws) {
-        console.error("Websocket not found");
+        logData({
+            title: "Websocket not found",
+            type: "error",
+            data: {
+                message:
+                    "Something during the setup of the events went wrong...",
+                ws,
+            },
+            layer: "room_ws",
+            timeStamp: true,
+        });
         return;
     }
     ws.emit(Signals.CREATE_ROOM, {
@@ -38,7 +59,16 @@ export const roomWasCreated = ({ ws, callback }: RoomWasCreatedParams) => {
         };
     } else {
         return () => {
-            console.log("Nothing to unmount.");
+            logData({
+                title: "Nothing to unmount",
+                type: "warn",
+                data: {
+                    message:
+                        "Something during the setup of the events went wrong...",
+                },
+                layer: "room_ws",
+                timeStamp: true,
+            });
         };
     }
 };

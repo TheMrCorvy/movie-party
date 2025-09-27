@@ -1,3 +1,4 @@
+import { logData } from "@repo/shared-utils/log-data";
 import { Signals } from "@repo/type-definitions/rooms";
 import { Socket } from "socket.io-client";
 
@@ -27,7 +28,16 @@ export const screenShareServcie: ScreenShareServcie = ({
 }) => {
     if (!ws) {
         return () => {
-            console.log("Nothing to unmount.");
+            logData({
+                title: "Nothing to unmount",
+                type: "warn",
+                data: {
+                    message:
+                        "Something during the setup of the events went wrong...",
+                },
+                layer: "room_ws",
+                timeStamp: true,
+            });
         };
     }
 

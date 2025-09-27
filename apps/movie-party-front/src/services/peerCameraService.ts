@@ -1,4 +1,5 @@
 import { stringIsEmpty } from "@repo/shared-utils";
+import { logData } from "@repo/shared-utils/log-data";
 import { Signals } from "@repo/type-definitions/rooms";
 import { Socket } from "socket.io-client";
 
@@ -20,6 +21,18 @@ export const emitToggleCamera: EmitToggleCamera = ({
     if (!ws || stringIsEmpty(roomId) || stringIsEmpty(peerId)) {
         return;
     }
+
+    logData({
+        type: "info",
+        title: "Emitting toggle camera event",
+        timeStamp: true,
+        layer: "room_ws",
+        data: {
+            roomId,
+            peerId,
+            cameraStatus,
+        },
+    });
 
     ws.emit(Signals.PEER_TOGGLED_CAMERA, { roomId, peerId, cameraStatus });
 };
@@ -44,7 +57,16 @@ export const listenPeerToggledCamera: ListenPeerToggledCamera = ({
 }) => {
     if (!ws) {
         return () => {
-            console.log("Nothing to unmount.");
+            logData({
+                title: "Nothing to unmount",
+                type: "warn",
+                data: {
+                    message:
+                        "Something during the setup of the events went wrong...",
+                },
+                layer: "room_ws",
+                timeStamp: true,
+            });
         };
     }
 

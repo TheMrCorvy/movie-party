@@ -1,3 +1,4 @@
+import { logData } from "@repo/shared-utils/log-data";
 import { MessageWithIndex, Participant } from "@repo/type-definitions";
 import { Signals } from "@repo/type-definitions/rooms";
 import Peer from "peerjs";
@@ -32,7 +33,16 @@ export const updateParticipantsService: UpdateParticipantsService = ({
     }
 
     return () => {
-        console.log("Nothing to unmount.");
+        logData({
+            title: "Nothing to unmount",
+            type: "warn",
+            data: {
+                message:
+                    "Something during the setup of the events went wrong...",
+            },
+            layer: "room_ws",
+            timeStamp: true,
+        });
     };
 };
 
@@ -48,12 +58,29 @@ export const newPeerJoinedListener: NewPeerJoined = ({ ws, peer, me }) => {
     if (ws) {
         ws.on(Signals.NEW_PEER_JOINED, ({ peerId, peerName }) => {
             if (!peer) {
-                console.error("No peer available...");
+                logData({
+                    layer: "camera",
+                    title: "No peer available",
+                    data: {
+                        peerId,
+                        peer,
+                        peerName,
+                        ws,
+                        me,
+                    },
+                    timeStamp: true,
+                    type: "error",
+                });
                 return;
             }
 
             if (me.stream) {
-                console.log("Calling: ", peerName);
+                logData({
+                    timeStamp: true,
+                    title: "Calling peer: " + peerName,
+                    layer: "camera_caller",
+                    type: "info",
+                });
                 peer.call(peerId, me.stream);
             }
         });
@@ -64,6 +91,15 @@ export const newPeerJoinedListener: NewPeerJoined = ({ ws, peer, me }) => {
     }
 
     return () => {
-        console.log("Nothing to unmount.");
+        logData({
+            title: "Nothing to unmount",
+            type: "warn",
+            data: {
+                message:
+                    "Something during the setup of the events went wrong...",
+            },
+            layer: "room_ws",
+            timeStamp: true,
+        });
     };
 };

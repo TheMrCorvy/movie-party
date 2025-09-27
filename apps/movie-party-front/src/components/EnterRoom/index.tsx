@@ -5,6 +5,7 @@ import { Typography } from "@mui/material";
 import { stringIsEmpty } from "@repo/shared-utils";
 import { enterRoomService } from "../../services/enterRoomService";
 import { useRoom } from "../../context/RoomContext/RoomContextProvider";
+import { logData } from "@repo/shared-utils/log-data";
 
 export interface EnterRoomParams {
     roomExists: boolean;
@@ -19,6 +20,13 @@ const EnterRoom: FC<EnterRoomParams> = ({ roomExists }) => {
         if (!roomExists || stringIsEmpty(myName)) {
             return;
         }
+
+        logData({
+            data: "Entering room...",
+            layer: "room_ws",
+            timeStamp: true,
+            type: "info",
+        });
 
         enterRoomService({
             peerId: room.myId,

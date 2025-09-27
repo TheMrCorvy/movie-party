@@ -14,6 +14,7 @@ import {
     sendMessageService,
 } from "../../services/messagesService";
 import { ActionTypes } from "../../context/RoomContext/roomActions";
+import { logData } from "@repo/shared-utils/log-data";
 
 export const useChatLogic = () => {
     const { ws, room, dispatch } = useRoom();
@@ -24,11 +25,19 @@ export const useChatLogic = () => {
     useEffect(() => {
         const unmountMessageReceived = messageReceivedService({
             ws,
-            callback: ({ messageReceived }) =>
+            callback: ({ messageReceived }) => {
+                logData({
+                    title: "Message received",
+                    data: messageReceived,
+                    layer: "messages",
+                    timeStamp: true,
+                    type: "info",
+                });
                 dispatch({
                     type: ActionTypes.MESSAGE_RECEIVED,
                     payload: messageReceived,
-                }),
+                });
+            },
         });
 
         return () => {
@@ -51,6 +60,13 @@ export const useChatLogic = () => {
                 peerId: room.myId,
             };
 
+            logData({
+                title: "Sending message",
+                data: newMessage,
+                layer: "messages",
+                timeStamp: true,
+                type: "info",
+            });
             setMessageInput("");
             sendMessageService({ message: newMessage, roomId: room.id, ws });
         }
