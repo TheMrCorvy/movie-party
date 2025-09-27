@@ -8,6 +8,10 @@
         "./feature-flags": {
             "types": "./src/featreFlags.ts",
             "default": "./src/featreFlags.ts"
+        },
+        "./log-data": {
+            "types": "./src/logData.ts",
+            "default": "./src/logData.ts"
         }
     },
     "devDependencies": {
