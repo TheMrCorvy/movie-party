@@ -12,7 +12,8 @@ type LayersAvailable =
     | "screen_sharing"
     | "screen_sharing_sender"
     | "screen_sharing_receiver"
-    | "access_user_hardware";
+    | "access_user_hardware"
+    | "*"; // This layer will always be logged, use it for heavy errors
 
 export interface LogDataParams {
     title?: string;
@@ -69,7 +70,7 @@ export const logData: LogData = ({
         // If the layer is set and the feature flag is allowing for specific layers, then the logs are available
     }
 
-    if (allowAllLogs) {
+    if (allowAllLogs || layer === "*") {
         logIsAvailable = true;
         // If layer is unset, the the developer has to set the FF CONSOLE_LOG_ALL_LAYERS in order to see any logs
     }
