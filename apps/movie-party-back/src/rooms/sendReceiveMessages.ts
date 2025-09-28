@@ -1,3 +1,4 @@
+import { logData } from "@repo/shared-utils/log-data";
 import { Message, MessageWithIndex } from "@repo/type-definitions";
 import { Room, Signals } from "@repo/type-definitions/rooms";
 import { Server as SocketIOServer } from "socket.io";
@@ -28,6 +29,15 @@ export const sendReceiveMessages: SendReceiveMessages = ({
         ...message,
         index: room.messages.length - 1,
     };
+
+    logData({
+        timeStamp: true,
+        addSpaceAfter: true,
+        title: "Received message",
+        layer: "messages",
+        type: "info",
+        data: messageReceived,
+    });
 
     room.messages.push(messageReceived);
 

@@ -1,3 +1,4 @@
+import { logData } from "@repo/shared-utils/log-data";
 import { Room, Signals } from "@repo/type-definitions/rooms";
 import type { Server as SocketIOServer } from "socket.io";
 
@@ -14,12 +15,26 @@ export const roomExists = ({ roomId, rooms, io }: RoomExistsParams) => {
             roomExists: true,
             password: room.password ? true : false,
         });
-        console.log("Room exists.");
+        logData({
+            layer: "room_ws",
+            type: "log",
+            title: "Room, in fact, exists",
+            timeStamp: true,
+            addSpaceAfter: true,
+            data: roomId,
+        });
     } else {
         io.emit(Signals.ROOM_NOT_FOUND, {
             roomExists: false,
             password: false,
         });
-        console.log("Room doesn't exist.");
+        logData({
+            layer: "room_ws",
+            type: "error",
+            title: "Room, in fact, doesn't exists",
+            timeStamp: true,
+            addSpaceAfter: true,
+            data: roomId,
+        });
     }
 };

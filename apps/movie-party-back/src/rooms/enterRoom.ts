@@ -2,6 +2,7 @@ import { RoomParams } from ".";
 import type { Socket, Server as SocketIOServer } from "socket.io";
 import { Signals, Room } from "@repo/type-definitions/rooms";
 import { leaveRoom } from "./leaveRoom";
+import { logData } from "@repo/shared-utils/log-data";
 
 export interface EnterRoomParams extends RoomParams {
     peerName: string;
@@ -39,7 +40,22 @@ export const enterRoom: EnterRoom = ({
         socket.join(roomId);
     }
 
-    console.log("Emitting get participants...");
+    logData({
+        title: "Emitting get participants",
+        layer: "participants_update",
+        addSpaceAfter: true,
+        timeStamp: true,
+        data: {
+            room,
+            payload: {
+                roomId,
+                participants: room.participants,
+                messages: room.messages,
+                peerSharingScreen: room.peerSharingScreen,
+            },
+        },
+        type: "info",
+    });
     io.in(roomId).emit(Signals.GET_PARTICIPANTS, {
         roomId,
         participants: room.participants,
@@ -49,11 +65,24 @@ export const enterRoom: EnterRoom = ({
 
     socket.to(roomId).emit(Signals.NEW_PEER_JOINED, { peerId, peerName });
 
-    console.log("user joined the room: ", { roomId, peerId, peerName });
+    logData({
+        title: "User joined the room",
+        layer: "participants_update",
+        addSpaceAfter: true,
+        timeStamp: true,
+        data: { roomId, peerId, peerName },
+        type: "info",
+    });
 
     socket.on("disconnect", (reason) => {
         // sudden disconnection
-        console.log(`${peerName} left the room, reason: ${reason}`);
+        logData({
+            title: `${peerName} left the room, reason: ${reason}`,
+            addSpaceAfter: true,
+            layer: "room_ws",
+            timeStamp: true,
+            type: "info",
+        });
         leaveRoom({ roomId, peerId, rooms, io });
     });
 };

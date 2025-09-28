@@ -3,6 +3,7 @@ import { Socket, Server as SocketIOServer } from "socket.io";
 import { Signals } from "@repo/type-definitions/rooms";
 import { leaveRoom } from "./leaveRoom";
 import { generateId } from "@repo/shared-utils";
+import { logData } from "@repo/shared-utils/log-data";
 
 export interface CreateRoomParams {
     rooms: Room[];
@@ -37,11 +38,31 @@ export const createRoom: CreateRoom = ({
 
     socket.join(roomId);
     socket.emit(Signals.ROOM_CREATED, { room });
-    console.log("user created a room", room);
+    // console.log("user created a room", room);
+    logData({
+        title: "A user created a room",
+        layer: "room_ws",
+        addSpaceAfter: true,
+        timeStamp: true,
+        type: "info",
+        data: {
+            room,
+            peer: {
+                peerId,
+                peerName,
+            },
+        },
+    });
 
     socket.on("disconnect", (reason) => {
         // sudden disconnection
-        console.log(`${peerName} left the room, reason: ${reason}`);
+        logData({
+            title: `${peerName} left the room, reason: ${reason}`,
+            addSpaceAfter: true,
+            layer: "room_ws",
+            timeStamp: true,
+            type: "info",
+        });
         leaveRoom({ roomId, peerId, rooms, io });
     });
 };

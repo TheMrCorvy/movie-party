@@ -1,3 +1,4 @@
+import { logData } from "@repo/shared-utils/log-data";
 import { Room, Signals } from "@repo/type-definitions/rooms";
 import { Server as SocketIOServer } from "socket.io";
 
@@ -43,4 +44,13 @@ export const shareScreen: ShareScreen = ({
     };
 
     io.emit(Signals.SCREEN_SHARING, { peerId, status });
+
+    logData({
+        title: "Someone toggled their screen share",
+        addSpaceAfter: true,
+        type: "info",
+        layer: "screen_sharing",
+        data: { peerId, status },
+        timeStamp: true,
+    });
 };

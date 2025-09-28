@@ -8,6 +8,7 @@ import { roomExists } from "./roomExists";
 import { sendReceiveMessages } from "./sendReceiveMessages";
 import { togglePeerCamera } from "./togglePeerCamera";
 import { shareScreen } from "./shareScreen";
+import { logData } from "@repo/shared-utils/log-data";
 
 export interface RoomParams {
     roomId: string;
@@ -25,7 +26,14 @@ export const roomHandler = (socket: Socket, io: SocketIOServer) => {
     );
     socket.on(Signals.LEAVE_ROOM, ({ peerId, roomId }) => {
         // the user clicked to leave the room
-        console.log("user left the room", peerId);
+        logData({
+            title: "User opted out or was kicked out",
+            timeStamp: true,
+            addSpaceAfter: true,
+            layer: "room_ws",
+            type: "info",
+            data: { peerId, roomId },
+        });
         leaveRoom({ roomId, peerId, rooms, io });
     });
     socket.on(Signals.DOES_ROOM_EXISTS, ({ roomId }) =>
