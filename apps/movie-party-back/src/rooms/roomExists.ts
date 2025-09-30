@@ -1,12 +1,14 @@
 import { logData } from "@repo/shared-utils/log-data";
-import { Room, Signals } from "@repo/type-definitions/rooms";
+import {
+    RoomExistsWsParams,
+    ServerRoom,
+    Signals,
+} from "@repo/type-definitions/rooms";
 import type { Server as SocketIOServer } from "socket.io";
 
-export interface RoomExistsParams {
-    roomId: string;
-    rooms: Room[];
-
+export interface RoomExistsParams extends RoomExistsWsParams {
     io: SocketIOServer;
+    rooms: ServerRoom[];
 }
 export const roomExists = ({ roomId, rooms, io }: RoomExistsParams) => {
     const room = rooms.find((r) => r.id === roomId);

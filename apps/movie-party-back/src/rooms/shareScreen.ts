@@ -1,11 +1,12 @@
 import { logData } from "@repo/shared-utils/log-data";
-import { Room, Signals } from "@repo/type-definitions/rooms";
+import {
+    Room,
+    ShareScreenWsParams,
+    Signals,
+} from "@repo/type-definitions/rooms";
 import { Server as SocketIOServer } from "socket.io";
 
-export interface ShareScreenParams {
-    roomId: string;
-    peerId: string;
-    status: boolean;
+export interface ShareScreenParams extends ShareScreenWsParams {
     io: SocketIOServer;
     rooms: Room[];
 }

@@ -1,6 +1,5 @@
 import { Socket, Server as SocketIOServer } from "socket.io";
-import { Signals } from "@repo/type-definitions/rooms";
-import { Room } from "@repo/type-definitions/rooms";
+import { ServerRoom, Signals } from "@repo/type-definitions/rooms";
 import { createRoom } from "./createRoom";
 import { enterRoom } from "./enterRoom";
 import { leaveRoom } from "./leaveRoom";
@@ -10,16 +9,11 @@ import { togglePeerCamera } from "./togglePeerCamera";
 import { shareScreen } from "./shareScreen";
 import { logData } from "@repo/shared-utils/log-data";
 
-export interface RoomParams {
-    roomId: string;
-    peerId: string;
-}
-
-const rooms: Room[] = [];
+const rooms: ServerRoom[] = [];
 
 export const roomHandler = (socket: Socket, io: SocketIOServer) => {
-    socket.on(Signals.CREATE_ROOM, ({ peerName, peerId }) =>
-        createRoom({ rooms, socket, peerName, peerId, io })
+    socket.on(Signals.CREATE_ROOM, ({ peerName, peerId, password }) =>
+        createRoom({ rooms, socket, peerName, peerId, io, password })
     );
     socket.on(Signals.ENTER_ROOM, ({ roomId, peerId, peerName }) =>
         enterRoom({ roomId, peerId, peerName, rooms, io, socket })
@@ -34,7 +28,7 @@ export const roomHandler = (socket: Socket, io: SocketIOServer) => {
             type: "info",
             data: { peerId, roomId },
         });
-        leaveRoom({ roomId, peerId, rooms, io });
+        leaveRoom({ roomId, peerId, rooms, io, socket });
     });
     socket.on(Signals.DOES_ROOM_EXISTS, ({ roomId }) =>
         roomExists({ rooms, roomId, io })

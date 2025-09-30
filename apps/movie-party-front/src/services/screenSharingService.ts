@@ -1,5 +1,5 @@
 import { logData } from "@repo/shared-utils/log-data";
-import { Signals } from "@repo/type-definitions/rooms";
+import { ShareScreenWsParams, Signals } from "@repo/type-definitions/rooms";
 import { Socket } from "socket.io-client";
 
 export interface ScreenShareServiceCallbackParams {
@@ -7,10 +7,7 @@ export interface ScreenShareServiceCallbackParams {
     status: boolean;
 }
 
-export interface ScreenShareServiceParams {
-    roomId: string;
-    peerId: string;
-    status: boolean;
+export interface ScreenShareServiceParams extends ShareScreenWsParams {
     ws: Socket | null;
     callback: (params: ScreenShareServiceCallbackParams) => void;
 }
@@ -41,7 +38,9 @@ export const screenShareServcie: ScreenShareServcie = ({
         };
     }
 
-    ws.emit(Signals.SCREEN_SHARING, { roomId, peerId, status });
+    const shareScreenParams: ShareScreenWsParams = { roomId, peerId, status };
+
+    ws.emit(Signals.SCREEN_SHARING, shareScreenParams);
     ws.on(Signals.SCREEN_SHARING, callback);
 
     return () => {

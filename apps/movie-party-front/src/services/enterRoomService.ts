@@ -1,11 +1,12 @@
 import { logData } from "@repo/shared-utils/log-data";
-import { Signals } from "@repo/type-definitions/rooms";
+import {
+    EnterRoomWsParams,
+    RoomExistsWsParams,
+    Signals,
+} from "@repo/type-definitions/rooms";
 import { Socket } from "socket.io-client";
-export interface EnterRoomServiceParams {
+export interface EnterRoomServiceParams extends EnterRoomWsParams {
     ws: Socket | null;
-    peerId: string;
-    peerName: string;
-    roomId: string;
 }
 
 export type EnterRoomService = (params: EnterRoomServiceParams) => void;
@@ -17,11 +18,12 @@ export const enterRoomService: EnterRoomService = ({
     roomId,
 }) => {
     if (ws) {
-        ws.emit(Signals.ENTER_ROOM, {
+        const enterRoomParams: EnterRoomWsParams = {
             peerId,
             peerName,
             roomId,
-        });
+        };
+        ws.emit(Signals.ENTER_ROOM, enterRoomParams);
     }
 };
 
@@ -30,8 +32,7 @@ export interface VerifyRoomServiceCallbackParams {
     password: boolean;
 }
 
-export interface VerifyRoomServiceParams {
-    roomId: string;
+export interface VerifyRoomServiceParams extends RoomExistsWsParams {
     ws: Socket | null;
     callback: (params: VerifyRoomServiceCallbackParams) => void;
 }
@@ -54,7 +55,9 @@ export const verifyRoom: VerifyRoomService = ({ roomId, ws, callback }) => {
         };
     }
 
-    ws.emit(Signals.DOES_ROOM_EXISTS, { roomId });
+    const roomExistsParams: RoomExistsWsParams = { roomId };
+
+    ws.emit(Signals.DOES_ROOM_EXISTS, roomExistsParams);
     ws.on(Signals.ROOM_EXISTS, callback);
     ws.on(Signals.ROOM_NOT_FOUND, callback);
 

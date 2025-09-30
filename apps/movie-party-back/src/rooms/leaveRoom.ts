@@ -1,16 +1,16 @@
-import { RoomParams } from ".";
-import type { Server as SocketIOServer } from "socket.io";
-import { Signals, Room } from "@repo/type-definitions/rooms";
+import type { Socket, Server as SocketIOServer } from "socket.io";
+import { Signals, Room, LeaveRoomWsParams } from "@repo/type-definitions/rooms";
 import { logData } from "@repo/shared-utils/log-data";
 
-export interface LeaveRoomParams extends RoomParams {
+export interface LeaveRoomParams extends LeaveRoomWsParams {
     rooms: Room[];
     io: SocketIOServer;
+    socket: Socket;
 }
 
 export type LeaveRoom = (params: LeaveRoomParams) => void;
 
-export const leaveRoom: LeaveRoom = ({ peerId, roomId, rooms, io }) => {
+export const leaveRoom: LeaveRoom = ({ peerId, roomId, rooms, io, socket }) => {
     const room = rooms.find((room) => room.id === room.id);
     if (!room) {
         logData({
@@ -73,6 +73,8 @@ export const leaveRoom: LeaveRoom = ({ peerId, roomId, rooms, io }) => {
         messages: room.messages,
         peerSharingScreen: room.peerSharingScreen,
     });
+
+    socket.leave(roomId);
 
     logData({
         title: "User left",

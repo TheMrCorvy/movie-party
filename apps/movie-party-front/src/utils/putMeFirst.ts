@@ -1,6 +1,7 @@
 import { Participant } from "@repo/type-definitions";
 
 import { stringIsEmpty } from "@repo/shared-utils";
+import { logData } from "@repo/shared-utils/log-data";
 
 export interface PutMeFirstParams {
     participants: Participant[];
@@ -15,11 +16,22 @@ export const putMeFirst: PutMeFirst = ({
     myId,
     oldVersionOfMe,
 }) => {
-    const me = participants.find(
-        (participant) => participant.id === myId
-    ) as Participant;
+    const me = participants.find((participant) => participant.id === myId);
 
     if (!me || stringIsEmpty(myId)) {
+        logData({
+            type: "error",
+            layer: "*",
+            title: "Somethig weird happend",
+            data: {
+                message: "My id wasn't found in the participants array...",
+                participants,
+                myId,
+                oldVersionOfMe,
+            },
+            timeStamp: true,
+            addSpaceAfter: true,
+        });
         throw new Error("Something weird happend.");
     }
 

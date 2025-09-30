@@ -1,11 +1,8 @@
 import { logData } from "@repo/shared-utils/log-data";
-import { Signals } from "@repo/type-definitions/rooms";
+import { Signals, ToggleCameraWsParams } from "@repo/type-definitions/rooms";
 import { Server as SocketIOServer } from "socket.io";
 
-export interface TogglePeerCameraParams {
-    roomId: string;
-    peerId: string;
-    cameraStatus: boolean;
+export interface TogglePeerCameraParams extends ToggleCameraWsParams {
     io: SocketIOServer;
 }
 

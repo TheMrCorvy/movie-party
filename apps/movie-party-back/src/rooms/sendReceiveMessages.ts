@@ -1,12 +1,10 @@
 import { logData } from "@repo/shared-utils/log-data";
-import { Message, MessageWithIndex } from "@repo/type-definitions";
-import { Room, Signals } from "@repo/type-definitions/rooms";
+import { MessageWithIndex } from "@repo/type-definitions";
+import { MessagesWsParams, Room, Signals } from "@repo/type-definitions/rooms";
 import { Server as SocketIOServer } from "socket.io";
 
-export interface SendReceiveMessagesParams {
-    roomId: string;
+export interface SendReceiveMessagesParams extends MessagesWsParams {
     rooms: Room[];
-    message: Message;
     io: SocketIOServer;
 }
 

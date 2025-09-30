@@ -1,17 +1,17 @@
-import { Signals } from "@repo/type-definitions/rooms";
+import { CreateRoomWsParams, Signals } from "@repo/type-definitions/rooms";
 import { Socket } from "socket.io-client";
 
 import { generateId, stringIsEmpty } from "@repo/shared-utils";
 import { logData } from "@repo/shared-utils/log-data";
 
-export interface CreateRoomServiceParams {
+export interface CreateRoomServiceParams extends CreateRoomWsParams {
     ws: Socket | null;
-    peerName: string;
 }
 
 export const createRoomService = ({
     ws,
     peerName,
+    password,
 }: CreateRoomServiceParams) => {
     if (!peerName || stringIsEmpty(peerName)) {
         logData({
@@ -40,10 +40,12 @@ export const createRoomService = ({
         });
         return;
     }
-    ws.emit(Signals.CREATE_ROOM, {
+    const createRoomParams: CreateRoomWsParams = {
         peerId: generateId(),
         peerName,
-    });
+        password,
+    };
+    ws.emit(Signals.CREATE_ROOM, createRoomParams);
 };
 
 export interface RoomWasCreatedParams {

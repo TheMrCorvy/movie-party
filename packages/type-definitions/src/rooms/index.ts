@@ -1,4 +1,4 @@
-import { MessageWithIndex, Participant } from "..";
+import { Message, MessageWithIndex, Participant } from "..";
 
 export enum Signals {
     "CREATE_ROOM" = "CREATE_ROOM",
@@ -24,4 +24,47 @@ export interface Room {
     password?: string;
     screenSharing?: MediaStream;
     peerSharingScreen: string; //id of the peer
+}
+
+export interface ServerRoom extends Room {
+    password?: string;
+}
+
+export interface CreateRoomWsParams {
+    peerId: string;
+    peerName: string;
+    password?: string;
+}
+
+export interface EnterRoomWsParams {
+    roomId: string;
+    peerId: string;
+    peerName: string;
+    password?: string;
+}
+
+export interface LeaveRoomWsParams {
+    roomId: string;
+    peerId: string;
+}
+
+export interface RoomExistsWsParams {
+    roomId: string;
+}
+
+export interface MessagesWsParams {
+    roomId: string;
+    message: Message;
+}
+
+export interface ToggleCameraWsParams {
+    roomId: string;
+    peerId: string;
+    cameraStatus: boolean;
+}
+
+export interface ShareScreenWsParams {
+    roomId: string;
+    peerId: string;
+    status: boolean;
 }

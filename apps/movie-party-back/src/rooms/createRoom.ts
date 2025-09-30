@@ -1,15 +1,13 @@
-import { Room } from "@repo/type-definitions/rooms";
+import { CreateRoomWsParams, Room } from "@repo/type-definitions/rooms";
 import { Socket, Server as SocketIOServer } from "socket.io";
 import { Signals } from "@repo/type-definitions/rooms";
 import { leaveRoom } from "./leaveRoom";
 import { generateId } from "@repo/shared-utils";
 import { logData } from "@repo/shared-utils/log-data";
 
-export interface CreateRoomParams {
+export interface CreateRoomParams extends CreateRoomWsParams {
     rooms: Room[];
     socket: Socket;
-    peerId: string;
-    peerName: string;
     io: SocketIOServer;
 }
 
@@ -21,6 +19,7 @@ export const createRoom: CreateRoom = ({
     peerId,
     peerName,
     io,
+    password,
 }) => {
     const roomId = generateId();
     const room: Room = {
@@ -63,6 +62,6 @@ export const createRoom: CreateRoom = ({
             timeStamp: true,
             type: "info",
         });
-        leaveRoom({ roomId, peerId, rooms, io });
+        leaveRoom({ roomId, peerId, rooms, io, socket });
     });
 };

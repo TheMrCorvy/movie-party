@@ -1,13 +1,11 @@
 import { stringIsEmpty } from "@repo/shared-utils";
 import { logData } from "@repo/shared-utils/log-data";
-import { Message, MessageWithIndex } from "@repo/type-definitions";
-import { Signals } from "@repo/type-definitions/rooms";
+import { MessageWithIndex } from "@repo/type-definitions";
+import { MessagesWsParams, Signals } from "@repo/type-definitions/rooms";
 import { Socket } from "socket.io-client";
 
-export interface SendMessageServiceParams {
+export interface SendMessageServiceParams extends MessagesWsParams {
     ws: Socket | null;
-    message: Message;
-    roomId: string;
 }
 
 export type SendMessageService = (params: SendMessageServiceParams) => void;
@@ -52,7 +50,8 @@ export const sendMessageService: SendMessageService = ({
         });
     }
 
-    ws.emit(Signals.SEND_MESSAGE, { message, roomId });
+    const messageparams: MessagesWsParams = { message, roomId };
+    ws.emit(Signals.SEND_MESSAGE, messageparams);
 };
 
 export interface MessageReceivedServiceParams {

@@ -1,11 +1,9 @@
-import { RoomParams } from ".";
 import type { Socket, Server as SocketIOServer } from "socket.io";
-import { Signals, Room } from "@repo/type-definitions/rooms";
+import { Signals, Room, EnterRoomWsParams } from "@repo/type-definitions/rooms";
 import { leaveRoom } from "./leaveRoom";
 import { logData } from "@repo/shared-utils/log-data";
 
-export interface EnterRoomParams extends RoomParams {
-    peerName: string;
+export interface EnterRoomParams extends EnterRoomWsParams {
     rooms: Room[];
     socket: Socket;
     io: SocketIOServer;
@@ -20,6 +18,7 @@ export const enterRoom: EnterRoom = ({
     rooms,
     io,
     socket,
+    password,
 }) => {
     const room = rooms.find((room) => room.id === roomId);
     if (!room) {
@@ -83,6 +82,6 @@ export const enterRoom: EnterRoom = ({
             timeStamp: true,
             type: "info",
         });
-        leaveRoom({ roomId, peerId, rooms, io });
+        leaveRoom({ roomId, peerId, rooms, io, socket });
     });
 };
