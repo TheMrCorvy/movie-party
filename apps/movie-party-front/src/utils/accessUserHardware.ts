@@ -1,14 +1,26 @@
+import {
+    FeatureNames,
+    isFeatureFlagEnabled,
+} from "@repo/shared-utils/feature-flags";
+import { logData } from "@repo/shared-utils/log-data";
+
 export const getUserScreen = async (): Promise<MediaStream> => {
+    const accessMicrophone = isFeatureFlagEnabled(
+        FeatureNames.ACCESS_MICROPHONE
+    );
     return await navigator.mediaDevices.getDisplayMedia({
         video: true,
-        audio: false, // to do: implement FF
+        audio: accessMicrophone,
     });
 };
 
 export const getUserCamera = async (): Promise<MediaStream> => {
+    const accessMicrophone = isFeatureFlagEnabled(
+        FeatureNames.ACCESS_MICROPHONE
+    );
     return await navigator.mediaDevices.getUserMedia({
         video: true,
-        audio: false, // to do: implement FF
+        audio: accessMicrophone,
     });
 };
 
@@ -31,7 +43,14 @@ export const copyToClipboard: CopyToClipboard = async ({ text, callback }) => {
 
         callback(true);
     } catch (err) {
-        console.error("Failed to copy text: ", err);
+        logData({
+            type: "error",
+            layer: "*",
+            title: "Failed to copy text",
+            data: err,
+            timeStamp: true,
+            addSpaceAfter: true,
+        });
         callback(false);
     }
 };

@@ -6,8 +6,8 @@
             "default": "./src/index.ts"
         },
         "./feature-flags": {
-            "types": "./src/featreFlags.ts",
-            "default": "./src/featreFlags.ts"
+            "types": "./src/featureFlags.ts",
+            "default": "./src/featureFlags.ts"
         },
         "./log-data": {
             "types": "./src/logData.ts",
