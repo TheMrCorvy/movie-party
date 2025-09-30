@@ -1,9 +1,12 @@
+import dotenv from "dotenv";
 import express from "express";
 import { Server } from "socket.io";
 import http from "http";
 import cors from "cors";
 import { roomHandler } from "./rooms";
 import { logData } from "@repo/shared-utils/log-data";
+
+dotenv.config();
 
 const app = express();
 
