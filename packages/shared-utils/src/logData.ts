@@ -48,13 +48,6 @@ export const logData: LogData = ({
     );
     let dataString: unknown;
 
-    try {
-        dataString = JSON.stringify({ data });
-    } catch (err) {
-        console.warn("The data provided was corrupted or circular.", err);
-        dataString = data;
-    }
-
     const logLabel = title ? `${title}: ` : "Debug log: ";
     const separator =
         "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -";
@@ -77,6 +70,15 @@ export const logData: LogData = ({
 
     if (!logIsAvailable) {
         return;
+    }
+
+    try {
+        dataString = JSON.stringify({ data });
+    } catch (err) {
+        if (logIsAvailable) {
+            console.warn("The data provided was corrupted or circular.", err);
+        }
+        dataString = data;
     }
 
     if (clearConsole) {
