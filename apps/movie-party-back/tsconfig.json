@@ -13,6 +13,7 @@
         "strictFunctionTypes": true,
         "noUnusedLocals": true,
         "noUnusedParameters": false,
+        "isolatedModules": true,
         "paths": {
             "*": ["node_modules/*"]
         },
