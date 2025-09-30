@@ -1,10 +1,11 @@
-import type { ChangeEvent, FC } from "react";
+import { useState, type ChangeEvent, type FC } from "react";
 import styles from "./styles";
 import {
     Checkbox,
     FormControl,
     FormControlLabel,
     FormLabel,
+    InputAdornment,
     InputLabel,
     MenuItem,
     Radio,
@@ -14,6 +15,8 @@ import {
     Typography,
     type SelectChangeEvent,
 } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import GlassButton from "../GlassButton";
 
 export interface GlassInputProps {
     placeholder?: string;
@@ -76,7 +79,10 @@ const GlassInput: FC<GlassInputProps> = ({
         selectStyles,
     } = styles();
 
+    const [showPassword, setShowPassword] = useState(false);
+
     if (kind === "text input") {
+        const showPasswordbtn = rest.type === "password";
         return (
             <TextField
                 fullWidth
@@ -84,7 +90,32 @@ const GlassInput: FC<GlassInputProps> = ({
                 variant="outlined"
                 aria-label={ariaLabel || "Text input"}
                 sx={textField}
+                slotProps={
+                    !showPasswordbtn
+                        ? undefined
+                        : {
+                              input: {
+                                  endAdornment: (
+                                      <InputAdornment position="end">
+                                          <GlassButton
+                                              variant="icon-btn"
+                                              onClick={() =>
+                                                  setShowPassword(!showPassword)
+                                              }
+                                          >
+                                              {showPassword ? (
+                                                  <VisibilityOff />
+                                              ) : (
+                                                  <Visibility />
+                                              )}
+                                          </GlassButton>
+                                      </InputAdornment>
+                                  ),
+                              },
+                          }
+                }
                 {...rest}
+                type={!showPassword ? rest.type : "text"}
             />
         );
     }

@@ -14,6 +14,8 @@ const CreateRoom: FC = () => {
     const [myName, setMyName] = useState("");
     const { ws } = useRoom();
     const { mainContainer } = styles();
+    const [roomPassword, setRoomPassword] = useState("");
+    const [addPassword, setAddPassword] = useState(false);
 
     const createRoomSubmit = () => {
         logData({
@@ -26,12 +28,18 @@ const CreateRoom: FC = () => {
             ws,
             peerName: myName,
             peerId: generateId(),
+            password: roomPassword,
         });
     };
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
-        setMyName(e.target.value);
+        if (e.target.name === "name") {
+            setMyName(e.target.value);
+            return;
+        }
+
+        setRoomPassword(e.target.value);
     };
 
     return (
@@ -40,9 +48,26 @@ const CreateRoom: FC = () => {
                 <GlassInput
                     type="text"
                     kind="text input"
-                    size="small"
+                    size="medium"
+                    label="Nombre"
+                    name="name"
                     onChange={handleChange}
                 />
+                <GlassButton onClick={() => setAddPassword(!addPassword)}>
+                    {addPassword
+                        ? "Quitar contraseña de sala"
+                        : "Añadir contraseña a la sala"}
+                </GlassButton>
+                {addPassword && (
+                    <GlassInput
+                        type="password"
+                        kind="text input"
+                        label="Contraseña"
+                        size="medium"
+                        name="password"
+                        onChange={handleChange}
+                    />
+                )}
                 <GlassButton onClick={createRoomSubmit}>
                     Create Room
                 </GlassButton>
