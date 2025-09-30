@@ -4,10 +4,7 @@ import Container from "@mui/material/Container";
 
 import GlassContainer from "../components/GlassContainer";
 import { useRoom } from "../context/RoomContext/RoomContextProvider";
-import {
-    verifyRoom,
-    VerifyRoomServiceCallbackParams,
-} from "../services/enterRoomService";
+import { verifyRoom } from "../services/enterRoomService";
 import { useParams } from "react-router-dom";
 import { Typography } from "@mui/material";
 
@@ -15,6 +12,7 @@ import { generateId } from "@repo/shared-utils";
 import { ActionTypes } from "../context/RoomContext/roomActions";
 import EnterRoom from "../components/EnterRoom";
 import { logData } from "@repo/shared-utils/log-data";
+import { RoomExistsWsCallbackParams } from "@repo/type-definitions/rooms";
 
 const JoinRoom: FC = () => {
     const { ws, dispatch } = useRoom();
@@ -25,7 +23,7 @@ const JoinRoom: FC = () => {
         roomExists: false,
     });
 
-    const roomWasVerified = (params: VerifyRoomServiceCallbackParams) => {
+    const roomWasVerified = (params: RoomExistsWsCallbackParams) => {
         if (!roomId || !params.roomExists || roomExists.hasBeenSet) {
             return;
         }

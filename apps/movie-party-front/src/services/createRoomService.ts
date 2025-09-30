@@ -5,7 +5,7 @@ import {
 } from "@repo/type-definitions/rooms";
 import { Socket } from "socket.io-client";
 
-import { generateId, stringIsEmpty } from "@repo/shared-utils";
+import { stringIsEmpty } from "@repo/shared-utils";
 import { logData } from "@repo/shared-utils/log-data";
 
 export interface CreateRoomServiceParams extends CreateRoomWsParams {
@@ -16,6 +16,7 @@ export const createRoomService = ({
     ws,
     peerName,
     password,
+    peerId,
 }: CreateRoomServiceParams) => {
     if (!peerName || stringIsEmpty(peerName)) {
         logData({
@@ -45,7 +46,7 @@ export const createRoomService = ({
         return;
     }
     const createRoomParams: CreateRoomWsParams = {
-        peerId: generateId(),
+        peerId,
         peerName,
         password,
     };
