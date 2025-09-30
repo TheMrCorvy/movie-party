@@ -1,6 +1,7 @@
 import { logData } from "@repo/shared-utils/log-data";
 import {
     Room,
+    ScreenShareWsCallbackParams,
     ShareScreenWsParams,
     Signals,
 } from "@repo/type-definitions/rooms";
@@ -44,7 +45,9 @@ export const shareScreen: ShareScreen = ({
         peerSharingScreen: peerId,
     };
 
-    io.emit(Signals.SCREEN_SHARING, { peerId, status });
+    const callbackParams: ScreenShareWsCallbackParams = { peerId, status };
+
+    io.emit(Signals.SCREEN_SHARING, callbackParams);
 
     logData({
         title: "Someone toggled their screen share",

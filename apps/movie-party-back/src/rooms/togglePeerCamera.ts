@@ -1,5 +1,9 @@
 import { logData } from "@repo/shared-utils/log-data";
-import { Signals, ToggleCameraWsParams } from "@repo/type-definitions/rooms";
+import {
+    Signals,
+    ToggleCameraWsCallbackParams,
+    ToggleCameraWsParams,
+} from "@repo/type-definitions/rooms";
 import { Server as SocketIOServer } from "socket.io";
 
 export interface TogglePeerCameraParams extends ToggleCameraWsParams {
@@ -28,5 +32,10 @@ export const togglePeerCamera: TogglePeerCamera = ({
         data: { peerId, cameraStatus },
     });
 
-    io.emit(Signals.PEER_TOGGLED_CAMERA, { peerId, cameraStatus });
+    const callbackParams: ToggleCameraWsCallbackParams = {
+        peerId,
+        cameraStatus,
+    };
+
+    io.emit(Signals.PEER_TOGGLED_CAMERA, callbackParams);
 };

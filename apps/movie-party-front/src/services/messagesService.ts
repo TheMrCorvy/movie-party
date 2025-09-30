@@ -1,7 +1,10 @@
 import { stringIsEmpty } from "@repo/shared-utils";
 import { logData } from "@repo/shared-utils/log-data";
-import { MessageWithIndex } from "@repo/type-definitions";
-import { MessagesWsParams, Signals } from "@repo/type-definitions/rooms";
+import {
+    MessageReceivedWsCallbackParams,
+    MessagesWsParams,
+    Signals,
+} from "@repo/type-definitions/rooms";
 import { Socket } from "socket.io-client";
 
 export interface SendMessageServiceParams extends MessagesWsParams {
@@ -59,12 +62,8 @@ export interface MessageReceivedServiceParams {
     callback: MessageReceivedCallback;
 }
 
-export interface MessageReceivedCallbackParams {
-    messageReceived: MessageWithIndex;
-}
-
 export type MessageReceivedCallback = (
-    params: MessageReceivedCallbackParams
+    params: MessageReceivedWsCallbackParams
 ) => void;
 
 export type MessageReceivedService = (

@@ -1,6 +1,11 @@
 import { logData } from "@repo/shared-utils/log-data";
 import { MessageWithIndex } from "@repo/type-definitions";
-import { MessagesWsParams, Room, Signals } from "@repo/type-definitions/rooms";
+import {
+    MessageReceivedWsCallbackParams,
+    MessagesWsParams,
+    Room,
+    Signals,
+} from "@repo/type-definitions/rooms";
 import { Server as SocketIOServer } from "socket.io";
 
 export interface SendReceiveMessagesParams extends MessagesWsParams {
@@ -38,6 +43,6 @@ export const sendReceiveMessages: SendReceiveMessages = ({
     });
 
     room.messages.push(messageReceived);
-
-    io.emit(Signals.MESSAGE_RECEIVED, { messageReceived });
+    const callbackParams: MessageReceivedWsCallbackParams = { messageReceived };
+    io.emit(Signals.MESSAGE_RECEIVED, callbackParams);
 };

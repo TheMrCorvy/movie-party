@@ -1,4 +1,8 @@
-import { CreateRoomWsParams, Signals } from "@repo/type-definitions/rooms";
+import {
+    CreateRoomWsParams,
+    RoomCreatedWsCallbackParams,
+    Signals,
+} from "@repo/type-definitions/rooms";
 import { Socket } from "socket.io-client";
 
 import { generateId, stringIsEmpty } from "@repo/shared-utils";
@@ -50,7 +54,7 @@ export const createRoomService = ({
 
 export interface RoomWasCreatedParams {
     ws: Socket | null;
-    callback: (params: any) => void;
+    callback: (params: RoomCreatedWsCallbackParams) => void;
 }
 
 export const roomWasCreated = ({ ws, callback }: RoomWasCreatedParams) => {

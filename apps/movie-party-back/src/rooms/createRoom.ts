@@ -1,4 +1,8 @@
-import { CreateRoomWsParams, Room } from "@repo/type-definitions/rooms";
+import {
+    CreateRoomWsParams,
+    Room,
+    RoomCreatedWsCallbackParams,
+} from "@repo/type-definitions/rooms";
 import { Socket, Server as SocketIOServer } from "socket.io";
 import { Signals } from "@repo/type-definitions/rooms";
 import { leaveRoom } from "./leaveRoom";
@@ -33,10 +37,15 @@ export const createRoom: CreateRoom = ({
         ],
         peerSharingScreen: "",
     };
-    rooms.push(room);
 
+    rooms.push({ ...room, password });
     socket.join(roomId);
-    socket.emit(Signals.ROOM_CREATED, { room });
+
+    const roomCreatedCallbackParams: RoomCreatedWsCallbackParams = {
+        room,
+    };
+
+    socket.emit(Signals.ROOM_CREATED, roomCreatedCallbackParams);
     // console.log("user created a room", room);
     logData({
         title: "A user created a room",

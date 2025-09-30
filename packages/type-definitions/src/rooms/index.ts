@@ -36,11 +36,22 @@ export interface CreateRoomWsParams {
     password?: string;
 }
 
+export interface RoomCreatedWsCallbackParams {
+    room: Room;
+}
+
 export interface EnterRoomWsParams {
     roomId: string;
     peerId: string;
     peerName: string;
     password?: string;
+}
+
+export interface UpdateParticipantsWsCallback {
+    roomId: string;
+    participants: Participant[];
+    messages: MessageWithIndex[];
+    peerSharingScreen: string;
 }
 
 export interface LeaveRoomWsParams {
@@ -52,9 +63,18 @@ export interface RoomExistsWsParams {
     roomId: string;
 }
 
+export interface RoomExistsWsCallbackParams {
+    roomExists: boolean;
+    password: boolean;
+}
+
 export interface MessagesWsParams {
     roomId: string;
     message: Message;
+}
+
+export interface MessageReceivedWsCallbackParams {
+    messageReceived: MessageWithIndex;
 }
 
 export interface ToggleCameraWsParams {
@@ -63,8 +83,18 @@ export interface ToggleCameraWsParams {
     cameraStatus: boolean;
 }
 
+export interface ToggleCameraWsCallbackParams {
+    peerId: string;
+    cameraStatus: boolean;
+}
+
 export interface ShareScreenWsParams {
     roomId: string;
+    peerId: string;
+    status: boolean;
+}
+
+export interface ScreenShareWsCallbackParams {
     peerId: string;
     status: boolean;
 }

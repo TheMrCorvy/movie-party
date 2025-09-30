@@ -1,5 +1,6 @@
 import { logData } from "@repo/shared-utils/log-data";
 import {
+    RoomExistsWsCallbackParams,
     RoomExistsWsParams,
     ServerRoom,
     Signals,
@@ -12,11 +13,14 @@ export interface RoomExistsParams extends RoomExistsWsParams {
 }
 export const roomExists = ({ roomId, rooms, io }: RoomExistsParams) => {
     const room = rooms.find((r) => r.id === roomId);
+    const callbackParams: RoomExistsWsCallbackParams = {
+        roomExists: true,
+        password: false,
+    };
+
     if (room) {
-        io.emit(Signals.ROOM_EXISTS, {
-            roomExists: true,
-            password: room.password ? true : false,
-        });
+        callbackParams.password = room.password ? true : false;
+        io.emit(Signals.ROOM_EXISTS, callbackParams);
         logData({
             layer: "room_ws",
             type: "log",
@@ -26,10 +30,8 @@ export const roomExists = ({ roomId, rooms, io }: RoomExistsParams) => {
             data: roomId,
         });
     } else {
-        io.emit(Signals.ROOM_NOT_FOUND, {
-            roomExists: false,
-            password: false,
-        });
+        callbackParams.roomExists = false;
+        io.emit(Signals.ROOM_NOT_FOUND, callbackParams);
         logData({
             layer: "room_ws",
             type: "error",

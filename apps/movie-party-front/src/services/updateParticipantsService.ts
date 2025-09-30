@@ -1,18 +1,14 @@
 import { logData } from "@repo/shared-utils/log-data";
-import { MessageWithIndex, Participant } from "@repo/type-definitions";
-import { Signals } from "@repo/type-definitions/rooms";
+import { Participant } from "@repo/type-definitions";
+import {
+    Signals,
+    UpdateParticipantsWsCallback,
+} from "@repo/type-definitions/rooms";
 import Peer from "peerjs";
 import { Socket } from "socket.io-client";
 
-export interface UpdateParticipantsCallback {
-    roomId: string;
-    participants: Participant[];
-    messages: MessageWithIndex[];
-    peerSharingScreen: string;
-}
-
 export interface UpdateParticipantsParam {
-    callback: (callbackParams: UpdateParticipantsCallback) => void;
+    callback: (callbackParams: UpdateParticipantsWsCallback) => void;
     ws: Socket | null;
 }
 

@@ -1,5 +1,10 @@
 import type { Socket, Server as SocketIOServer } from "socket.io";
-import { Signals, Room, LeaveRoomWsParams } from "@repo/type-definitions/rooms";
+import {
+    Signals,
+    Room,
+    LeaveRoomWsParams,
+    UpdateParticipantsWsCallback,
+} from "@repo/type-definitions/rooms";
 import { logData } from "@repo/shared-utils/log-data";
 
 export interface LeaveRoomParams extends LeaveRoomWsParams {
@@ -67,12 +72,13 @@ export const leaveRoom: LeaveRoom = ({ peerId, roomId, rooms, io, socket }) => {
         },
         type: "info",
     });
-    io.in(roomId).emit(Signals.GET_PARTICIPANTS, {
+    const getParticipantsCallback: UpdateParticipantsWsCallback = {
         roomId,
         participants: room.participants,
         messages: room.messages,
         peerSharingScreen: room.peerSharingScreen,
-    });
+    };
+    io.in(roomId).emit(Signals.GET_PARTICIPANTS, getParticipantsCallback);
 
     socket.leave(roomId);
 

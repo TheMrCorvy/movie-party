@@ -1,6 +1,10 @@
 import { stringIsEmpty } from "@repo/shared-utils";
 import { logData } from "@repo/shared-utils/log-data";
-import { Signals, ToggleCameraWsParams } from "@repo/type-definitions/rooms";
+import {
+    Signals,
+    ToggleCameraWsCallbackParams,
+    ToggleCameraWsParams,
+} from "@repo/type-definitions/rooms";
 import { Socket } from "socket.io-client";
 
 export interface EmitToggleCameraParams extends ToggleCameraWsParams {
@@ -31,19 +35,18 @@ export const emitToggleCamera: EmitToggleCamera = ({
         },
     });
 
-    const toggleCameraParams = { roomId, peerId, cameraStatus };
+    const toggleCameraParams: ToggleCameraWsParams = {
+        roomId,
+        peerId,
+        cameraStatus,
+    };
 
     ws.emit(Signals.PEER_TOGGLED_CAMERA, toggleCameraParams);
 };
 
 export interface ListenPeerToggledCameraParams {
     ws: Socket | null;
-    callback: (params: ListenPeerToggledCameraCallbackParams) => void;
-}
-
-export interface ListenPeerToggledCameraCallbackParams {
-    peerId: string;
-    cameraStatus: boolean;
+    callback: (params: ToggleCameraWsCallbackParams) => void;
 }
 
 export type ListenPeerToggledCamera = (

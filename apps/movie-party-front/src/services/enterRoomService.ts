@@ -1,6 +1,7 @@
 import { logData } from "@repo/shared-utils/log-data";
 import {
     EnterRoomWsParams,
+    RoomExistsWsCallbackParams,
     RoomExistsWsParams,
     Signals,
 } from "@repo/type-definitions/rooms";
@@ -27,14 +28,9 @@ export const enterRoomService: EnterRoomService = ({
     }
 };
 
-export interface VerifyRoomServiceCallbackParams {
-    roomExists: boolean;
-    password: boolean;
-}
-
 export interface VerifyRoomServiceParams extends RoomExistsWsParams {
     ws: Socket | null;
-    callback: (params: VerifyRoomServiceCallbackParams) => void;
+    callback: (params: RoomExistsWsCallbackParams) => void;
 }
 
 export type VerifyRoomService = (params: VerifyRoomServiceParams) => () => void;
