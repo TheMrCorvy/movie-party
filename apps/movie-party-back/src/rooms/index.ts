@@ -9,9 +9,15 @@ import { togglePeerCamera } from "./togglePeerCamera";
 import { shareScreen } from "./shareScreen";
 import { logData } from "@repo/shared-utils/log-data";
 
-const rooms: ServerRoom[] = [];
+export interface RoomHandlerParams {
+    socket: Socket;
+    io: SocketIOServer;
+    rooms: ServerRoom[];
+}
 
-export const roomHandler = (socket: Socket, io: SocketIOServer) => {
+export type RoomHandler = (params: RoomHandlerParams) => void;
+
+export const roomHandler: RoomHandler = ({ socket, io, rooms }) => {
     socket.on(Signals.CREATE_ROOM, ({ peerName, peerId, password }) =>
         createRoom({ rooms, socket, peerName, peerId, io, password })
     );
