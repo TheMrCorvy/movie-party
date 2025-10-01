@@ -5,6 +5,9 @@ import http from "http";
 import cors from "cors";
 import { roomHandler } from "./rooms";
 import { logData } from "@repo/shared-utils/log-data";
+import { ServerRoom } from "@repo/type-definitions/rooms";
+import { stringIsEmpty } from "@repo/shared-utils";
+import { verifyPassword } from "./utils/passwordVerification";
 
 dotenv.config();
 
@@ -17,6 +20,9 @@ app.use(
     })
 );
 
+app.use(express.json());
+
+const rooms: ServerRoom[] = [];
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: { origin: "*", methods: ["GET", "POST"] },
@@ -28,6 +34,58 @@ app.get("/", (req, res) => {
     res.send("Hello there!");
 });
 
+app.post("/room-password", async (req, res) => {
+    logData({
+        title: "Request Received",
+        data: req.body,
+        type: "info",
+        addSpaceAfter: true,
+        layer: "*",
+        timeStamp: true,
+    });
+
+    interface VerifyPasswordEndpointParams {
+        password: string;
+        roomId: string;
+        peerId: string;
+    }
+
+    const reqBody = req.body as VerifyPasswordEndpointParams;
+
+    if (
+        stringIsEmpty(reqBody.password) ||
+        stringIsEmpty(reqBody.roomId) ||
+        stringIsEmpty(reqBody.peerId)
+    ) {
+        return res.status(400).send({
+            message: "Data provided is invalid",
+        });
+    }
+
+    const room = rooms.find((r) => r.id === reqBody.roomId);
+
+    if (!room || !room.password || stringIsEmpty(room.password)) {
+        return res.status(400).send({
+            message: "Data provided is invalid",
+        });
+    }
+
+    const passwordIsCorrect = await verifyPassword(
+        reqBody.password,
+        room.password
+    );
+
+    if (!passwordIsCorrect) {
+        return res.status(400).send({
+            message: "Password is incorrect",
+        });
+    }
+
+    return res.status(200).send({
+        message: "Password is correct!",
+    });
+});
+
 io.on("connection", (socket) => {
     logData({
         title: "A user connected",
@@ -35,7 +93,7 @@ io.on("connection", (socket) => {
         layer: "*",
     });
 
-    roomHandler(socket, io);
+    roomHandler({ socket, io, rooms });
 });
 
 server.listen(port, () => {
