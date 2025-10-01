@@ -8,6 +8,7 @@ import { Signals } from "@repo/type-definitions/rooms";
 import { leaveRoom } from "./leaveRoom";
 import { generateId } from "@repo/shared-utils";
 import { logData } from "@repo/shared-utils/log-data";
+import { hashPassword } from "../utils/passwordVerification";
 
 export interface CreateRoomParams extends CreateRoomWsParams {
     rooms: Room[];
@@ -17,7 +18,7 @@ export interface CreateRoomParams extends CreateRoomWsParams {
 
 export type CreateRoom = (params: CreateRoomParams) => void;
 
-export const createRoom: CreateRoom = ({
+export const createRoom: CreateRoom = async ({
     rooms,
     socket,
     peerId,
@@ -38,7 +39,11 @@ export const createRoom: CreateRoom = ({
         peerSharingScreen: "",
     };
 
-    rooms.push({ ...room, password });
+    rooms.push({
+        ...room,
+        password: password ? await hashPassword(password) : undefined,
+    });
+
     socket.join(roomId);
 
     const roomCreatedCallbackParams: RoomCreatedWsCallbackParams = {
@@ -46,7 +51,6 @@ export const createRoom: CreateRoom = ({
     };
 
     socket.emit(Signals.ROOM_CREATED, roomCreatedCallbackParams);
-    // console.log("user created a room", room);
     logData({
         title: "A user created a room",
         layer: "room_ws",

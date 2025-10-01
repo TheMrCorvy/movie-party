@@ -7,7 +7,6 @@ import {
 } from "@repo/type-definitions/rooms";
 import { leaveRoom } from "./leaveRoom";
 import { logData } from "@repo/shared-utils/log-data";
-import { stringIsEmpty } from "@repo/shared-utils";
 
 export interface EnterRoomParams extends EnterRoomWsParams {
     rooms: Room[];
@@ -17,28 +16,16 @@ export interface EnterRoomParams extends EnterRoomWsParams {
 
 export type EnterRoom = (params: EnterRoomParams) => void;
 
-export const enterRoom: EnterRoom = ({
+export const enterRoom: EnterRoom = async ({
     roomId,
     peerId,
     peerName,
     rooms,
     io,
     socket,
-    password,
 }) => {
-    if (password && !stringIsEmpty(password)) {
-        logData({
-            title: "Received a password",
-            type: "info",
-            layer: "room_ws",
-            addSpaceAfter: true,
-            data: {
-                message: "Analyzing and comparing password...",
-            },
-            timeStamp: true,
-        });
-    }
     const room = rooms.find((room) => room.id === roomId);
+
     if (!room) {
         socket.emit(Signals.ROOM_NOT_FOUND);
         return;
