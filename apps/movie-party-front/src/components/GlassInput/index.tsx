@@ -54,6 +54,8 @@ export interface GlassInputProps {
     size?: "small" | "medium";
     checked?: boolean;
     options?: SelectOption[];
+    error?: boolean;
+    helperText?: string;
 }
 
 export interface SelectOption {
