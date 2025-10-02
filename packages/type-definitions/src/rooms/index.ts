@@ -21,7 +21,6 @@ export interface Room {
     id: string;
     messages: MessageWithIndex[];
     participants: Participant[];
-    password?: string;
     screenSharing?: MediaStream;
     peerSharingScreen: string; //id of the peer
 }
