@@ -21,6 +21,7 @@ const JoinRoom: FC = () => {
     const [roomExists, setRoomExists] = useState({
         hasBeenSet: false,
         roomExists: false,
+        password: false,
     });
 
     const roomWasVerified = (params: RoomExistsWsCallbackParams) => {
@@ -39,6 +40,7 @@ const JoinRoom: FC = () => {
         setRoomExists({
             hasBeenSet: true,
             roomExists: params.roomExists,
+            password: params.password,
         });
 
         dispatch({
@@ -48,7 +50,6 @@ const JoinRoom: FC = () => {
                 participants: [],
                 messages: [],
                 myId: generateId(),
-                password: params.password ? "Introducir contraseña..." : "", // to do implement password setup
                 peerSharingScreen: "",
             },
         });
@@ -82,7 +83,10 @@ const JoinRoom: FC = () => {
                 {!roomId ? (
                     <Typography>Loading...</Typography>
                 ) : (
-                    <EnterRoom roomExists={roomExists.roomExists} />
+                    <EnterRoom
+                        roomHasPassword={roomExists.password}
+                        roomExists={roomExists.roomExists}
+                    />
                 )}
             </GlassContainer>
         </Container>
