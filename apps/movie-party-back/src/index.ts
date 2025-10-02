@@ -90,6 +90,19 @@ app.post("/room-password", async (req, res) => {
     }
 
     if (useSocket) {
+        logData({
+            title: "Validation was successful",
+            layer: "room_ws",
+            addSpaceAfter: true,
+            timeStamp: true,
+            type: "info",
+            data: {
+                roomId: reqBody.roomId,
+                rooms,
+                peerId: reqBody.peerId,
+                peerName: reqBody.peerName,
+            },
+        });
         enterRoom({
             roomId: reqBody.roomId,
             rooms,
