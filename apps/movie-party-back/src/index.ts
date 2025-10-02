@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 import express from "express";
-import { Server } from "socket.io";
+import { Server, Socket } from "socket.io";
 import http from "http";
 import cors from "cors";
 import { roomHandler } from "./rooms";
@@ -8,6 +8,7 @@ import { logData } from "@repo/shared-utils/log-data";
 import { ServerRoom } from "@repo/type-definitions/rooms";
 import { stringIsEmpty } from "@repo/shared-utils";
 import { verifyPassword } from "./utils/passwordVerification";
+import { enterRoom } from "./rooms/enterRoom";
 
 dotenv.config();
 
@@ -27,6 +28,7 @@ const server = http.createServer(app);
 const io = new Server(server, {
     cors: { origin: "*", methods: ["GET", "POST"] },
 });
+let useSocket = null as null | Socket;
 
 const port = process.env.PORT || 4000;
 
@@ -48,6 +50,7 @@ app.post("/room-password", async (req, res) => {
         password: string;
         roomId: string;
         peerId: string;
+        peerName: string;
     }
 
     const reqBody = req.body as VerifyPasswordEndpointParams;
@@ -64,7 +67,12 @@ app.post("/room-password", async (req, res) => {
 
     const room = rooms.find((r) => r.id === reqBody.roomId);
 
-    if (!room || !room.password || stringIsEmpty(room.password)) {
+    if (
+        !room ||
+        !room.password ||
+        stringIsEmpty(room.password) ||
+        stringIsEmpty(reqBody.peerName)
+    ) {
         return res.status(400).send({
             message: "Data provided is invalid",
         });
@@ -81,6 +89,17 @@ app.post("/room-password", async (req, res) => {
         });
     }
 
+    if (useSocket) {
+        enterRoom({
+            roomId: reqBody.roomId,
+            rooms,
+            peerId: reqBody.peerId,
+            peerName: reqBody.peerName,
+            socket: useSocket,
+            io,
+        });
+    }
+
     return res.status(200).send({
         message: "Password is correct!",
     });
@@ -92,6 +111,8 @@ io.on("connection", (socket) => {
         addSpaceAfter: true,
         layer: "*",
     });
+
+    useSocket = socket;
 
     roomHandler({ socket, io, rooms });
 });
