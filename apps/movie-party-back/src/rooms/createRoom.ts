@@ -1,7 +1,7 @@
 import {
     CreateRoomWsParams,
-    Room,
     RoomCreatedWsCallbackParams,
+    ServerRoom,
 } from "@repo/type-definitions/rooms";
 import { Socket, Server as SocketIOServer } from "socket.io";
 import { Signals } from "@repo/type-definitions/rooms";
@@ -11,7 +11,7 @@ import { logData } from "@repo/shared-utils/log-data";
 import { hashPassword } from "../utils/passwordVerification";
 
 export interface CreateRoomParams extends CreateRoomWsParams {
-    rooms: Room[];
+    rooms: ServerRoom[];
     socket: Socket;
     io: SocketIOServer;
 }
@@ -27,7 +27,7 @@ export const createRoom: CreateRoom = async ({
     password,
 }) => {
     const roomId = generateId();
-    const room: Room = {
+    const room: ServerRoom = {
         id: roomId,
         messages: [],
         participants: [
