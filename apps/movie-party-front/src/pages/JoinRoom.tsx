@@ -51,6 +51,7 @@ const JoinRoom: FC = () => {
                 messages: [],
                 myId: generateId(),
                 peerSharingScreen: "",
+                imRoomOwner: false,
             },
         });
     };

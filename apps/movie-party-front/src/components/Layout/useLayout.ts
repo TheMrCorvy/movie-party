@@ -30,6 +30,7 @@ const useLayout = ({ pageIsRoom }: UseLayoutPops) => {
                     payload: {
                         ...params.room,
                         myId: params.room.participants[0].id,
+                        imRoomOwner: true,
                     },
                 });
             },

@@ -27,6 +27,7 @@ export interface Room {
 
 export interface ServerRoom extends Room {
     password?: string;
+    roomOwner: string; // The id of the participant who created the room
 }
 
 export interface CreateRoomWsParams {

@@ -24,6 +24,7 @@ const initialState: RoomState = {
         participants: [],
         myId: "",
         peerSharingScreen: "",
+        imRoomOwner: false,
     },
     ws,
 };
