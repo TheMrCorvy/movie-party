@@ -74,7 +74,17 @@ const useLayout = ({ pageIsRoom }: UseLayoutPops) => {
                     return;
                 }
 
-                console.error("Something happened...");
+                logData({
+                    title: "Something happened",
+                    layer: "*",
+                    timeStamp: true,
+                    type: "error",
+                    data: {
+                        ...params,
+                        message:
+                            "Something went wrong when validating update participants in useLayout",
+                    },
+                });
             },
         });
 

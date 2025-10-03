@@ -60,6 +60,7 @@ const EnterRoom: FC<EnterRoomParams> = ({ roomExists, roomHasPassword }) => {
                 timeStamp: true,
                 title: "Something went worng validating room password",
                 data: error,
+                type: "error",
             });
         }
 
