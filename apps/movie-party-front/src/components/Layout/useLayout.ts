@@ -118,9 +118,13 @@ const useLayout = ({ pageIsRoom }: UseLayoutPops) => {
             return;
         }
 
+        if (pageIsRoom && !imInTheRoom) {
+            navigate("/not-found");
+        }
+
         logData({
             title: "I'm not in the room",
-            data: room.participants,
+            data: room.id,
             timeStamp: true,
             type: "info",
             layer: "room_ws",
