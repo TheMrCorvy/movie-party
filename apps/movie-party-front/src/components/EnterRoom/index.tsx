@@ -19,7 +19,12 @@ const EnterRoom: FC<EnterRoomParams> = ({ roomExists, roomHasPassword }) => {
     const { room } = useRoom();
 
     const handleEnterRoom = async () => {
-        if (!roomExists || stringIsEmpty(myName)) {
+        if (
+            !roomExists ||
+            stringIsEmpty(myName) ||
+            (roomHasPassword && !password)
+        ) {
+            setError(true);
             return;
         }
 
@@ -47,6 +52,17 @@ const EnterRoom: FC<EnterRoomParams> = ({ roomExists, roomHasPassword }) => {
 
         const fullRes = await res.json();
 
+        if (fullRes.status !== 200) {
+            setError(true);
+
+            logData({
+                layer: "room_ws",
+                timeStamp: true,
+                title: "Something went worng validating room password",
+                data: error,
+            });
+        }
+
         logData({
             title: "Response recevied from password validation",
             data: fullRes,
@@ -54,14 +70,6 @@ const EnterRoom: FC<EnterRoomParams> = ({ roomExists, roomHasPassword }) => {
             timeStamp: true,
             type: "info",
         });
-
-        // enterRoomService({
-        //     peerId: room.myId,
-        //     peerName: myName,
-        //     roomId: room.id,
-        //     ws,
-        //     password,
-        // });
     };
 
     return (
@@ -69,11 +77,17 @@ const EnterRoom: FC<EnterRoomParams> = ({ roomExists, roomHasPassword }) => {
             <GlassInput
                 type="text"
                 kind="text input"
-                size="small"
+                size="medium"
                 onChange={(e: ChangeEvent<HTMLInputElement>) => {
                     e.preventDefault();
+                    setError(false);
                     setMyName(e.target.value);
                 }}
+                error={error}
+                helperText={
+                    error ? "Los datos ingresados son incorrectos" : undefined
+                }
+                label="Nombre"
             />
             {roomHasPassword && (
                 <GlassInput
@@ -83,9 +97,14 @@ const EnterRoom: FC<EnterRoomParams> = ({ roomExists, roomHasPassword }) => {
                     size="medium"
                     name="password"
                     error={error}
-                    helperText="La contraseña es incorrecta"
+                    helperText={
+                        error
+                            ? "Los datos ingresados son incorrectos"
+                            : undefined
+                    }
                     onChange={(e: ChangeEvent<HTMLInputElement>) => {
                         e.preventDefault();
+                        setError(false);
                         setPassword(e.target.value);
                     }}
                 />
