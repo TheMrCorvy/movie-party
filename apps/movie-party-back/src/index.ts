@@ -62,6 +62,7 @@ app.post("/room-password", async (req, res) => {
     ) {
         return res.status(400).send({
             message: "Data provided is invalid",
+            status: 400,
         });
     }
 
@@ -75,6 +76,7 @@ app.post("/room-password", async (req, res) => {
     ) {
         return res.status(400).send({
             message: "Data provided is invalid",
+            status: 400,
         });
     }
 
@@ -86,6 +88,7 @@ app.post("/room-password", async (req, res) => {
     if (!passwordIsCorrect) {
         return res.status(400).send({
             message: "Password is incorrect",
+            status: 400,
         });
     }
 
@@ -115,6 +118,7 @@ app.post("/room-password", async (req, res) => {
 
     return res.status(200).send({
         message: "Password is correct!",
+        status: 200,
     });
 });
 
