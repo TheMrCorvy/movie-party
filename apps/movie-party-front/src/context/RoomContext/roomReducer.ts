@@ -6,7 +6,7 @@ import { putMeFirst } from "../../utils/putMeFirst";
 export interface LocalRoom extends Room {
     myId: string;
     imRoomOwner: boolean;
-    password?: boolean;
+    password?: string;
 }
 export interface RoomState {
     room: LocalRoom;

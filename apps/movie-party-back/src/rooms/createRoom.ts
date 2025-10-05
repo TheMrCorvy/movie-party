@@ -49,7 +49,7 @@ export const createRoom: CreateRoom = async ({
 
     const roomCreatedCallbackParams: RoomCreatedWsCallbackParams = {
         room,
-        roomHasPassword: password ? true : false,
+        password,
     };
 
     socket.emit(Signals.ROOM_CREATED, roomCreatedCallbackParams);

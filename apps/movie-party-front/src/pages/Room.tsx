@@ -155,7 +155,7 @@ const Room: FC = () => {
                         </GlassButton>
                         <RoomPasswordUpdate
                             imRoomOwner={room.imRoomOwner}
-                            roomHasPassword={room.password}
+                            password={room.password}
                             roomId={room.id}
                             peerId={room.myId}
                         />

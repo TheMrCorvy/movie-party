@@ -38,7 +38,7 @@ export interface CreateRoomWsParams {
 
 export interface RoomCreatedWsCallbackParams {
     room: Room;
-    roomHasPassword: boolean;
+    password?: string;
 }
 
 export interface EnterRoomWsParams {
@@ -98,4 +98,10 @@ export interface ShareScreenWsParams {
 export interface ScreenShareWsCallbackParams {
     peerId: string;
     status: boolean;
+}
+
+export interface RoomPasswordCallbackParams {
+    message: string;
+    status: number;
+    roomHasPassword: boolean;
 }
