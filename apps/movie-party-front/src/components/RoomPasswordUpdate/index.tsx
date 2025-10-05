@@ -6,7 +6,6 @@ import KeyIcon from "@mui/icons-material/Key";
 import KeyOffIcon from "@mui/icons-material/KeyOff";
 import GlassInput from "../GlassInput";
 import { logData } from "@repo/shared-utils/log-data";
-import fakeTimeout from "../../utils/fakeTimeout";
 import { RoomPasswordCallbackParams } from "@repo/type-definitions/rooms";
 
 export interface RoomPasswordUpdateProps {
