@@ -27,6 +27,7 @@ import ScreenPlayer from "../components/ScreenPlayer";
 import { copyToClipboard } from "../utils/accessUserHardware";
 import { logData } from "@repo/shared-utils/log-data";
 import RoomPasswordUpdate from "../components/RoomPasswordUpdate";
+import GlassModal from "../components/GlassModal";
 
 const Room: FC = () => {
     const { room, dispatch, ws } = useRoom();
@@ -150,9 +151,25 @@ const Room: FC = () => {
                         <Typography variant="h3" component="h1" gutterBottom>
                             Room page
                         </Typography>
-                        <GlassButton onClick={handleCopy}>
-                            Compartir sala
-                        </GlassButton>
+                        <Grid container spacing={2} direction="row" width="50%">
+                            <Grid
+                                size={6}
+                                display="flex"
+                                justifyContent="center"
+                            >
+                                <GlassButton onClick={handleCopy}>
+                                    Compartir sala
+                                </GlassButton>
+                            </Grid>
+                            <Grid
+                                size={6}
+                                display="flex"
+                                justifyContent="center"
+                            >
+                                <GlassModal />
+                            </Grid>
+                        </Grid>
+
                         <RoomPasswordUpdate
                             imRoomOwner={room.imRoomOwner}
                             password={room.password}

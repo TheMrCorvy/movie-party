@@ -86,21 +86,32 @@ const styles: StylesService = () => {
                     borderColor: lightThemeLighterBg,
                 },
                 "&:hover fieldset": {
-                    borderColor: "rgba(255, 255, 255, 0.5)",
+                    borderColor: "rgba(255, 255, 255, 0.5) !important",
                 },
                 "&.Mui-focused fieldset": {
-                    borderColor: "rgba(255, 255, 255, 0.7)",
+                    borderColor: "rgba(255, 255, 255, 0.7) !important",
                 },
             },
             "& .MuiInputBase-input": {
                 color: "white",
             },
             "& .MuiInputLabel-root": {
-                color: "rgba(255, 255, 255, 0.7)",
+                color: "rgba(255, 255, 255, 0.7) !important",
             },
             "& .MuiInputBase-input::placeholder": {
-                color: "rgba(255, 255, 255, 0.7)",
+                color: "rgba(255, 255, 255, 0.7) !important",
                 opacity: 1,
+            },
+            "& .MuiInputBase-input::focused": {
+                color: "rgba(255, 255, 255, 0.7) !important",
+                opacity: 1,
+            },
+            "& .Mui-focused": {
+                color: "rgba(255, 255, 255, 0.7) !important",
+                opacity: 1,
+            },
+            "&:-webkit-autofill": {
+                backgroundColor: "rgb(232, 240, 254)",
             },
         },
     };

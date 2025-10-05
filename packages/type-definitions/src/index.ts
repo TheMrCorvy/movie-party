@@ -21,6 +21,7 @@ export interface Poll {
     id: string;
     amountOfVotes: number;
     options: PollOption[];
+    status: "live" | "ended";
 }
 
 export interface PollOption {
