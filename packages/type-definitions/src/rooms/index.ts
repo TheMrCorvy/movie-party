@@ -38,6 +38,7 @@ export interface CreateRoomWsParams {
 
 export interface RoomCreatedWsCallbackParams {
     room: Room;
+    roomHasPassword: boolean;
 }
 
 export interface EnterRoomWsParams {

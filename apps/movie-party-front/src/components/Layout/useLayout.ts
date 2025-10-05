@@ -31,6 +31,7 @@ const useLayout = ({ pageIsRoom }: UseLayoutPops) => {
                         ...params.room,
                         myId: params.room.participants[0].id,
                         imRoomOwner: true,
+                        password: params.roomHasPassword,
                     },
                 });
             },

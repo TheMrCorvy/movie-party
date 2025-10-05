@@ -26,6 +26,7 @@ import { newPeerJoinedListener } from "../services/updateParticipantsService";
 import ScreenPlayer from "../components/ScreenPlayer";
 import { copyToClipboard } from "../utils/accessUserHardware";
 import { logData } from "@repo/shared-utils/log-data";
+import RoomPasswordUpdate from "../components/RoomPasswordUpdate";
 
 const Room: FC = () => {
     const { room, dispatch, ws } = useRoom();
@@ -152,6 +153,12 @@ const Room: FC = () => {
                         <GlassButton onClick={handleCopy}>
                             Compartir sala
                         </GlassButton>
+                        <RoomPasswordUpdate
+                            imRoomOwner={room.imRoomOwner}
+                            roomHasPassword={room.password}
+                            roomId={room.id}
+                            peerId={room.myId}
+                        />
                         <ScreenPlayer
                             remoteScreen={remoteScreen}
                             me={peerConnection}
