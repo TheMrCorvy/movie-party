@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState } from "react";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -8,12 +8,16 @@ import { useTheme } from "@mui/material";
 import styles from "./styles";
 import GlassInput from "../GlassInput";
 import GlassButton from "../GlassButton";
-import type { FC } from "react";
+import type { FC, ReactNode, FormEvent } from "react";
 
-const GlassModal: FC = () => {
+export interface GlassModalProps {
+    children: ReactNode;
+    title: string;
+}
+const GlassModal: FC<GlassModalProps> = ({ children, title }) => {
     const theme = useTheme();
-    const { modal, title } = styles(theme.palette.mode);
-    const [open, setOpen] = React.useState(false);
+    const { modal, titleClass } = styles(theme.palette.mode);
+    const [open, setOpen] = useState(false);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -22,7 +26,7 @@ const GlassModal: FC = () => {
     const handleClose = () => {
         setOpen(false);
     };
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
         const formJson = Object.fromEntries((formData as any).entries());
@@ -34,12 +38,13 @@ const GlassModal: FC = () => {
         <>
             <GlassButton onClick={handleClickOpen}>Open modal</GlassButton>
             <Dialog open={open} onClose={handleClose} sx={modal}>
-                <DialogTitle>Subscribe to our Newsletter</DialogTitle>
+                <DialogTitle>{title}</DialogTitle>
                 <DialogContent>
-                    <DialogContentText sx={title}>
+                    <DialogContentText sx={titleClass}>
                         Stay updated with our latest news and offers. Enter your
                         email below to subscribe!
                     </DialogContentText>
+                    {children}
                     <form onSubmit={handleSubmit} id="subscription-form">
                         <GlassInput
                             autoFocus
