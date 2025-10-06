@@ -18,7 +18,7 @@ const styles: StylesService = (theme = "light") => {
             color: "#FFFFFF",
             padding: "20px",
         },
-        title: {
+        titleClass: {
             fontWeight: 600,
             fontSize: "1.8rem",
             marginBottom: "10px",
