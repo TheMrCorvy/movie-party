@@ -166,7 +166,7 @@ const Room: FC = () => {
                                 display="flex"
                                 justifyContent="center"
                             >
-                                <GlassModal />
+                                <GlassModal title="Example">hola</GlassModal>
                             </Grid>
                         </Grid>
 
