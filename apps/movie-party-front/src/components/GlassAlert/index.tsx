@@ -63,6 +63,9 @@ const GlassAlert: FC<GlassAlertProps> = ({
         error: "rgba(244, 67, 54, 0.15)",
     } as Record<AlertVariants, string>;
 
+    const capitalizeFirstLetter = (str: string) =>
+        str.charAt(0).toUpperCase() + str.slice(1);
+
     return (
         <Collapse in={open} id={id}>
             <Alert
@@ -80,6 +83,9 @@ const GlassAlert: FC<GlassAlertProps> = ({
                     "&.MuiAlert-outlinedSuccess": {
                         borderColor: "rgba(255, 255, 255, 0.5)",
                     },
+                    display: "flex",
+                    alignItems: "center",
+                    verticalAlign: "middle",
                 }}
                 action={
                     callback && (
@@ -94,7 +100,9 @@ const GlassAlert: FC<GlassAlertProps> = ({
                     )
                 }
             >
-                <AlertTitle>{title}</AlertTitle>
+                <Typography variant="subtitle1">
+                    {capitalizeFirstLetter(title)}
+                </Typography>
                 {description && (
                     <Typography
                         variant="subtitle2"
