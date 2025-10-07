@@ -1,10 +1,4 @@
-import {
-    Alert,
-    AlertTitle,
-    Collapse,
-    IconButton,
-    Typography,
-} from "@mui/material";
+import { Alert, Collapse, IconButton, Typography } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 
 import CloseIcon from "@mui/icons-material/Close";
