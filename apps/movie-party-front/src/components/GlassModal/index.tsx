@@ -6,60 +6,75 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useTheme } from "@mui/material";
 import styles from "./styles";
-import GlassInput from "../GlassInput";
-import GlassButton from "../GlassButton";
-import type { FC, ReactNode, FormEvent } from "react";
+import GlassButton, { GlassButtonProps } from "../GlassButton";
+import type { FC, ReactNode } from "react";
+
+export interface ModalAction {
+    shouldCloseModal: boolean;
+    callback: () => void;
+    buttonLabel: string;
+    value?: string;
+    buttonProps: GlassButtonProps;
+}
 
 export interface GlassModalProps {
     children: ReactNode;
     title: string;
+    description: string;
+    modalActions: ModalAction[];
+    openModalBtnLabel: string;
 }
-const GlassModal: FC<GlassModalProps> = ({ children, title }) => {
+const GlassModal: FC<GlassModalProps> = ({
+    children,
+    title,
+    openModalBtnLabel,
+    description,
+    modalActions,
+}) => {
     const theme = useTheme();
     const { modal, titleClass } = styles(theme.palette.mode);
     const [open, setOpen] = useState(false);
 
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
+    const handleButtonClick = (action?: ModalAction) => {
+        if (!open) {
+            setOpen(true);
+            return;
+        }
 
-    const handleClose = () => {
-        setOpen(false);
-    };
-    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const formData = new FormData(event.currentTarget);
-        const formJson = Object.fromEntries((formData as any).entries());
-        console.log("Form submitted:", formJson);
-        handleClose();
+        if (!action) {
+            return;
+        }
+
+        if (action.shouldCloseModal) {
+            setOpen(false);
+        }
+
+        action.callback();
     };
 
     return (
         <>
-            <GlassButton onClick={handleClickOpen}>Open modal</GlassButton>
-            <Dialog open={open} onClose={handleClose} sx={modal}>
+            <GlassButton onClick={handleButtonClick}>
+                {openModalBtnLabel}
+            </GlassButton>
+            <Dialog open={open} onClose={() => setOpen(false)} sx={modal}>
                 <DialogTitle>{title}</DialogTitle>
                 <DialogContent>
                     <DialogContentText sx={titleClass}>
-                        Stay updated with our latest news and offers. Enter your
-                        email below to subscribe!
+                        {description}
                     </DialogContentText>
                     {children}
-                    <form onSubmit={handleSubmit} id="subscription-form">
-                        <GlassInput
-                            autoFocus
-                            required
-                            id="email"
-                            name="email"
-                            label="Email Address"
-                            type="email"
-                            kind="text input"
-                        />
-                    </form>
                 </DialogContent>
                 <DialogActions>
-                    <GlassButton onClick={handleClose}>Cancel</GlassButton>
-                    <GlassButton onClick={handleClose}>Subscribe</GlassButton>
+                    {modalActions.map((action, i) => (
+                        <GlassButton
+                            key={`modal-action-${i}-${action.buttonLabel}`}
+                            {...action.buttonProps}
+                            onClick={action.callback}
+                        >
+                            {action.buttonLabel}
+                        </GlassButton>
+                    ))}
                 </DialogActions>
             </Dialog>
         </>
