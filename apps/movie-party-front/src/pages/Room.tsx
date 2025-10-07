@@ -27,7 +27,7 @@ import ScreenPlayer from "../components/ScreenPlayer";
 import { copyToClipboard } from "../utils/accessUserHardware";
 import { logData } from "@repo/shared-utils/log-data";
 import RoomPasswordUpdate from "../components/RoomPasswordUpdate";
-import GlassModal from "../components/GlassModal";
+import CreatePoll from "../components/CreatePoll";
 
 const Room: FC = () => {
     const { room, dispatch, ws } = useRoom();
@@ -166,7 +166,7 @@ const Room: FC = () => {
                                 display="flex"
                                 justifyContent="center"
                             >
-                                <GlassModal title="Example">hola</GlassModal>
+                                <CreatePoll />
                             </Grid>
                         </Grid>
 
