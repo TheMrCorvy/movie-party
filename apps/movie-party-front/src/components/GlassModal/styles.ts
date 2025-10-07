@@ -16,7 +16,7 @@ const styles: StylesService = (theme = "light") => {
             borderRadius: "20px",
             boxShadow: "0 8px 32px 0 rgba(0, 0, 0, 0.2)",
             color: "#FFFFFF",
-            padding: "20px",
+            padding: "12px",
         },
         titleClass: {
             fontWeight: 600,
