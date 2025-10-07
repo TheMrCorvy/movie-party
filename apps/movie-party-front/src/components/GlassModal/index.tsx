@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -6,78 +5,78 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useTheme } from "@mui/material";
 import styles from "./styles";
-import GlassButton, { GlassButtonProps } from "../GlassButton";
+import GlassButton from "../GlassButton";
 import type { FC, ReactNode } from "react";
+import { CSSProperties } from "@mui/material/styles";
+
+interface ButtonProps {
+    disabled?: boolean;
+    variant?: "btn" | "icon-btn";
+    border?: boolean;
+    fullWidth?: boolean;
+}
 
 export interface ModalAction {
-    shouldCloseModal: boolean;
     callback: () => void;
     buttonLabel: string;
     value?: string;
-    buttonProps: GlassButtonProps;
+    buttonProps?: ButtonProps;
 }
 
 export interface GlassModalProps {
     children: ReactNode;
     title: string;
-    description: string;
+    description?: string;
     modalActions: ModalAction[];
-    openModalBtnLabel: string;
+    open: boolean;
+    closeModalWithoutCallback: () => void;
 }
 const GlassModal: FC<GlassModalProps> = ({
     children,
     title,
-    openModalBtnLabel,
     description,
     modalActions,
+    open,
+    closeModalWithoutCallback,
 }) => {
     const theme = useTheme();
     const { modal, titleClass } = styles(theme.palette.mode);
-    const [open, setOpen] = useState(false);
-
-    const handleButtonClick = (action?: ModalAction) => {
-        if (!open) {
-            setOpen(true);
-            return;
-        }
-
-        if (!action) {
-            return;
-        }
-
-        if (action.shouldCloseModal) {
-            setOpen(false);
-        }
-
-        action.callback();
-    };
 
     return (
-        <>
-            <GlassButton onClick={handleButtonClick}>
-                {openModalBtnLabel}
-            </GlassButton>
-            <Dialog open={open} onClose={() => setOpen(false)} sx={modal}>
-                <DialogTitle>{title}</DialogTitle>
-                <DialogContent>
-                    <DialogContentText sx={titleClass}>
-                        {description}
-                    </DialogContentText>
-                    {children}
-                </DialogContent>
-                <DialogActions>
-                    {modalActions.map((action, i) => (
-                        <GlassButton
-                            key={`modal-action-${i}-${action.buttonLabel}`}
-                            {...action.buttonProps}
-                            onClick={action.callback}
-                        >
-                            {action.buttonLabel}
-                        </GlassButton>
-                    ))}
-                </DialogActions>
-            </Dialog>
-        </>
+        <Dialog
+            open={open}
+            fullWidth
+            maxWidth="md"
+            onClose={closeModalWithoutCallback}
+            slotProps={{
+                paper: {
+                    style: modal as CSSProperties,
+                },
+            }}
+        >
+            <DialogTitle>{title}</DialogTitle>
+            <DialogContent
+                sx={{
+                    padding: "10px",
+                }}
+            >
+                <DialogContentText sx={titleClass}>
+                    {description}
+                </DialogContentText>
+                {children}
+            </DialogContent>
+            <DialogActions>
+                {modalActions.map((action, i) => (
+                    <GlassButton
+                        key={`modal-action-${i}-${action.buttonLabel}`}
+                        {...action.buttonProps}
+                        onClick={action.callback}
+                    >
+                        {action.buttonLabel}
+                    </GlassButton>
+                ))}
+            </DialogActions>
+        </Dialog>
     );
 };
 
