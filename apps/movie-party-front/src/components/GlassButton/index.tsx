@@ -8,6 +8,7 @@ export interface GlassButtonProps {
     variant?: "icon-btn" | "btn";
     border?: boolean;
     disabled?: boolean;
+    fullWidth?: boolean;
 }
 
 const GlassButton: FC<GlassButtonProps> = ({
@@ -16,6 +17,7 @@ const GlassButton: FC<GlassButtonProps> = ({
     variant = "btn",
     border,
     disabled,
+    fullWidth,
 }) => {
     const { glassiconButton, glassButton } = styles();
     if (variant === "icon-btn") {
@@ -33,12 +35,13 @@ const GlassButton: FC<GlassButtonProps> = ({
     }
     return (
         <Button
+            fullWidth={fullWidth}
             variant="contained"
             onClick={onClick}
             disabled={disabled}
             sx={{
                 ...glassButton,
-                border: border ? '"1px solid rgba(255, 255, 255, 0.3)"' : "",
+                border: border ? "1px solid rgba(255, 255, 255, 0.3)" : "",
             }}
         >
             {children}
