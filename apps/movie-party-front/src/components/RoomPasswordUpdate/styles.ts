@@ -1,8 +1,3 @@
-import {
-    backdropFilter,
-    lightThemeBg,
-    lightThemeLighterBg,
-} from "../../styles/components";
 import type { StylesService } from "../../styles/types";
 
 const styles: StylesService = () => {
