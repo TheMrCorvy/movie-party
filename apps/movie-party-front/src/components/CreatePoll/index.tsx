@@ -5,17 +5,16 @@ import GlassButton from "../GlassButton";
 import GlassModal, { ModalAction } from "../GlassModal";
 import GlassAlert, { AlertCallbackParams } from "../GlassAlert";
 import { generateId } from "@repo/shared-utils";
-
-interface Option {
-    id: string;
-    value: string;
-    title: string;
-}
+import { PollOption } from "@repo/type-definitions";
+import { useRoom } from "../../context/RoomContext/RoomContextProvider";
+import { createPollSerice } from "../../services/pollService";
 
 const CreatePoll: FC = () => {
     const [modalOpen, setModalOpen] = useState(false);
     const [inputVal, setInputVal] = useState("");
-    const [options, setOptions] = useState<Option[]>([]);
+    const [options, setOptions] = useState<PollOption[]>([]);
+
+    const { ws, room } = useRoom();
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
@@ -36,25 +35,21 @@ const CreatePoll: FC = () => {
                 title: inputVal,
                 value: idValue,
                 id: idValue,
+                votes: 0,
             },
         ]);
+
+        setInputVal("");
     };
 
     const modalActions: ModalAction[] = [
         {
-            callback: () => setModalOpen(false),
+            callback: () => closeModal(),
             buttonLabel: "Cancelar",
-            buttonProps: {
-                border: true,
-            },
         },
         {
-            callback: () => console.log(options),
+            callback: () => emitPollCreation(),
             buttonLabel: "Crear encuesta",
-            buttonProps: {
-                disabled: options.length > 4,
-                border: true,
-            },
         },
     ];
 
@@ -63,14 +58,32 @@ const CreatePoll: FC = () => {
         setOptions(newArr);
     };
 
+    const closeModal = () => {
+        setInputVal("");
+        setOptions([]);
+        setModalOpen(false);
+    };
+
+    const emitPollCreation = () => {
+        createPollSerice({
+            roomId: room.id,
+            peerId: room.myId,
+            ws,
+            pollId: generateId(),
+            pollOptions: options,
+        });
+
+        closeModal();
+    };
+
     return (
         <>
-            <GlassButton border onClick={() => setModalOpen(true)}>
+            <GlassButton onClick={() => setModalOpen(true)}>
                 Iniciar encuesta
             </GlassButton>
             <GlassModal
                 open={modalOpen}
-                closeModalWithoutCallback={() => setModalOpen(false)}
+                closeModalWithoutCallback={closeModal}
                 modalActions={modalActions}
                 title="Iniciar Encuesta"
             >
@@ -86,11 +99,12 @@ const CreatePoll: FC = () => {
                             kind="text input"
                             size="medium"
                             onChange={handleInputChange}
+                            value={inputVal}
                         />
                     </Grid>
 
                     <Grid width="100%">
-                        <GlassButton border onClick={addOption} fullWidth>
+                        <GlassButton onClick={addOption} fullWidth>
                             Agregar opción
                         </GlassButton>
                     </Grid>
