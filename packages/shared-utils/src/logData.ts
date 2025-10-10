@@ -13,6 +13,7 @@ type LayersAvailable =
     | "screen_sharing_sender"
     | "screen_sharing_receiver"
     | "access_user_hardware"
+    | "poll"
     | "*"; // This layer will always be logged, use it for heavy errors
 
 export interface LogDataParams {
