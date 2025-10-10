@@ -1,4 +1,4 @@
-import { Message, MessageWithIndex, Participant } from "..";
+import { Message, MessageWithIndex, Participant, Poll, PollOption } from "..";
 
 export enum Signals {
     "CREATE_ROOM" = "CREATE_ROOM",
@@ -15,6 +15,9 @@ export enum Signals {
     "PEER_TOGGLED_CAMERA" = "PEER_TOGGLED_CAMERA",
     "NEW_PEER_JOINED" = "NEW_PEER_JOINED",
     "SCREEN_SHARING" = "SCREEN_SHARING",
+    "CREATE_POLL" = "CREATE_POLL",
+    "POLL_UPDATED" = "POLL_UPDATED",
+    "VOTE_IN_POLL" = "VOTE_IN_POLL",
 }
 
 export interface Room {
@@ -76,6 +79,23 @@ export interface MessagesWsParams {
 
 export interface MessageReceivedWsCallbackParams {
     messageReceived: MessageWithIndex;
+}
+
+export interface CreatePollWsParams {
+    roomId: string;
+    peerId: string;
+    pollOptions: PollOption[];
+    pollId: string;
+}
+
+export interface PollUpdatedWsParams {
+    poll: Poll;
+}
+
+export interface VoteWsParams {
+    roomId: string;
+    peerId: string;
+    optionId: string;
 }
 
 export interface ToggleCameraWsParams {
