@@ -9,7 +9,7 @@ export interface Message {
     peerName: string;
     message: string;
     isPoll?: boolean;
-    Poll?: Poll;
+    poll?: Poll;
     id: string;
 }
 
@@ -25,6 +25,8 @@ export interface Poll {
 }
 
 export interface PollOption {
-    label: string;
+    title: string;
     votes: number;
+    id: string;
+    value: string;
 }
