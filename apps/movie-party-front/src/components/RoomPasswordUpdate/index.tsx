@@ -7,6 +7,8 @@ import KeyOffIcon from "@mui/icons-material/KeyOff";
 import GlassInput from "../GlassInput";
 import { logData } from "@repo/shared-utils/log-data";
 import { RoomPasswordCallbackParams } from "@repo/type-definitions/rooms";
+import styles from "./styles";
+import { CSSProperties } from "@mui/material/styles";
 
 export interface RoomPasswordUpdateProps {
     imRoomOwner: boolean;
@@ -83,23 +85,11 @@ const RoomPasswordUpdate: FC<RoomPasswordUpdateProps> = ({
         }
     };
 
+    const { sectionContainer, gridContainer } = styles();
+
     return (
-        <section
-            style={{
-                minWidth: "25rem",
-                maxWidth: "100%",
-            }}
-        >
-            <Grid
-                container
-                spacing={2}
-                sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    verticalAlign: "middle",
-                }}
-            >
+        <section style={sectionContainer as CSSProperties}>
+            <Grid container spacing={2} sx={gridContainer}>
                 <Grid size={2}>
                     <GlassButton
                         disabled={roomHasPassword ? false : true}
