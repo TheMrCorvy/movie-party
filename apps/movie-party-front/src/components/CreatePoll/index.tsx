@@ -1,5 +1,5 @@
 import { Grid } from "@mui/material";
-import { ChangeEvent, useState, type FC } from "react";
+import { ChangeEvent, useEffect, useState, type FC } from "react";
 import GlassInput from "../GlassInput";
 import GlassButton from "../GlassButton";
 import GlassModal, { ModalAction } from "../GlassModal";
@@ -13,6 +13,7 @@ const CreatePoll: FC = () => {
     const [modalOpen, setModalOpen] = useState(false);
     const [inputVal, setInputVal] = useState("");
     const [options, setOptions] = useState<PollOption[]>([]);
+    const [disabledBtn, setDisabledBtn] = useState(false);
 
     const { ws, room } = useRoom();
 
@@ -76,10 +77,32 @@ const CreatePoll: FC = () => {
         closeModal();
     };
 
+    useEffect(() => {
+        let shouldBeDisabled = false;
+
+        room.messages.map((message) => {
+            if (
+                message.isPoll &&
+                message.poll &&
+                message.poll.status === "live" &&
+                !shouldBeDisabled
+            ) {
+                shouldBeDisabled = true;
+            }
+        });
+
+        setDisabledBtn(shouldBeDisabled);
+    }, [room.messages]);
+
     return (
         <>
-            <GlassButton onClick={() => setModalOpen(true)}>
-                Iniciar encuesta
+            <GlassButton
+                disabled={disabledBtn}
+                onClick={() => setModalOpen(true)}
+            >
+                {disabledBtn
+                    ? "Ya hay una encuesta en proceso"
+                    : "Iniciar encuesta"}
             </GlassButton>
             <GlassModal
                 open={modalOpen}
