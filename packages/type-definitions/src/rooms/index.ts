@@ -86,6 +86,7 @@ export interface CreatePollWsParams {
     peerId: string;
     pollOptions: PollOption[];
     pollId: string;
+    title: string;
 }
 
 export interface PollUpdatedWsParams {
