@@ -1,4 +1,4 @@
-import { Grid } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { ChangeEvent, useEffect, useState, type FC } from "react";
 import GlassInput from "../GlassInput";
 import GlassButton from "../GlassButton";
@@ -12,14 +12,22 @@ import { createPollSerice } from "../../services/pollService";
 const CreatePoll: FC = () => {
     const [modalOpen, setModalOpen] = useState(false);
     const [inputVal, setInputVal] = useState("");
+    const [titleVal, setTitleVal] = useState("");
     const [options, setOptions] = useState<PollOption[]>([]);
     const [disabledBtn, setDisabledBtn] = useState(false);
 
     const { ws, room } = useRoom();
 
-    const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const handleInputChange = (
+        e: ChangeEvent<HTMLInputElement>,
+        target: "title" | "option"
+    ) => {
         e.preventDefault();
-        setInputVal(e.target.value);
+        if (target === "option") {
+            setInputVal(e.target.value);
+        } else {
+            setTitleVal(e.target.value);
+        }
     };
 
     const addOption = () => {
@@ -72,6 +80,7 @@ const CreatePoll: FC = () => {
             ws,
             pollId: generateId(),
             pollOptions: options,
+            title: titleVal,
         });
 
         closeModal();
@@ -110,7 +119,41 @@ const CreatePoll: FC = () => {
                 modalActions={modalActions}
                 title="Iniciar Encuesta"
             >
-                <Grid container direction="column" gap={2}>
+                <Grid
+                    container
+                    direction="column"
+                    gap={2}
+                    width="50%"
+                    sx={{
+                        marginLeft: "25%",
+                    }}
+                >
+                    <Grid width="100%">
+                        <GlassInput
+                            autoFocus
+                            required
+                            id="poll-title"
+                            name="poll-title"
+                            label="Título para la encuesta"
+                            type="text"
+                            kind="text input"
+                            size="medium"
+                            onChange={(e) => handleInputChange(e, "title")}
+                            value={inputVal}
+                        />
+                    </Grid>
+
+                    <Grid marginTop="1rem">
+                        <Typography
+                            variant="subtitle2"
+                            sx={{
+                                fontWeight: "bold",
+                            }}
+                        >
+                            Agregar opciones para votar
+                        </Typography>
+                    </Grid>
+
                     <Grid width="100%">
                         <GlassInput
                             autoFocus
@@ -121,7 +164,7 @@ const CreatePoll: FC = () => {
                             type="text"
                             kind="text input"
                             size="medium"
-                            onChange={handleInputChange}
+                            onChange={(e) => handleInputChange(e, "option")}
                             value={inputVal}
                         />
                     </Grid>
