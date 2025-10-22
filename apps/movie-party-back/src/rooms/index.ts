@@ -49,7 +49,17 @@ export const roomHandler: RoomHandler = ({ socket, io, rooms }) => {
     socket.on(Signals.SCREEN_SHARING, ({ peerId, status, roomId }) =>
         shareScreen({ peerId, status, rooms, roomId, io })
     );
-    socket.on(Signals.CREATE_POLL, ({ roomId, peerId, pollOptions, pollId }) =>
-        createPoll({ io, rooms, roomId, peerId, pollId, pollOptions })
+    socket.on(
+        Signals.CREATE_POLL,
+        ({ roomId, peerId, pollOptions, pollId, title }) =>
+            createPoll({
+                io,
+                rooms,
+                roomId,
+                peerId,
+                pollId,
+                pollOptions,
+                title,
+            })
     );
 };

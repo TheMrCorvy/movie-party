@@ -19,6 +19,7 @@ export const createPollSerice: CreatePollService = ({
     peerId,
     pollOptions,
     pollId,
+    title,
 }) => {
     if (!ws) {
         logData({
@@ -36,7 +37,11 @@ export const createPollSerice: CreatePollService = ({
         return;
     }
 
-    if (stringIsEmpty(roomId) || stringIsEmpty(peerId)) {
+    if (
+        stringIsEmpty(roomId) ||
+        stringIsEmpty(peerId) ||
+        stringIsEmpty(title)
+    ) {
         logData({
             title: "Couldn't create the poll. Data provided was incomplete",
             type: "error",
@@ -51,7 +56,13 @@ export const createPollSerice: CreatePollService = ({
         return;
     }
 
-    ws.emit(Signals.CREATE_POLL, { roomId, peerId, pollOptions, pollId });
+    ws.emit(Signals.CREATE_POLL, {
+        roomId,
+        peerId,
+        pollOptions,
+        pollId,
+        title,
+    });
 };
 
 export interface ListenPollUpdateServiceParams {
