@@ -22,6 +22,7 @@ export interface Poll {
     amountOfVotes: number;
     options: PollOption[];
     status: "live" | "ended";
+    title: string;
 }
 
 export interface PollOption {
