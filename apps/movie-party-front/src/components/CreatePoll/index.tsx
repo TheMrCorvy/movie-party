@@ -59,6 +59,9 @@ const CreatePoll: FC = () => {
         {
             callback: () => emitPollCreation(),
             buttonLabel: "Crear encuesta",
+            buttonProps: {
+                disabled: options.length < 2 || options.length > 6,
+            },
         },
     ];
 
@@ -139,7 +142,7 @@ const CreatePoll: FC = () => {
                             kind="text input"
                             size="medium"
                             onChange={(e) => handleInputChange(e, "title")}
-                            value={inputVal}
+                            value={titleVal}
                         />
                     </Grid>
 
