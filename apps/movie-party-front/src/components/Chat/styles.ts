@@ -20,6 +20,7 @@ const styles: StylesService = (theme = "light") => {
             overflow: "hidden",
             display: "flex",
             flexDirection: "column",
+            position: "relative",
         },
         chatListStyles: {
             flexGrow: 1,
