@@ -8,6 +8,7 @@ import { useChatLogic } from "./useChatLogic";
 import styles from "./styles";
 import { useTheme } from "@mui/material/styles";
 import { logData } from "@repo/shared-utils/log-data";
+import Poll from "../Poll";
 
 const Chat: FC = () => {
     const {
@@ -37,13 +38,19 @@ const Chat: FC = () => {
     return (
         <Box sx={chatBoxStyles}>
             <List sx={chatListStyles}>
-                {sortedMessages.map((message, index) => (
-                    <ChatMessage
-                        key={index + "-chat-message-" + message.peerName}
-                        message={message}
-                        myId={myId}
-                    />
-                ))}
+                {sortedMessages.map((message, index) =>
+                    message.isPoll &&
+                    message.poll &&
+                    message.poll.status === "live" ? (
+                        <Poll poll={message.poll} />
+                    ) : (
+                        <ChatMessage
+                            key={index + "-chat-message-" + message.peerName}
+                            message={message}
+                            myId={myId}
+                        />
+                    )
+                )}
                 <div ref={messagesEndRef} />
             </List>
             <Divider sx={dividerStyles} />
