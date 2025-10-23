@@ -22,6 +22,7 @@ export const createPoll: CreatePoll = ({
     pollId,
     pollOptions,
     rooms,
+    title,
     io,
 }) => {
     const roomIndex = rooms.findIndex((r) => r.id === roomId);
@@ -114,6 +115,7 @@ export const createPoll: CreatePoll = ({
         options: pollOptions,
         amountOfVotes: 0,
         status: "live",
+        title,
     };
 
     const pollMessage: MessageWithIndex = {
