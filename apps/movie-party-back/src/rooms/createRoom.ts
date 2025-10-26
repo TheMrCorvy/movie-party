@@ -29,7 +29,15 @@ export const createRoom: CreateRoom = async ({
     const roomId = generateId();
     const room: ServerRoom = {
         id: roomId,
-        messages: [],
+        messages: [
+            {
+                peerId,
+                peerName,
+                index: 0,
+                id: generateId(),
+                message: peerName + " ha creado la sala de conferencias.",
+            },
+        ],
         participants: [
             {
                 id: peerId,
