@@ -4,9 +4,12 @@ import {
     Room,
     EnterRoomWsParams,
     UpdateParticipantsWsCallback,
+    MessageReceivedWsCallbackParams,
 } from "@repo/type-definitions/rooms";
 import { leaveRoom } from "./leaveRoom";
 import { logData } from "@repo/shared-utils/log-data";
+import { MessageWithIndex } from "@repo/type-definitions";
+import { generateId } from "@repo/shared-utils";
 
 export interface EnterRoomParams extends EnterRoomWsParams {
     rooms: Room[];
@@ -25,8 +28,9 @@ export const enterRoom: EnterRoom = async ({
     socket,
 }) => {
     const room = rooms.find((room) => room.id === roomId);
+    const roomIndex = rooms.findIndex((room) => room.id === roomId);
 
-    if (!room) {
+    if (!room || roomIndex === -1) {
         socket.emit(Signals.ROOM_NOT_FOUND);
         return;
     }
@@ -66,9 +70,24 @@ export const enterRoom: EnterRoom = async ({
         messages: room.messages,
         peerSharingScreen: room.peerSharingScreen,
     };
-    io.in(roomId).emit(Signals.GET_PARTICIPANTS, getParticipantsCallback);
 
+    const newMessage: MessageWithIndex = {
+        peerId,
+        peerName,
+        id: generateId(),
+        index: room.messages.length - 1,
+        message: peerName + " se ha unido a la sala de conferencias.",
+    };
+
+    rooms[roomIndex].messages.push(newMessage);
+
+    io.in(roomId).emit(Signals.GET_PARTICIPANTS, getParticipantsCallback);
     socket.to(roomId).emit(Signals.NEW_PEER_JOINED, { peerId, peerName });
+
+    const callbackParams: MessageReceivedWsCallbackParams = {
+        messageReceived: newMessage,
+    };
+    io.emit(Signals.MESSAGE_RECEIVED, callbackParams);
 
     logData({
         title: "User joined the room",
