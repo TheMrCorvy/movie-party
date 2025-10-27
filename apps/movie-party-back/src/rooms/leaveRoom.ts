@@ -4,8 +4,12 @@ import {
     Room,
     LeaveRoomWsParams,
     UpdateParticipantsWsCallback,
+    PollUpdatedWsParams,
+    MessageReceivedWsCallbackParams,
 } from "@repo/type-definitions/rooms";
 import { logData } from "@repo/shared-utils/log-data";
+import { MessageWithIndex, Poll } from "@repo/type-definitions";
+import { generateId } from "@repo/shared-utils";
 
 export interface LeaveRoomParams extends LeaveRoomWsParams {
     rooms: Room[];
@@ -17,7 +21,8 @@ export type LeaveRoom = (params: LeaveRoomParams) => void;
 
 export const leaveRoom: LeaveRoom = ({ peerId, roomId, rooms, io, socket }) => {
     const room = rooms.find((room) => room.id === room.id);
-    if (!room) {
+    const roomIndex = rooms.findIndex((room) => room.id === roomId);
+    if (!room || roomIndex === -1) {
         logData({
             title: "User tryed to leave from a non existing room",
             type: "error",
@@ -35,6 +40,9 @@ export const leaveRoom: LeaveRoom = ({ peerId, roomId, rooms, io, socket }) => {
         });
         return;
     }
+
+    const peerName =
+        room.participants.find((peer) => peer.id === peerId)?.name || "Mr. X";
 
     room.participants = room.participants.filter(
         (participant) => participant.id !== peerId
@@ -80,7 +88,20 @@ export const leaveRoom: LeaveRoom = ({ peerId, roomId, rooms, io, socket }) => {
     };
     io.in(roomId).emit(Signals.GET_PARTICIPANTS, getParticipantsCallback);
 
-    socket.leave(roomId);
+    const newMessage: MessageWithIndex = {
+        peerId,
+        peerName,
+        id: generateId(),
+        index: room.messages.length - 1,
+        message: peerName + " ha abandonado la sala de conferencias.",
+    };
+
+    rooms[roomIndex].messages.push(newMessage);
+    const callbackParams: MessageReceivedWsCallbackParams = {
+        messageReceived: newMessage,
+    };
+
+    io.emit(Signals.MESSAGE_RECEIVED, callbackParams);
 
     logData({
         title: "User left",
@@ -93,4 +114,35 @@ export const leaveRoom: LeaveRoom = ({ peerId, roomId, rooms, io, socket }) => {
             peerId,
         },
     });
+
+    let emitPollUpdate = false;
+    let updatedPoll: Poll | undefined = undefined;
+
+    room.messages.map((message, i) => {
+        if (
+            message.isPoll &&
+            message.poll &&
+            message.poll.status === "live" &&
+            message.poll.amountOfVotes >= room.participants.length
+        ) {
+            const newMessage = {
+                ...message,
+                poll: {
+                    ...message.poll,
+                    status: "ended",
+                },
+            };
+            emitPollUpdate = true;
+            updatedPoll = newMessage.poll as Poll;
+            room.messages[i] = newMessage as MessageWithIndex;
+        }
+    });
+
+    if (emitPollUpdate && updatedPoll) {
+        io.in(roomId).emit(Signals.POLL_UPDATED, {
+            poll: updatedPoll,
+        } as PollUpdatedWsParams);
+    }
+
+    socket.leave(roomId);
 };
