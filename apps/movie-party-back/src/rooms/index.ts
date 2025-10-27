@@ -8,7 +8,8 @@ import { sendReceiveMessages } from "./sendReceiveMessages";
 import { togglePeerCamera } from "./togglePeerCamera";
 import { shareScreen } from "./shareScreen";
 import { logData } from "@repo/shared-utils/log-data";
-import { createPoll } from "./pollUpdates";
+import { createPoll } from "./createPoll";
+import { voteInPoll } from "./voteInPoll";
 
 export interface RoomHandlerParams {
     socket: Socket;
@@ -61,5 +62,16 @@ export const roomHandler: RoomHandler = ({ socket, io, rooms }) => {
                 pollOptions,
                 title,
             })
+    );
+
+    socket.on(Signals.VOTE_IN_POLL, ({ roomId, peerId, pollId, optionId }) =>
+        voteInPoll({
+            roomId,
+            peerId,
+            rooms,
+            io,
+            pollId,
+            optionId,
+        })
     );
 };
