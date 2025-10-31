@@ -9,6 +9,7 @@ import styles from "./styles";
 import { useTheme } from "@mui/material/styles";
 import { logData } from "@repo/shared-utils/log-data";
 import Poll from "../Poll";
+import { MessageWithIndex } from "@repo/type-definitions";
 
 const Chat: FC = () => {
     const {
@@ -35,21 +36,56 @@ const Chat: FC = () => {
         type: "info",
     });
 
+    const renderMessage = (index: number, message: MessageWithIndex) => {
+        if (message.isPoll && message.poll) {
+            if (message.poll.status === "live") {
+                return (
+                    <Poll
+                        poll={message.poll}
+                        key={index + "-live-poll-" + message.poll.id}
+                    />
+                );
+            }
+
+            let messageBody = "";
+
+            message.poll.options.forEach((option) => {
+                if (!messageBody) {
+                    messageBody = `${option.votes} voto(s) para "${option.title}"`;
+                } else {
+                    messageBody += `, ${option.votes} voto(s) para "${option.title}"`;
+                }
+            });
+
+            messageBody += ".";
+
+            return (
+                <ChatMessage
+                    key={index + "-chat-message-" + message.peerName}
+                    message={{
+                        ...message,
+                        peerName: message.poll.title,
+                        message: messageBody,
+                    }}
+                    myId={myId}
+                />
+            );
+        }
+
+        return (
+            <ChatMessage
+                key={index + "-chat-message-" + message.peerName}
+                message={message}
+                myId={myId}
+            />
+        );
+    };
+
     return (
         <Box sx={chatBoxStyles}>
             <List sx={chatListStyles}>
                 {sortedMessages.map((message, index) =>
-                    message.isPoll &&
-                    message.poll &&
-                    message.poll.status === "live" ? (
-                        <Poll poll={message.poll} />
-                    ) : (
-                        <ChatMessage
-                            key={index + "-chat-message-" + message.peerName}
-                            message={message}
-                            myId={myId}
-                        />
-                    )
+                    renderMessage(index, message)
                 )}
                 <div ref={messagesEndRef} />
             </List>
