@@ -5,26 +5,32 @@ import Home from "./pages/Home";
 import Room from "./pages/Room";
 import { ThemeContextProvider } from "./context/ThemeContext/ThemeContextProvider";
 import { Layout } from "./components/Layout";
-import JoinRoom from "./pages/JoinRoom";
+import JoinRoomPage from "./pages/JoinRoomPage";
 import { RoomContextProvider } from "./context/RoomContext/RoomContextProvider";
+import { BackgroundImageProvider } from "./context/BackgroundImageContext";
 
 createRoot(document.getElementById("root")!).render(
     <StrictMode>
         <RoomContextProvider>
-            <BrowserRouter>
-                <ThemeContextProvider>
-                    <Routes>
-                        <Route path="/" element={<Layout />}>
-                            <Route index element={<Home />} />
-                            <Route path="/room/:roomId" element={<Room />} />
-                            <Route
-                                path="/join-room/:roomId"
-                                element={<JoinRoom />}
-                            />
-                        </Route>
-                    </Routes>
-                </ThemeContextProvider>
-            </BrowserRouter>
+            <BackgroundImageProvider>
+                <BrowserRouter>
+                    <ThemeContextProvider>
+                        <Routes>
+                            <Route path="/" element={<Layout />}>
+                                <Route index element={<Home />} />
+                                <Route
+                                    path="/room/:roomId"
+                                    element={<Room />}
+                                />
+                                <Route
+                                    path="/join-room/:roomId"
+                                    element={<JoinRoomPage />}
+                                />
+                            </Route>
+                        </Routes>
+                    </ThemeContextProvider>
+                </BrowserRouter>
+            </BackgroundImageProvider>
         </RoomContextProvider>
     </StrictMode>
 );
