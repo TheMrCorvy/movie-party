@@ -72,6 +72,7 @@ const CreatePoll: FC = () => {
 
     const closeModal = () => {
         setInputVal("");
+        setTitleVal("");
         setOptions([]);
         setModalOpen(false);
     };
@@ -169,11 +170,17 @@ const CreatePoll: FC = () => {
                             size="medium"
                             onChange={(e) => handleInputChange(e, "option")}
                             value={inputVal}
+                            error={inputVal.length > 20}
+                            helperText="Las opciones no pueden ser más de 20 caractéres."
                         />
                     </Grid>
 
                     <Grid width="100%">
-                        <GlassButton onClick={addOption} fullWidth>
+                        <GlassButton
+                            onClick={addOption}
+                            fullWidth
+                            disabled={inputVal.length > 20}
+                        >
                             Agregar opción
                         </GlassButton>
                     </Grid>
