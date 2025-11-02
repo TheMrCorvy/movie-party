@@ -9,6 +9,7 @@ export interface GlassButtonProps {
     border?: boolean;
     disabled?: boolean;
     fullWidth?: boolean;
+    "aria-label"?: string;
 }
 
 const GlassButton: FC<GlassButtonProps> = ({
@@ -18,6 +19,7 @@ const GlassButton: FC<GlassButtonProps> = ({
     border,
     disabled,
     fullWidth,
+    "aria-label": ariaLabel,
 }) => {
     const { glassiconButton, glassButton } = styles();
     if (variant === "icon-btn") {
@@ -25,7 +27,7 @@ const GlassButton: FC<GlassButtonProps> = ({
             <IconButton
                 color="primary"
                 onClick={onClick}
-                aria-label="Send message"
+                aria-label={ariaLabel || "Send message"}
                 sx={glassiconButton}
                 disabled={disabled}
             >
