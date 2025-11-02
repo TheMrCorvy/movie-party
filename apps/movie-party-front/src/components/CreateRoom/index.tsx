@@ -69,7 +69,7 @@ const CreateRoom: FC = () => {
                     />
                 )}
                 <GlassButton onClick={createRoomSubmit}>
-                    Create Room
+                    Ingresar a la sala de conferencias
                 </GlassButton>
             </GlassContainer>
         </Container>
