@@ -90,15 +90,17 @@ const RoomPasswordUpdate: FC<RoomPasswordUpdateProps> = ({
     return (
         <section style={sectionContainer as CSSProperties}>
             <Grid container spacing={2} sx={gridContainer}>
-                <Grid size={2}>
-                    <GlassButton
-                        disabled={roomHasPassword ? false : true}
-                        variant="icon-btn"
-                        onClick={removePassword}
-                    >
-                        <DeleteIcon />
-                    </GlassButton>
-                </Grid>
+                {roomHasPassword && (
+                    <Grid size={2}>
+                        <GlassButton
+                            aria-label="remove password"
+                            variant="icon-btn"
+                            onClick={removePassword}
+                        >
+                            <DeleteIcon />
+                        </GlassButton>
+                    </Grid>
+                )}
                 <Grid size={8}>
                     <GlassInput
                         kind="text input"
@@ -114,6 +116,7 @@ const RoomPasswordUpdate: FC<RoomPasswordUpdateProps> = ({
                 </Grid>
                 <Grid size={2}>
                     <GlassButton
+                        aria-label="update password"
                         variant="icon-btn"
                         onClick={() => sendUpdatedPassword(newPassword)}
                     >
