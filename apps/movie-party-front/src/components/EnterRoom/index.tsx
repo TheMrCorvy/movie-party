@@ -1,7 +1,6 @@
 import { ChangeEvent, FC, useState } from "react";
 import GlassInput from "../GlassInput";
 import GlassButton from "../GlassButton";
-import { Typography } from "@mui/material";
 import { stringIsEmpty } from "@repo/shared-utils";
 import { useRoom } from "../../context/RoomContext/RoomContextProvider";
 import { logData } from "@repo/shared-utils/log-data";
@@ -110,10 +109,9 @@ const EnterRoom: FC<EnterRoomParams> = ({ roomExists, roomHasPassword }) => {
                     }}
                 />
             )}
-            <GlassButton onClick={handleEnterRoom}>Enter Room</GlassButton>
-            <Typography>
-                Room Exists: {roomExists ? "True" : "False"}
-            </Typography>
+            <GlassButton onClick={handleEnterRoom}>
+                Ingresar a la sala de conferencias
+            </GlassButton>
         </>
     );
 };
