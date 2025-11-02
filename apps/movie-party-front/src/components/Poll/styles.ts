@@ -48,6 +48,10 @@ const styles: StylesService = (theme = "light") => {
             "&:active": {
                 transform: "scale(0.98)",
             },
+            "&:disabled": {
+                backgroundColor:
+                    theme === "dark" ? darkThemeDarkerBg : lightThemeBg,
+            },
         },
         pollOptionName: {
             color: "white",
