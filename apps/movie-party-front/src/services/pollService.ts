@@ -4,6 +4,7 @@ import {
     CreatePollWsParams,
     PollUpdatedWsParams,
     Signals,
+    VoteWsParams,
 } from "@repo/type-definitions/rooms";
 import { Socket } from "socket.io-client";
 
@@ -150,5 +151,12 @@ export const voteInPollService: VoteInPollService = ({
         return;
     }
 
-    ws.emit(Signals.VOTE_IN_POLL, { roomId, peerId, pollOptionId, pollId });
+    const emitVote: VoteWsParams = {
+        roomId,
+        peerId,
+        optionId: pollOptionId,
+        pollId,
+    };
+
+    ws.emit(Signals.VOTE_IN_POLL, emitVote);
 };
