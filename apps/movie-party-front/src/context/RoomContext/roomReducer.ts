@@ -112,6 +112,41 @@ export const roomReducer = (
                 },
             };
 
+        case ActionTypes.FINISHED_POLL:
+            return {
+                ...state,
+                room: {
+                    ...state.room,
+                    messages: state.room.messages.map((message) => {
+                        if (message.id === action.payload.message.id) {
+                            return action.payload.message;
+                        }
+                        return message;
+                    }),
+                },
+            };
+
+        case ActionTypes.USER_VOTED:
+            return {
+                ...state,
+                room: {
+                    ...state.room,
+                    messages: state.room.messages.map((message) => {
+                        if (
+                            message.isPoll &&
+                            message.poll &&
+                            message.poll.status === "live"
+                        ) {
+                            return {
+                                ...message,
+                                poll: action.payload.poll,
+                            };
+                        }
+                        return message;
+                    }),
+                },
+            };
+
         default:
             return state;
     }
