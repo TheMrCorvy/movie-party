@@ -97,6 +97,7 @@ export interface VoteWsParams {
     roomId: string;
     peerId: string;
     optionId: string;
+    pollId: string;
 }
 
 export interface ToggleCameraWsParams {
