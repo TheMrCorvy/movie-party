@@ -1,4 +1,4 @@
-import { MessageWithIndex, Participant } from "@repo/type-definitions";
+import { MessageWithIndex, Participant, Poll } from "@repo/type-definitions";
 import { LocalRoom } from "./roomReducer";
 
 export enum ActionTypes {
@@ -10,6 +10,8 @@ export enum ActionTypes {
     "TOGGLE_PARTICIPANT_CAMERA" = "TOGGLE_PARTICIPANT_CAMERA",
     "SETUP_PEER_ACTION" = "SETUP_PEER_ACTION",
     "TOGGLE_SCREEN_SHARING" = "TOGGLE_SCREEN_SHARING",
+    "USER_VOTED" = "USER_VOTED",
+    "FINISHED_POLL" = "FINISHED_POLL",
 }
 
 export interface SetRoomAction {
@@ -58,6 +60,20 @@ export interface ToggleScreenSharing {
     payload: string;
 }
 
+export interface UserVotedAction {
+    type: ActionTypes.USER_VOTED;
+    payload: {
+        poll: Poll;
+    };
+}
+
+export interface FinishedPollAction {
+    type: ActionTypes.FINISHED_POLL;
+    payload: {
+        message: MessageWithIndex;
+    };
+}
+
 export type RoomAction =
     | SetRoomAction
     | UpdateParticipantsAction
@@ -65,4 +81,6 @@ export type RoomAction =
     | StartMyCameraAction
     | MessageReceivedAction
     | ToggleParticipantCameraAction
-    | ToggleScreenSharing;
+    | ToggleScreenSharing
+    | UserVotedAction
+    | FinishedPollAction;
