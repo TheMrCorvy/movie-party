@@ -21,8 +21,8 @@ const styles: StylesService = (theme = "light") => {
             alignItems: "center",
             justifyContent: "center",
             position: "absolute",
-            top: 30,
-            right: 30,
+            top: 20,
+            right: 20,
         },
     };
 };
