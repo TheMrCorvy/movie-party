@@ -1,6 +1,8 @@
 import React, { useRef } from "react";
-import { useBackground } from "../../context/BackgroundImageContext";
-import defaultBg from "../../assets/background.jpg";
+import {
+    useBackground,
+    PatternClass,
+} from "../../context/BackgroundImageContext";
 import GlassButton from "../GlassButton";
 import GlassContainer from "../GlassContainer";
 import BackgroundPatternPicker from "../BackgroundPatternPicker";
@@ -26,7 +28,9 @@ export const BackgroundImageInput = () => {
     };
 
     const handleReset = () => {
-        dispatch({ type: "SET_BACKGROUND", payload: defaultBg });
+        // Clear custom image and set default pattern (cubes)
+        dispatch({ type: "SET_BACKGROUND", payload: null });
+        dispatch({ type: "SET_PATTERN", payload: PatternClass.CUBES });
         if (fileInputRef.current) {
             fileInputRef.current.value = "";
         }

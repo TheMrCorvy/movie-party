@@ -7,7 +7,6 @@ import {
     ReactNode,
     Dispatch,
 } from "react";
-import defaultBg from "../../assets/background.jpg";
 
 export enum PatternClass {
     HEARTS = "hearts",
@@ -68,8 +67,8 @@ export const BackgroundImageProvider = ({
     children: ReactNode;
 }) => {
     const [state, dispatch] = useReducer(backgroundReducer, {
-        background: defaultBg,
-        patternClass: null,
+        background: null,
+        patternClass: PatternClass.CUBES,
     });
 
     return (

@@ -16,21 +16,27 @@ export const Layout: FC = () => {
     const prevPatternRef = useRef<string | null>(null);
 
     useEffect(() => {
-        // If a pattern class is active, let html handle the background and make
-        // body transparent. Otherwise, apply the chosen background image to body.
+        document.body.style.height = "100vh";
+
         if (patternClass) {
             document.body.style.backgroundImage = "none";
             document.body.style.backgroundSize = "";
             document.body.style.backgroundPosition = "";
             document.body.style.backgroundRepeat = "";
             document.body.style.backgroundColor = "transparent";
-        } else {
+            return;
+        }
+
+        if (background) {
             document.body.style.backgroundImage = `url(${background})`;
             document.body.style.backgroundSize = "cover";
             document.body.style.backgroundPosition = "center";
             document.body.style.backgroundRepeat = "no-repeat";
+            return;
         }
-        document.body.style.height = "100vh";
+
+        document.body.style.backgroundImage = "none";
+        document.body.style.backgroundColor = "transparent";
     }, [background, patternClass]);
 
     useEffect(() => {
