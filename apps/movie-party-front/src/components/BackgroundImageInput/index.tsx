@@ -52,6 +52,36 @@ export const BackgroundImageInput = () => {
                     ref={fileInputRef}
                     style={{ display: "none" }}
                 />
+                <div style={{ marginBottom: 8 }}>
+                    <label
+                        style={{
+                            display: "block",
+                            fontSize: 12,
+                            marginBottom: 6,
+                        }}
+                    >
+                        Patrones de fondo
+                    </label>
+                    <select
+                        onChange={(e) => {
+                            const val = e.target.value;
+                            if (val === "none") {
+                                dispatch({
+                                    type: "SET_PATTERN",
+                                    payload: null,
+                                });
+                            } else {
+                                dispatch({ type: "SET_PATTERN", payload: val });
+                            }
+                        }}
+                        defaultValue={"none"}
+                        style={{ padding: 6, borderRadius: 6 }}
+                    >
+                        <option value="none">Ninguno</option>
+                        <option value="bg-pattern-one">Patrón 1</option>
+                        <option value="bg-pattern-two">Patrón 2</option>
+                    </select>
+                </div>
                 <GlassButton onClick={handleButtonClick}>
                     Cambiar fondo de pantalla
                 </GlassButton>

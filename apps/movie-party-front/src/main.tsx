@@ -8,6 +8,7 @@ import { Layout } from "./components/Layout";
 import JoinRoomPage from "./pages/JoinRoomPage";
 import { RoomContextProvider } from "./context/RoomContext/RoomContextProvider";
 import { BackgroundImageProvider } from "./context/BackgroundImageContext";
+import "./styles/backgroundPatterns.css";
 
 createRoot(document.getElementById("root")!).render(
     <StrictMode>
