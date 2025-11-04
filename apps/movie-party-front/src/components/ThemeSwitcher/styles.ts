@@ -20,9 +20,6 @@ const styles: StylesService = (theme = "light") => {
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            position: "absolute",
-            top: 20,
-            right: 20,
         },
     };
 };

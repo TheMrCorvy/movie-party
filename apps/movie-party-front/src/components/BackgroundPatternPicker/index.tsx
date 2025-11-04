@@ -11,7 +11,7 @@ export const BackgroundPatternPicker: React.FC = () => {
                     display: "block",
                     fontSize: 16,
                     fontWeight: 600,
-                    marginBottom: 8,
+                    marginBottom: 16,
                 }}
             >
                 Patrones de fondo

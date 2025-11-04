@@ -1,4 +1,4 @@
-html.hearts {
+html.anama {
     --s: 126px;
     --c1: #e7525b;
     --c2: #78dbf0;
@@ -133,7 +133,7 @@ html.bricks {
   background-size: var(--s) var(--s);
 }
 
-html.hearts,
+html.anama,
 html.squigly {
     background-repeat: repeat;
 }
@@ -157,7 +157,7 @@ html.squigly {
     transform: translateZ(0) scale(1.04);
 }
 
-.pattern-preview.hearts {
+.pattern-preview.anama {
     --s: 36px;
     --c1: #e7525b;
     --c2: #78dbf0;

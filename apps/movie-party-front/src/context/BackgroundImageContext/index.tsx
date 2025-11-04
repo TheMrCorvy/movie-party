@@ -9,7 +9,7 @@ import {
 } from "react";
 
 export enum PatternClass {
-    HEARTS = "hearts",
+    ANAMA = "anama",
     SQUIGLY = "squigly",
     WAVES = "waves",
     STARS = "stars",
@@ -36,7 +36,7 @@ const BackgroundDispatchContext = createContext<Dispatch<Action> | undefined>(
 
 export const patterns: PatternClass[] = [
     PatternClass.CUBES,
-    PatternClass.HEARTS,
+    PatternClass.ANAMA,
     PatternClass.SQUIGLY,
     PatternClass.WAVES,
     PatternClass.STARS,

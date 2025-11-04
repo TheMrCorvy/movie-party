@@ -4,7 +4,7 @@ import { type FC, useEffect, useRef } from "react";
 import ThemeSwitcher from "../ThemeSwitcher";
 import useLayout from "./useLayout";
 import { useBackground } from "../../context/BackgroundImageContext";
-import { BackgroundImageInput } from "../BackgroundImageInput";
+import { BackgroundImageInput } from "../RoomControls";
 
 export const Layout: FC = () => {
     const { background, patternClass } = useBackground();
@@ -52,24 +52,9 @@ export const Layout: FC = () => {
 
     return (
         <Box sx={{ display: "flex", flexDirection: "column" }}>
-            <ThemeSwitcher />
-            <BackgroundImageInput />
+            {/* <ThemeSwitcher /> */}
+            {/* <BackgroundImageInput /> */}
             <Outlet />
         </Box>
     );
 };
-
-/**
- * html {
-  --s: 126px; /* control the size*/
-//   --c1: #e7525b;
-//   --c2: #78dbf0;
-
-//   --_g: 80%,var(--c1) 25.4%,#0000 26%;
-//   background:
-//    radial-gradient(at 80% var(--_g)),
-//    radial-gradient(at 20% var(--_g)),
-//    conic-gradient(from -45deg at 50% 41%,var(--c1) 90deg,var(--c2) 0)
-//       calc(var(--s)/2) 0;
-//   background-size: var(--s) var(--s);
-// }

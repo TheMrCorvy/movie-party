@@ -16,6 +16,7 @@ export interface GlassContainerProps {
         | "revert-layer"
         | "row-reverse"
         | "unset";
+    gap?: number | string;
     children: React.ReactNode;
 }
 
@@ -24,6 +25,7 @@ const GlassContainer: FC<GlassContainerProps> = ({
     height,
     width,
     direction = "column",
+    gap = 2,
 }) => {
     const theme = useTheme();
     const { containerStyles } = styles(theme.palette.mode);
@@ -35,6 +37,7 @@ const GlassContainer: FC<GlassContainerProps> = ({
                 height: height || "fit-content",
                 width: width || "fit-content",
                 flexDirection: direction,
+                gap,
             }}
         >
             {children}

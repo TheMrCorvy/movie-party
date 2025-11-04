@@ -1,14 +1,8 @@
 import { useEffect, useMemo, useState, type FC } from "react";
-import { Container, Grid, Typography } from "@mui/material";
+import { Container, Grid } from "@mui/material";
 import Chat from "../components/Chat";
-import {
-    roomContainerStyles,
-    roomGridContainerStyles,
-    roomMainContentStyles,
-    roomChatSectionStyles,
-} from "../styles/pages";
+import { roomContainerStyles, roomChatSectionStyles } from "../styles/pages";
 import GlassContainer from "../components/GlassContainer";
-import GlassButton from "../components/GlassButton";
 import PeerVideo from "../components/PeerVideo";
 import { useRoom } from "../context/RoomContext/RoomContextProvider";
 import {
@@ -24,10 +18,8 @@ import { ActionTypes } from "../context/RoomContext/roomActions";
 import { listenPeerToggledCamera } from "../services/peerCameraService";
 import { newPeerJoinedListener } from "../services/updateParticipantsService";
 import ScreenPlayer from "../components/ScreenPlayer";
-import { copyToClipboard } from "../utils/accessUserHardware";
 import { logData } from "@repo/shared-utils/log-data";
-import RoomPasswordUpdate from "../components/RoomPasswordUpdate";
-import CreatePoll from "../components/CreatePoll";
+import RoomControls from "../components/RoomControls";
 
 const Room: FC = () => {
     const { room, dispatch, ws } = useRoom();
@@ -36,21 +28,6 @@ const Room: FC = () => {
         [room.myId]
     );
     const [remoteScreen, setremoteScreen] = useState<MediaStream | null>(null);
-
-    const handleCopy = async () => {
-        const text = "http://localhost:5173/join-room/" + room.id;
-        await copyToClipboard({
-            callback: (params) =>
-                logData({
-                    title: "Copied invitation",
-                    data: params,
-                    type: "info",
-                    timeStamp: true,
-                    layer: "access_user_hardware",
-                }),
-            text,
-        });
-    };
 
     useEffect(() => {
         const unmountListenEvent = listenPeerToggledCamera({
@@ -139,47 +116,30 @@ const Room: FC = () => {
 
     return (
         <Container maxWidth="xl" sx={roomContainerStyles}>
-            <Grid container sx={roomGridContainerStyles}>
+            <Grid
+                container
+                sx={{
+                    height: "100vh",
+                    display: "flex",
+                    verticalAlign: "center",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    paddingTop: "2rem",
+                }}
+            >
                 <Grid
                     size={{
-                        xs: 12,
-                        md: 9,
+                        md: 12,
+                        lg: 9,
                     }}
-                    sx={roomMainContentStyles}
+                    sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 2,
+                    }}
                 >
+                    <RoomControls />
                     <GlassContainer width={"100%"}>
-                        <Typography variant="h3" component="h1" gutterBottom>
-                            Room page
-                        </Typography>
-                        <Grid container spacing={2} direction="row" width="50%">
-                            <Grid
-                                size={6}
-                                display="flex"
-                                justifyContent="center"
-                            >
-                                <GlassButton onClick={handleCopy}>
-                                    Compartir sala
-                                </GlassButton>
-                            </Grid>
-                            <Grid
-                                size={6}
-                                display="flex"
-                                justifyContent="center"
-                            >
-                                <CreatePoll />
-                            </Grid>
-                        </Grid>
-
-                        <RoomPasswordUpdate
-                            imRoomOwner={room.imRoomOwner}
-                            password={room.password}
-                            roomId={room.id}
-                            peerId={room.myId}
-                        />
-                        <ScreenPlayer
-                            remoteScreen={remoteScreen}
-                            me={peerConnection}
-                        />
                         <GlassContainer
                             height={"auto"}
                             width={"100%"}
@@ -199,12 +159,16 @@ const Room: FC = () => {
                                 ))}
                             </>
                         </GlassContainer>
+                        <ScreenPlayer
+                            remoteScreen={remoteScreen}
+                            me={peerConnection}
+                        />
                     </GlassContainer>
                 </Grid>
                 <Grid
                     size={{
-                        xs: 12,
-                        md: 3,
+                        md: 12,
+                        lg: 3,
                     }}
                     sx={roomChatSectionStyles}
                 >

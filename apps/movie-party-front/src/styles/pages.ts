@@ -1,27 +1,11 @@
 import type { SxProps, Theme } from "@mui/material/styles";
 
-// Room page styles
 export const roomContainerStyles: SxProps<Theme> = {
-    height: "100vh",
     color: "white",
     padding: 0,
 };
 
-export const roomGridContainerStyles: SxProps<Theme> = {
-    height: "100vh",
-};
-
-export const roomMainContentStyles: SxProps<Theme> = {
-    overflowY: "auto",
-    height: "100vh",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-};
-
 export const roomChatSectionStyles: SxProps<Theme> = {
-    height: "100vh",
     display: "flex",
     flexDirection: "column",
     padding: "24px",
@@ -41,4 +25,3 @@ export const peerVideosContainerStyles: SxProps<Theme> = {
     flexWrap: "wrap",
     justifyContent: "center",
 };
-// End of room page styles
