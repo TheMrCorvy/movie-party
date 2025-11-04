@@ -6,7 +6,6 @@ import KeyIcon from "@mui/icons-material/Key";
 import KeyOffIcon from "@mui/icons-material/KeyOff";
 import GlassInput from "../GlassInput";
 import styles from "./styles";
-import { CSSProperties } from "@mui/material/styles";
 import useRoomPasswordUpdate from "./useRoomPasswordUpdate";
 
 export interface RoomPasswordUpdateProps {

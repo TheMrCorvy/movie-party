@@ -1,10 +1,8 @@
 import { Outlet } from "react-router-dom";
 import { Box } from "@mui/material";
 import { type FC, useEffect, useRef } from "react";
-import ThemeSwitcher from "../ThemeSwitcher";
 import useLayout from "./useLayout";
 import { useBackground } from "../../context/BackgroundImageContext";
-import { BackgroundImageInput } from "../RoomControls";
 
 export const Layout: FC = () => {
     const { background, patternClass } = useBackground();
@@ -52,8 +50,6 @@ export const Layout: FC = () => {
 
     return (
         <Box sx={{ display: "flex", flexDirection: "column" }}>
-            {/* <ThemeSwitcher /> */}
-            {/* <BackgroundImageInput /> */}
             <Outlet />
         </Box>
     );
