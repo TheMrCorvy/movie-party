@@ -26,8 +26,13 @@ export interface Room {
     participants: Participant[];
     screenSharing?: MediaStream;
     peerSharingScreen: string; //id of the peer
+    hasCustomBg?: RoomBackground;
 }
 
+export interface RoomBackground {
+    isCssPattern: boolean;
+    src: string;
+}
 export interface ServerRoom extends Room {
     password?: string;
     roomOwner: string; // The id of the participant who created the room

@@ -31,3 +31,15 @@ export interface PollOption {
     id: string;
     value: string;
 }
+
+export enum PatternClass {
+    ANAMA = "anama",
+    SQUIGLY = "squigly",
+    WAVES = "waves",
+    STARS = "stars",
+    CLOUDS = "clouds",
+    CLASSIC = "classic",
+    CUBES = "cubes",
+    MATERIAL = "material",
+    BRICKS = "bricks",
+}

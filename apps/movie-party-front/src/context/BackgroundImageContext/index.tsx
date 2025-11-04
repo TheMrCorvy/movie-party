@@ -1,5 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 
+import { PatternClass } from "@repo/type-definitions";
 import {
     createContext,
     useReducer,
@@ -7,18 +8,6 @@ import {
     ReactNode,
     Dispatch,
 } from "react";
-
-export enum PatternClass {
-    ANAMA = "anama",
-    SQUIGLY = "squigly",
-    WAVES = "waves",
-    STARS = "stars",
-    CLOUDS = "clouds",
-    CLASSIC = "classic",
-    CUBES = "cubes",
-    MATERIAL = "material",
-    BRICKS = "bricks",
-}
 
 export type State = {
     background: string | null;

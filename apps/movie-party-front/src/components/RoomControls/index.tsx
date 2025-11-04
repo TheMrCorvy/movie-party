@@ -1,8 +1,6 @@
 import React, { useRef } from "react";
-import {
-    useBackground,
-    PatternClass,
-} from "../../context/BackgroundImageContext";
+import { useBackground } from "../../context/BackgroundImageContext";
+import { PatternClass } from "@repo/type-definitions";
 import GlassButton from "../GlassButton";
 import GlassContainer from "../GlassContainer";
 import BackgroundPatternPicker from "../BackgroundPatternPicker";
@@ -121,26 +119,28 @@ const RoomControls = () => {
                         Resetear fondo de pantalla
                     </GlassButton>
                 </Grid>
-                <Grid
-                    size={{
-                        md: 6,
-                        lg: 4,
-                        xl: 3,
-                    }}
-                    sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        flexDirection: "column",
-                    }}
-                >
-                    <RoomPasswordUpdate
-                        imRoomOwner={room.imRoomOwner}
-                        password={room.password}
-                        roomId={room.id}
-                        peerId={room.myId}
-                    />
-                </Grid>
+                {room.imRoomOwner && (
+                    <Grid
+                        size={{
+                            md: 6,
+                            lg: 4,
+                            xl: 3,
+                        }}
+                        sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            flexDirection: "column",
+                        }}
+                    >
+                        <RoomPasswordUpdate
+                            imRoomOwner={room.imRoomOwner}
+                            password={room.password}
+                            roomId={room.id}
+                            peerId={room.myId}
+                        />
+                    </Grid>
+                )}
                 <Grid
                     size={{
                         md: 6,

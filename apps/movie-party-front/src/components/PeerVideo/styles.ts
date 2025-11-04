@@ -39,7 +39,6 @@ const styles: StylesService = () => {
             backdropFilter: backdropFilter,
             backgroundColor: lightThemeLighterBg,
             border: `1px solid ${lightThemeLighterBg}`,
-            boxShadow: "0 8px 32px 0 rgba(0, 0, 0, 0.2)",
             width: "200px",
         },
     };
