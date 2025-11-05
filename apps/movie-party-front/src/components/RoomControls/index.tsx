@@ -1,5 +1,4 @@
 import React, { useRef } from "react";
-import { useBackground } from "../../context/BackgroundImageContext";
 import { PatternClass } from "@repo/type-definitions";
 import GlassButton from "../GlassButton";
 import GlassContainer from "../GlassContainer";
@@ -12,13 +11,15 @@ import { Grid } from "@mui/material";
 import CreatePoll from "../CreatePoll";
 import { copyToClipboard } from "../../utils/accessUserHardware";
 import { logData } from "@repo/shared-utils/log-data";
-import { uploadRoomBackground } from "../../services/roomBackgroundService";
+import {
+    sendBackgroundPattern,
+    uploadRoomBackground,
+} from "../../services/roomBackgroundService";
 
 const RoomControls = () => {
-    const { dispatch } = useBackground();
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const { room } = useRoom();
+    const { room, ws } = useRoom();
 
     const handleFileChange = async (
         event: React.ChangeEvent<HTMLInputElement>
@@ -43,8 +44,12 @@ const RoomControls = () => {
     };
 
     const handleReset = () => {
-        dispatch({ type: "SET_BACKGROUND", payload: null });
-        dispatch({ type: "SET_PATTERN", payload: PatternClass.CUBES });
+        sendBackgroundPattern({
+            ws,
+            roomId: room.id,
+            peerId: room.myId,
+            pattern: PatternClass.CUBES,
+        });
         if (fileInputRef.current) {
             fileInputRef.current.value = "";
         }

@@ -2,9 +2,12 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useRoom } from "../../context/RoomContext/RoomContextProvider";
 import { updateParticipantsService } from "../../services/updateParticipantsService";
+import { listenBackgroundUpdates } from "../../services/roomBackgroundService";
 import { ActionTypes } from "../../context/RoomContext/roomActions";
 import { roomWasCreated } from "../../services/createRoomService";
 import { logData } from "@repo/shared-utils/log-data";
+import { useBackground } from "../../context/BackgroundImageContext";
+import { PatternClass } from "@repo/type-definitions";
 
 export interface UseLayoutPops {
     pageIsRoom: boolean;
@@ -13,30 +16,9 @@ export interface UseLayoutPops {
 const useLayout = ({ pageIsRoom }: UseLayoutPops) => {
     const { room, ws, dispatch } = useRoom();
     const navigate = useNavigate();
+    const { dispatch: backgroundDispatch } = useBackground();
 
     useEffect(() => {
-        const roomWasCreatedEvent = roomWasCreated({
-            ws,
-            callback: (params) => {
-                logData({
-                    title: "Room was created",
-                    data: params,
-                    timeStamp: true,
-                    type: "info",
-                    layer: "room_ws",
-                });
-                dispatch({
-                    type: ActionTypes.SET_ROOM,
-                    payload: {
-                        ...params.room,
-                        myId: params.room.participants[0].id,
-                        imRoomOwner: true,
-                        password: params.password,
-                    },
-                });
-            },
-        });
-
         const updateParticipantsEvent = updateParticipantsService({
             ws,
             callback: (params) => {
@@ -92,9 +74,71 @@ const useLayout = ({ pageIsRoom }: UseLayoutPops) => {
 
         return () => {
             updateParticipantsEvent();
-            roomWasCreatedEvent();
         };
     }, [ws, dispatch, room.id, room.myId, pageIsRoom]);
+
+    useEffect(() => {
+        const roomWasCreatedEvent = roomWasCreated({
+            ws,
+            callback: (params) => {
+                logData({
+                    title: "Room was created",
+                    data: params,
+                    timeStamp: true,
+                    type: "info",
+                    layer: "room_ws",
+                });
+                dispatch({
+                    type: ActionTypes.SET_ROOM,
+                    payload: {
+                        ...params.room,
+                        myId: params.room.participants[0].id,
+                        imRoomOwner: true,
+                        password: params.password,
+                    },
+                });
+            },
+        });
+
+        return () => {
+            roomWasCreatedEvent();
+        };
+    }, [dispatch, ws]);
+
+    useEffect(() => {
+        const unmountBackgroundUpdated = listenBackgroundUpdates({
+            ws,
+            callback: (params) => {
+                if (!room.id) return;
+
+                logData({
+                    title: "Background updated",
+                    data: params,
+                    timeStamp: true,
+                    type: "info",
+                    layer: "room_ws",
+                });
+
+                if (params.background.isCssPattern) {
+                    backgroundDispatch({
+                        type: "SET_PATTERN",
+                        payload: params.background.src as PatternClass,
+                    });
+
+                    return;
+                }
+
+                backgroundDispatch({
+                    type: "SET_BACKGROUND",
+                    payload: `http://localhost:4000${params.background.src}`,
+                });
+            },
+        });
+
+        return () => {
+            unmountBackgroundUpdated();
+        };
+    }, [ws, dispatch, room, backgroundDispatch]);
 
     useEffect(() => {
         const imInTheRoom = room.participants.find(

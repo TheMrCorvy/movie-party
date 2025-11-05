@@ -1,8 +1,21 @@
 import React from "react";
 import { useBackground, patterns } from "../../context/BackgroundImageContext";
+import { sendBackgroundPattern } from "../../services/roomBackgroundService";
+import { PatternClass } from "@repo/type-definitions";
+import { useRoom } from "../../context/RoomContext/RoomContextProvider";
 
 export const BackgroundPatternPicker: React.FC = () => {
-    const { patternClass, dispatch } = useBackground();
+    const { patternClass } = useBackground();
+    const { room, ws } = useRoom();
+
+    const setBackground = (p: PatternClass) => {
+        sendBackgroundPattern({
+            ws,
+            roomId: room.id,
+            peerId: room.myId,
+            pattern: p,
+        });
+    };
 
     return (
         <div style={{ marginBottom: 8, textAlign: "center" }}>
@@ -25,14 +38,11 @@ export const BackgroundPatternPicker: React.FC = () => {
             >
                 {patterns.map((p, idx) => {
                     const key = `${String(p)}-${idx}`;
-                    // Only mark selected when a patternClass is set (no default selection)
                     const selected = !!patternClass && patternClass === p;
                     return (
                         <button
                             key={key}
-                            onClick={() =>
-                                dispatch({ type: "SET_PATTERN", payload: p })
-                            }
+                            onClick={() => setBackground(p)}
                             aria-pressed={selected}
                             title={String(p)}
                             style={{
