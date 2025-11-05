@@ -18,6 +18,7 @@ export enum Signals {
     "CREATE_POLL" = "CREATE_POLL",
     "POLL_UPDATED" = "POLL_UPDATED",
     "VOTE_IN_POLL" = "VOTE_IN_POLL",
+    "BACKGROUND_UPDATED" = "BACKGROUND_UPDATED",
 }
 
 export interface Room {
@@ -61,6 +62,7 @@ export interface UpdateParticipantsWsCallback {
     participants: Participant[];
     messages: MessageWithIndex[];
     peerSharingScreen: string;
+    hasCustomBg?: RoomBackground;
 }
 
 export interface LeaveRoomWsParams {
@@ -75,6 +77,7 @@ export interface RoomExistsWsParams {
 export interface RoomExistsWsCallbackParams {
     roomExists: boolean;
     password: boolean;
+    hasCustomBg?: RoomBackground;
 }
 
 export interface MessagesWsParams {
@@ -96,6 +99,16 @@ export interface CreatePollWsParams {
 
 export interface PollUpdatedWsParams {
     poll: Poll;
+}
+
+export interface BackgroundUpdatedWsParams {
+    roomId: string;
+    peerId: string;
+    background: RoomBackground;
+}
+
+export interface BackgroundUpdatedWsCallbackParams {
+    background: RoomBackground;
 }
 
 export interface VoteWsParams {
