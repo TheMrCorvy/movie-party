@@ -69,6 +69,7 @@ export const enterRoom: EnterRoom = async ({
         participants: room.participants,
         messages: room.messages,
         peerSharingScreen: room.peerSharingScreen,
+        hasCustomBg: room.hasCustomBg,
     };
 
     const newMessage: MessageWithIndex = {

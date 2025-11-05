@@ -10,6 +10,8 @@ import {
 import { logData } from "@repo/shared-utils/log-data";
 import { MessageWithIndex, Poll } from "@repo/type-definitions";
 import { generateId } from "@repo/shared-utils";
+import path from "path";
+import fs from "fs";
 
 export interface LeaveRoomParams extends LeaveRoomWsParams {
     rooms: Room[];
@@ -20,7 +22,7 @@ export interface LeaveRoomParams extends LeaveRoomWsParams {
 export type LeaveRoom = (params: LeaveRoomParams) => void;
 
 export const leaveRoom: LeaveRoom = ({ peerId, roomId, rooms, io, socket }) => {
-    const room = rooms.find((room) => room.id === room.id);
+    const room = rooms.find((room) => room.id === roomId);
     const roomIndex = rooms.findIndex((room) => room.id === roomId);
     if (!room || roomIndex === -1) {
         logData({
@@ -48,8 +50,59 @@ export const leaveRoom: LeaveRoom = ({ peerId, roomId, rooms, io, socket }) => {
         (participant) => participant.id !== peerId
     );
 
-    if (room?.participants.length === 0) {
-        rooms = rooms.filter((room) => room.id !== roomId);
+    if (room.participants.length === 0) {
+        try {
+            const bg = room.hasCustomBg;
+            if (bg && !bg.isCssPattern) {
+                const assetsPath = path.join(__dirname, "../assets");
+                if (fs.existsSync(assetsPath)) {
+                    const files = fs.readdirSync(assetsPath);
+                    const match = files.find(
+                        (f) => f.startsWith(roomId + ".") || f === roomId
+                    );
+                    if (match) {
+                        const fileToDelete = path.join(assetsPath, match);
+                        try {
+                            fs.unlinkSync(fileToDelete);
+                            logData({
+                                title: "Deleted room background image from disk",
+                                layer: "room_ws",
+                                type: "info",
+                                timeStamp: true,
+                                addSpaceAfter: true,
+                                data: fileToDelete,
+                            });
+                        } catch (err) {
+                            logData({
+                                title: "Failed to delete room background image",
+                                layer: "room_ws",
+                                type: "error",
+                                timeStamp: true,
+                                addSpaceAfter: true,
+                                data: { err, file: fileToDelete },
+                            });
+                        }
+                    }
+                }
+            }
+        } catch (err) {
+            logData({
+                title: "Error while trying to remove room background",
+                layer: "room_ws",
+                type: "error",
+                timeStamp: true,
+                addSpaceAfter: true,
+                data: err,
+            });
+        }
+
+        if (roomIndex !== -1) {
+            rooms.splice(roomIndex, 1);
+        } else {
+            const idx = rooms.findIndex((r) => r.id === roomId);
+            if (idx !== -1) rooms.splice(idx, 1);
+        }
+
         logData({
             title: "Deleted empty room",
             layer: "room_ws",
@@ -61,6 +114,7 @@ export const leaveRoom: LeaveRoom = ({ peerId, roomId, rooms, io, socket }) => {
                 peerId,
             },
         });
+
         return;
     }
 

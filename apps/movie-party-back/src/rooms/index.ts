@@ -10,6 +10,7 @@ import { shareScreen } from "./shareScreen";
 import { logData } from "@repo/shared-utils/log-data";
 import { createPoll } from "./createPoll";
 import { voteInPoll } from "./voteInPoll";
+import { updateBackground } from "./updateBackground";
 
 export interface RoomHandlerParams {
     socket: Socket;
@@ -73,5 +74,8 @@ export const roomHandler: RoomHandler = ({ socket, io, rooms }) => {
             pollId,
             optionId,
         })
+    );
+    socket.on(Signals.BACKGROUND_UPDATED, ({ roomId, peerId, background }) =>
+        updateBackground({ roomId, peerId, background, rooms, io, socket })
     );
 };

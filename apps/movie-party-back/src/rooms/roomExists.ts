@@ -16,10 +16,12 @@ export const roomExists = ({ roomId, rooms, io }: RoomExistsParams) => {
     const callbackParams: RoomExistsWsCallbackParams = {
         roomExists: true,
         password: false,
+        hasCustomBg: undefined,
     };
 
     if (room) {
         callbackParams.password = room.password ? true : false;
+        callbackParams.hasCustomBg = room.hasCustomBg;
         io.emit(Signals.ROOM_EXISTS, callbackParams);
         logData({
             layer: "room_ws",
