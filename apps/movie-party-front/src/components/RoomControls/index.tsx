@@ -12,6 +12,7 @@ import { Grid } from "@mui/material";
 import CreatePoll from "../CreatePoll";
 import { copyToClipboard } from "../../utils/accessUserHardware";
 import { logData } from "@repo/shared-utils/log-data";
+import { uploadRoomBackground } from "../../services/roomBackgroundService";
 
 const RoomControls = () => {
     const { dispatch } = useBackground();
@@ -19,19 +20,25 @@ const RoomControls = () => {
 
     const { room } = useRoom();
 
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileChange = async (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => {
         const file = event.target.files?.[0];
         if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                if (e.target?.result) {
-                    dispatch({
-                        type: "SET_BACKGROUND",
-                        payload: e.target.result as string,
-                    });
-                }
-            };
-            reader.readAsDataURL(file);
+            try {
+                await uploadRoomBackground({
+                    file,
+                    roomId: room.id,
+                    peerId: room.myId,
+                });
+            } catch (error) {
+                logData({
+                    type: "error",
+                    data: error,
+                    timeStamp: true,
+                    layer: "access_user_hardware",
+                });
+            }
         }
     };
 
