@@ -9,9 +9,12 @@ import { ActionTypes } from "../../context/RoomContext/roomActions";
 import { logData } from "@repo/shared-utils/log-data";
 import { RoomExistsWsCallbackParams } from "@repo/type-definitions/rooms";
 import { useNavigate } from "react-router-dom";
+import { useBackground } from "../../context/BackgroundImageContext";
+import { PatternClass } from "@repo/type-definitions";
 
 const useJoinRoom = () => {
     const { ws, dispatch } = useRoom();
+    const { dispatch: backgroundDispatch } = useBackground();
     const { roomId } = useParams();
     const navigate = useNavigate();
 
@@ -55,6 +58,20 @@ const useJoinRoom = () => {
                 imRoomOwner: false,
             },
         });
+
+        if (params.hasCustomBg && params.hasCustomBg.src) {
+            if (params.hasCustomBg.isCssPattern) {
+                backgroundDispatch({
+                    type: "SET_PATTERN",
+                    payload: params.hasCustomBg.src as PatternClass,
+                });
+            } else {
+                backgroundDispatch({
+                    type: "SET_BACKGROUND",
+                    payload: `http://localhost:4000${params.hasCustomBg.src}`,
+                });
+            }
+        }
     };
 
     useEffect(() => {
