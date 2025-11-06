@@ -6,7 +6,6 @@ import { stringIsEmpty } from "@repo/shared-utils";
 import { verifyPassword } from "../utils/passwordVerification";
 import { enterRoom } from "../rooms/enterRoom";
 import { Socket } from "socket.io";
-import { log } from "console";
 
 interface VerifyPasswordEndpointParams {
     password?: string;
