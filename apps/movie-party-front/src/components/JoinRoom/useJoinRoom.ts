@@ -59,19 +59,23 @@ const useJoinRoom = () => {
             },
         });
 
-        if (params.hasCustomBg && params.hasCustomBg.src) {
-            if (params.hasCustomBg.isCssPattern) {
-                backgroundDispatch({
-                    type: "SET_PATTERN",
-                    payload: params.hasCustomBg.src as PatternClass,
-                });
-            } else {
-                backgroundDispatch({
-                    type: "SET_BACKGROUND",
-                    payload: `http://localhost:4000${params.hasCustomBg.src}`,
-                });
-            }
+        if (!params.hasCustomBg || !params.hasCustomBg.src) {
+            return;
         }
+
+        if (params.hasCustomBg.isCssPattern) {
+            backgroundDispatch({
+                type: "SET_PATTERN",
+                payload: params.hasCustomBg.src as PatternClass,
+            });
+
+            return;
+        }
+
+        backgroundDispatch({
+            type: "SET_BACKGROUND",
+            payload: `http://localhost:4000${params.hasCustomBg.src}`,
+        });
     };
 
     useEffect(() => {

@@ -3,7 +3,6 @@ import { ChangeEvent, FC } from "react";
 import GlassButton from "../GlassButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import KeyIcon from "@mui/icons-material/Key";
-import KeyOffIcon from "@mui/icons-material/KeyOff";
 import GlassInput from "../GlassInput";
 import styles from "./styles";
 import useRoomPasswordUpdate from "./useRoomPasswordUpdate";
@@ -73,7 +72,7 @@ const RoomPasswordUpdate: FC<RoomPasswordUpdateProps> = ({
                         variant="icon-btn"
                         onClick={() => sendUpdatedPassword(newPassword)}
                     >
-                        {roomHasPassword ? <KeyOffIcon /> : <KeyIcon />}
+                        <KeyIcon />
                     </GlassButton>
                 </Grid>
             </Grid>
