@@ -8,6 +8,9 @@ import { roomWasCreated } from "../../services/createRoomService";
 import { logData } from "@repo/shared-utils/log-data";
 import { useBackground } from "../../context/BackgroundImageContext";
 import { PatternClass } from "@repo/type-definitions";
+import useNotificationSound, {
+    NotificationSounds,
+} from "../../hooks/useNotificationSound";
 
 export interface UseLayoutPops {
     pageIsRoom: boolean;
@@ -17,6 +20,7 @@ const useLayout = ({ pageIsRoom }: UseLayoutPops) => {
     const { room, ws, dispatch } = useRoom();
     const navigate = useNavigate();
     const { dispatch: backgroundDispatch } = useBackground();
+    const { playSound } = useNotificationSound();
 
     useEffect(() => {
         const updateParticipantsEvent = updateParticipantsService({
@@ -34,6 +38,13 @@ const useLayout = ({ pageIsRoom }: UseLayoutPops) => {
                         type: ActionTypes.UPDATE_PARTICIPANTS,
                         payload: params.participants,
                     });
+
+                    if (
+                        params.participants.length > room.participants.length &&
+                        !room.participants.find((p) => p.id === room.myId)
+                    ) {
+                        playSound({ filename: NotificationSounds.PEER_LEFT });
+                    }
                     return;
                 }
 
@@ -55,6 +66,7 @@ const useLayout = ({ pageIsRoom }: UseLayoutPops) => {
                             peerSharingScreen: params.peerSharingScreen,
                         },
                     });
+
                     return;
                 }
 
@@ -75,7 +87,15 @@ const useLayout = ({ pageIsRoom }: UseLayoutPops) => {
         return () => {
             updateParticipantsEvent();
         };
-    }, [ws, dispatch, room.id, room.myId, pageIsRoom]);
+    }, [
+        ws,
+        dispatch,
+        room.id,
+        room.myId,
+        pageIsRoom,
+        playSound,
+        room.participants.length,
+    ]);
 
     useEffect(() => {
         const roomWasCreatedEvent = roomWasCreated({
@@ -160,11 +180,13 @@ const useLayout = ({ pageIsRoom }: UseLayoutPops) => {
                 type: "info",
                 layer: "room_ws",
             });
+            playSound({ filename: NotificationSounds.ENTERING_ROOM });
             navigate("/room/" + room.id);
             return;
         }
 
         if (pageIsRoom && !imInTheRoom) {
+            playSound({ filename: NotificationSounds.LEFT_THE_ROOM });
             navigate("/not-found");
         }
 
@@ -175,7 +197,7 @@ const useLayout = ({ pageIsRoom }: UseLayoutPops) => {
             type: "info",
             layer: "room_ws",
         });
-    }, [room, navigate, pageIsRoom]);
+    }, [room, navigate, pageIsRoom, playSound]);
 };
 
 export default useLayout;

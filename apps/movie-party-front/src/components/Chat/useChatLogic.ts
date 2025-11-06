@@ -15,12 +15,17 @@ import {
 } from "../../services/messagesService";
 import { ActionTypes } from "../../context/RoomContext/roomActions";
 import { logData } from "@repo/shared-utils/log-data";
+import useNotificationSound, {
+    NotificationSounds,
+} from "../../hooks/useNotificationSound";
 
 export const useChatLogic = () => {
     const { ws, room, dispatch } = useRoom();
     const [messageInput, setMessageInput] = useState("");
     const listRef = useRef<HTMLUListElement>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
+
+    const { playSound } = useNotificationSound();
 
     useEffect(() => {
         const unmountMessageReceived = messageReceivedService({
@@ -37,13 +42,14 @@ export const useChatLogic = () => {
                     type: ActionTypes.MESSAGE_RECEIVED,
                     payload: messageReceived,
                 });
+                playSound({ filename: NotificationSounds.MESSAGE_RECEIVED });
             },
         });
 
         return () => {
             unmountMessageReceived();
         };
-    }, [ws, dispatch]);
+    }, [ws, dispatch, playSound]);
 
     useEffect(() => {
         if (messagesEndRef.current) {

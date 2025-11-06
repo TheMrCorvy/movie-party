@@ -13,6 +13,10 @@ import { startCall } from "../../services/callsService";
 import fakeTimeout from "../../utils/fakeTimeout";
 import { getUserCamera, stopAllTracks } from "../../utils/accessUserHardware";
 import { logData } from "@repo/shared-utils/log-data";
+import PhoneDisabledIcon from "@mui/icons-material/PhoneDisabled";
+import useNotificationSound, {
+    NotificationSounds,
+} from "../../hooks/useNotificationSound";
 
 interface PeerVideoProps {
     stream?: MediaStream | null;
@@ -33,6 +37,7 @@ const PeerVideo: FC<PeerVideoProps> = ({
     const otherParticipants = [...room.participants].filter(
         (participant) => participant.id !== room.myId
     );
+    const { playSound } = useNotificationSound();
 
     useEffect(() => {
         logData({
@@ -127,6 +132,22 @@ const PeerVideo: FC<PeerVideoProps> = ({
         }
     };
 
+    const endCall = async () => {
+        stopAllTracks(stream);
+        setCameraIsOn(false);
+        emitToggleCamera({
+            roomId: room.id,
+            peerId: room.myId,
+            cameraStatus: false,
+            ws,
+        });
+        playSound({
+            filename: NotificationSounds.LEFT_THE_ROOM,
+        });
+        await fakeTimeout(1000);
+        window.location.href = "/";
+    };
+
     return (
         <Box sx={videoContainerStyles}>
             {stream && (
@@ -145,9 +166,23 @@ const PeerVideo: FC<PeerVideoProps> = ({
                     {peerName}
                 </Typography>
                 {isMyCamera && (
-                    <GlassButton variant="icon-btn" onClick={toggleCamera}>
-                        {cameraIsOn ? <VideocamOffIcon /> : <VideocamIcon />}
-                    </GlassButton>
+                    <div
+                        style={{
+                            display: "flex",
+                            gap: "8px",
+                        }}
+                    >
+                        <GlassButton variant="icon-btn" onClick={toggleCamera}>
+                            {cameraIsOn ? (
+                                <VideocamOffIcon />
+                            ) : (
+                                <VideocamIcon />
+                            )}
+                        </GlassButton>
+                        <GlassButton variant="icon-btn" onClick={endCall}>
+                            <PhoneDisabledIcon />
+                        </GlassButton>
+                    </div>
                 )}
             </Box>
         </Box>
