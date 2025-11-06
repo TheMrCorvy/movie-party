@@ -6,6 +6,7 @@ import { stringIsEmpty } from "@repo/shared-utils";
 import { verifyPassword } from "../utils/passwordVerification";
 import { enterRoom } from "../rooms/enterRoom";
 import { Socket } from "socket.io";
+import { log } from "console";
 
 interface VerifyPasswordEndpointParams {
     password?: string;
@@ -14,7 +15,7 @@ interface VerifyPasswordEndpointParams {
     peerName: string;
 }
 
-export const verifyRoomPassword = (
+export const verifyRoomPassword = async (
     req: Request,
     res: Response,
     rooms: ServerRoom[],
@@ -53,10 +54,23 @@ export const verifyRoomPassword = (
     }
 
     if (room.password) {
-        const passwordIsCorrect = verifyPassword(
+        const passwordIsCorrect = await verifyPassword(
             reqBody.password || "",
             room.password
         );
+
+        logData({
+            layer: "room_ws",
+            title: "Password Verification Result",
+            type: "info",
+            timeStamp: true,
+            data: {
+                providedPassword: reqBody.password || "",
+                roomPasswordHash: room.password,
+                passwordIsCorrect,
+            },
+            addSpaceAfter: true,
+        });
 
         if (!passwordIsCorrect) {
             return res.status(400).send({
