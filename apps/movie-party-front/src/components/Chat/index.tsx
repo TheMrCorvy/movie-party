@@ -66,6 +66,7 @@ const Chat: FC = () => {
                         ...message,
                         peerName: message.poll.title,
                         message: messageBody,
+                        peerId: message.poll.id,
                     }}
                     myId={myId}
                 />
