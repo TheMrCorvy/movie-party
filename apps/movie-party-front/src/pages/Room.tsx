@@ -124,7 +124,7 @@ const Room: FC = () => {
                     verticalAlign: "center",
                     justifyContent: "center",
                     alignItems: "center",
-                    paddingTop: "2rem",
+                    paddingTop: "1rem",
                 }}
             >
                 <Grid
@@ -162,6 +162,7 @@ const Room: FC = () => {
                         <ScreenPlayer
                             remoteScreen={remoteScreen}
                             me={peerConnection}
+                            clearRemoteScreen={() => setremoteScreen(null)}
                         />
                     </GlassContainer>
                 </Grid>

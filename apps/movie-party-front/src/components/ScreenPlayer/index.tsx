@@ -2,7 +2,10 @@ import { useEffect, useRef, useState, type FC } from "react";
 import GlassButton from "../GlassButton";
 import { useRoom } from "../../context/RoomContext/RoomContextProvider";
 import { ActionTypes } from "../../context/RoomContext/roomActions";
-import { screenShareServcie } from "../../services/screenSharingService";
+import {
+    listenScreenShareService,
+    screenShareServcie,
+} from "../../services/screenSharingService";
 import { getUserScreen, stopAllTracks } from "../../utils/accessUserHardware";
 import Peer from "peerjs";
 import { startCall } from "../../services/callsService";
@@ -11,9 +14,14 @@ import { logData } from "@repo/shared-utils/log-data";
 export interface ScreenPlayerProps {
     me: Peer;
     remoteScreen?: MediaStream | null;
+    clearRemoteScreen: () => void;
 }
 
-const ScreenPlayer: FC<ScreenPlayerProps> = ({ me, remoteScreen }) => {
+const ScreenPlayer: FC<ScreenPlayerProps> = ({
+    me,
+    remoteScreen,
+    clearRemoteScreen,
+}) => {
     const { room, dispatch, ws } = useRoom();
     const [screenStream, setScreenStream] = useState<MediaStream>();
     const videoref = useRef<HTMLVideoElement>(null);
@@ -59,6 +67,12 @@ const ScreenPlayer: FC<ScreenPlayerProps> = ({ me, remoteScreen }) => {
                 type: "info",
                 data: remoteScreen,
             });
+            screenShareServcie({
+                roomId: room.id,
+                peerId: room.myId,
+                ws,
+                status: false,
+            });
             return;
         }
 
@@ -103,10 +117,17 @@ const ScreenPlayer: FC<ScreenPlayerProps> = ({ me, remoteScreen }) => {
             stream: displayStream,
             streamType: "screen",
         });
+
+        screenShareServcie({
+            roomId: room.id,
+            peerId: room.myId,
+            ws,
+            status: true,
+        });
     };
 
     useEffect(() => {
-        const removeScreenSharingEventListener = screenShareServcie({
+        const removeScreenSharingEventListener = listenScreenShareService({
             roomId: room.id,
             peerId: room.myId,
             ws,
@@ -126,9 +147,11 @@ const ScreenPlayer: FC<ScreenPlayerProps> = ({ me, remoteScreen }) => {
                     type: ActionTypes.TOGGLE_SCREEN_SHARING,
                     payload: params.status ? params.peerId : "",
                 });
+                if (!params.status) {
+                    clearRemoteScreen();
+                }
             },
         });
-
         return () => {
             removeScreenSharingEventListener();
         };
