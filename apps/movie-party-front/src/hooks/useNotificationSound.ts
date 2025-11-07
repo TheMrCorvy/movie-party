@@ -1,3 +1,7 @@
+import {
+    FeatureNames,
+    isFeatureFlagEnabled,
+} from "@repo/shared-utils/feature-flags";
 import { logData } from "@repo/shared-utils/log-data";
 import { useCallback } from "react";
 
@@ -16,6 +20,13 @@ export interface PlaySoundParams {
 
 const useNotificationSound = () => {
     const playSound = useCallback((params: PlaySoundParams) => {
+        if (!isFeatureFlagEnabled(FeatureNames.PLAY_SOUNDS)) {
+            if (params?.callback) {
+                params.callback();
+            }
+
+            return;
+        }
         const audioUrl = new URL(
             `../assets/${params.filename}.mp3`,
             import.meta.url

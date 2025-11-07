@@ -2,6 +2,7 @@ export enum FeatureNames {
     "CONSOLE_LOG_ALL_LAYERS" = "CONSOLE_LOG_ALL_LAYERS",
     "CONSOLE_LOG_LAYER_SPECIFIC" = "CONSOLE_LOG_LAYER_SPECIFIC",
     "ACCESS_MICROPHONE" = "ACCESS_MICROPHONE",
+    "PLAY_SOUNDS" = "PLAY_SOUNDS",
 }
 
 export interface FeatureFlag {
