@@ -113,6 +113,9 @@ const styles: StylesService = () => {
             "&:-webkit-autofill": {
                 backgroundColor: "rgb(232, 240, 254)",
             },
+            "& .MuiFormHelperText-root": {
+                color: "rgba(255, 255, 255, 0.9) !important",
+            },
         },
     };
 };
