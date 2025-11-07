@@ -15,6 +15,7 @@ import {
     sendBackgroundPattern,
     uploadRoomBackground,
 } from "../../services/roomBackgroundService";
+import ShareIcon from "@mui/icons-material/Share";
 
 const RoomControls = () => {
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -172,7 +173,7 @@ const RoomControls = () => {
                         },
                     }}
                 >
-                    <GlassButton onClick={handleCopy}>
+                    <GlassButton onClick={handleCopy} startIcon={<ShareIcon />}>
                         Compartir sala
                     </GlassButton>
                     <CreatePoll />

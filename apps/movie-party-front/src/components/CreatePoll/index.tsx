@@ -8,6 +8,7 @@ import { generateId } from "@repo/shared-utils";
 import { PollOption } from "@repo/type-definitions";
 import { useRoom } from "../../context/RoomContext/RoomContextProvider";
 import { createPollSerice } from "../../services/pollService";
+import PollIcon from "@mui/icons-material/Poll";
 
 const CreatePoll: FC = () => {
     const [modalOpen, setModalOpen] = useState(false);
@@ -112,6 +113,7 @@ const CreatePoll: FC = () => {
             <GlassButton
                 disabled={disabledBtn}
                 onClick={() => setModalOpen(true)}
+                startIcon={<PollIcon />}
             >
                 {disabledBtn
                     ? "Ya hay una encuesta en proceso"

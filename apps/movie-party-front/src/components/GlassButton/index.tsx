@@ -10,6 +10,8 @@ export interface GlassButtonProps {
     disabled?: boolean;
     fullWidth?: boolean;
     "aria-label"?: string;
+    startIcon?: ReactNode;
+    endIcon?: ReactNode;
 }
 
 const GlassButton: FC<GlassButtonProps> = ({
@@ -20,6 +22,8 @@ const GlassButton: FC<GlassButtonProps> = ({
     disabled,
     fullWidth,
     "aria-label": ariaLabel,
+    startIcon,
+    endIcon,
 }) => {
     const { glassiconButton, glassButton } = styles();
     if (variant === "icon-btn") {
@@ -45,6 +49,8 @@ const GlassButton: FC<GlassButtonProps> = ({
                 ...glassButton,
                 border: border ? "1px solid rgba(255, 255, 255, 0.3)" : "",
             }}
+            startIcon={startIcon && startIcon}
+            endIcon={endIcon && endIcon}
         >
             {children}
         </Button>
