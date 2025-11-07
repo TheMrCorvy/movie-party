@@ -13,7 +13,6 @@ const styles: StylesService = (theme = "light") => {
             backgroundColor:
                 theme === "dark" ? darkThemeDarkerBg : lightThemeBg,
             border: borderWhite,
-            borderRadius: "20px",
             boxShadow: "0 8px 32px 0 rgba(0, 0, 0, 0.2)",
             color: "#FFFFFF",
             padding: "12px",

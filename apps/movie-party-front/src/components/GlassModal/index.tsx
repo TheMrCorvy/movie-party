@@ -3,11 +3,12 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { useTheme } from "@mui/material";
+import { Slide, useTheme } from "@mui/material";
 import styles from "./styles";
 import GlassButton from "../GlassButton";
-import type { FC, ReactNode } from "react";
+import { forwardRef, ReactElement, Ref, type FC, type ReactNode } from "react";
 import { CSSProperties } from "@mui/material/styles";
+import { TransitionProps } from "@mui/material/transitions";
 
 interface ButtonProps {
     disabled?: boolean;
@@ -30,7 +31,18 @@ export interface GlassModalProps {
     modalActions: ModalAction[];
     open: boolean;
     closeModalWithoutCallback: () => void;
+    fullScreen?: boolean;
 }
+
+const Transition = forwardRef(function Transition(
+    props: TransitionProps & {
+        children: ReactElement<any, any>;
+    },
+    ref: Ref<unknown>
+) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
+
 const GlassModal: FC<GlassModalProps> = ({
     children,
     title,
@@ -38,6 +50,7 @@ const GlassModal: FC<GlassModalProps> = ({
     modalActions,
     open,
     closeModalWithoutCallback,
+    fullScreen = false,
 }) => {
     const theme = useTheme();
     const { modal, titleClass } = styles(theme.palette.mode);
@@ -46,12 +59,19 @@ const GlassModal: FC<GlassModalProps> = ({
         <Dialog
             open={open}
             fullWidth
+            fullScreen={fullScreen}
             maxWidth="md"
             onClose={closeModalWithoutCallback}
             slotProps={{
                 paper: {
-                    style: modal as CSSProperties,
+                    style: {
+                        ...modal,
+                        borderRadius: fullScreen ? 0 : "20px",
+                    } as CSSProperties,
                 },
+            }}
+            slots={{
+                transition: Transition,
             }}
         >
             <DialogTitle>{title}</DialogTitle>
