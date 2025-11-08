@@ -36,18 +36,21 @@ const EnterRoom: FC<EnterRoomParams> = ({ roomExists, roomHasPassword }) => {
             type: "info",
         });
 
-        const res = await fetch("http://localhost:4000/room-password", {
-            method: "POST",
-            body: JSON.stringify({
-                peerId: room.myId,
-                peerName: myName,
-                password,
-                roomId: room.id,
-            }),
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
+        const res = await fetch(
+            `${process.env.BACKEND_BASE_PATH || "http://localhost:4000"}/room-password`,
+            {
+                method: "POST",
+                body: JSON.stringify({
+                    peerId: room.myId,
+                    peerName: myName,
+                    password,
+                    roomId: room.id,
+                }),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }
+        );
 
         const fullRes = await res.json();
 
