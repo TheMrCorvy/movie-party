@@ -1,4 +1,3 @@
-import React from "react";
 import { useBackground, patterns } from "../../context/BackgroundImageContext";
 import { sendBackgroundPattern } from "../../services/roomBackgroundService";
 import { PatternClass } from "@repo/type-definitions";
