@@ -3,14 +3,15 @@ import { logData } from "@repo/shared-utils/log-data";
 import { Poll, PollOption } from "@repo/type-definitions";
 import {
     PollUpdatedWsParams,
-    Room,
+    ServerRoom,
     Signals,
     VoteWsParams,
 } from "@repo/type-definitions/rooms";
 import { Server as SocketIOServer } from "socket.io";
+import roomValidation from "../utils/roomValidations";
 
 export interface VoteInPollParams extends VoteWsParams {
-    rooms: Room[];
+    rooms: ServerRoom[];
     io: SocketIOServer;
 }
 
@@ -24,9 +25,14 @@ export const voteInPoll: VoteInPoll = ({
     pollId,
     optionId,
 }) => {
-    const roomIndex = rooms.findIndex((r) => r.id === roomId);
+    const { roomIndex, roomExists, peer, room } = roomValidation({
+        rooms,
+        roomId,
+        peerShouldBeParticipant: true,
+        peerId,
+    });
 
-    if (roomIndex === -1 || !rooms[roomIndex]) {
+    if (roomIndex === -1 || !roomExists || !room) {
         io.emit(Signals.ROOM_NOT_FOUND);
         return;
     }
@@ -57,8 +63,6 @@ export const voteInPoll: VoteInPoll = ({
         return;
     }
 
-    const peer = rooms[roomIndex].participants.find((p) => p.id === peerId);
-
     if (!peer) {
         io.emit(Signals.ERROR, { message: "The peer is not in the room." });
         logData({
@@ -67,7 +71,7 @@ export const voteInPoll: VoteInPoll = ({
             addSpaceAfter: true,
             title: "Someone tried to create a Poll without being in the room",
             data: {
-                room: rooms[roomIndex],
+                room: room,
                 peerId,
                 peer,
             },
@@ -76,7 +80,7 @@ export const voteInPoll: VoteInPoll = ({
         return;
     }
 
-    const pollIndex = rooms[roomIndex].messages.findIndex(
+    const pollIndex = room.messages.findIndex(
         (po) => po.id === pollId && po.isPoll && po.poll?.status === "live"
     );
 
@@ -97,7 +101,7 @@ export const voteInPoll: VoteInPoll = ({
         return;
     }
 
-    const option = rooms[roomIndex].messages[pollIndex].poll?.options.find(
+    const option = room.messages[pollIndex].poll?.options.find(
         (op) => op.id === optionId
     );
 
@@ -127,11 +131,11 @@ export const voteInPoll: VoteInPoll = ({
         data: option,
     });
 
-    const poll = rooms[roomIndex].messages[pollIndex].poll as Poll;
+    const poll = room.messages[pollIndex].poll as Poll;
     poll.amountOfVotes++;
     (poll.options.find((po) => po.id === optionId) as PollOption).votes++;
 
-    if (rooms[roomIndex].participants.length <= poll.amountOfVotes) {
+    if (room.participants.length <= poll.amountOfVotes) {
         poll.status = "ended";
     }
 

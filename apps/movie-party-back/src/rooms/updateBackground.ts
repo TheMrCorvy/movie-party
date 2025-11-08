@@ -6,6 +6,7 @@ import {
     ServerRoom,
 } from "@repo/type-definitions/rooms";
 import { logData } from "@repo/shared-utils/log-data";
+import roomValidation from "../utils/roomValidations";
 
 export interface UpdateBackgroundParams extends BackgroundUpdatedWsParams {
     rooms: ServerRoom[];
@@ -22,17 +23,20 @@ export const updateBackground = ({
     socket,
 }: UpdateBackgroundParams) => {
     try {
-        const room = rooms.find((r) => r.id === roomId);
+        const { room, peer } = roomValidation({
+            rooms,
+            roomId,
+            peerShouldBeParticipant: true,
+            peerId,
+        });
 
         if (!room) {
             socket.emit(Signals.ROOM_NOT_FOUND);
             return;
         }
 
-        const participant = room.participants.find((p) => p.id === peerId);
-
-        if (!participant) {
-            socket.emit(Signals.ERROR, { message: "Peer not in room" });
+        if (!peer) {
+            socket.emit(Signals.ERROR, { message: "Peer not in room." });
             return;
         }
 

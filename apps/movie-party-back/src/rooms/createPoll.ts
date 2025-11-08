@@ -1,16 +1,16 @@
-import { stringIsEmpty } from "@repo/shared-utils";
 import { logData } from "@repo/shared-utils/log-data";
 import { MessageWithIndex, Poll } from "@repo/type-definitions";
 import {
     CreatePollWsParams,
     MessageReceivedWsCallbackParams,
-    Room,
+    ServerRoom,
     Signals,
 } from "@repo/type-definitions/rooms";
 import { Server as SocketIOServer } from "socket.io";
+import roomValidation from "../utils/roomValidations";
 
 export interface CreatePollParams extends CreatePollWsParams {
-    rooms: Room[];
+    rooms: ServerRoom[];
     io: SocketIOServer;
 }
 
@@ -25,36 +25,20 @@ export const createPoll: CreatePoll = ({
     title,
     io,
 }) => {
-    const roomIndex = rooms.findIndex((r) => r.id === roomId);
+    const { roomIndex, roomExists, room, peerIsParticipant, peer } =
+        roomValidation({
+            roomId,
+            rooms,
+            peerShouldBeParticipant: true,
+            peerId,
+        });
 
-    if (roomIndex === -1 || !rooms[roomIndex]) {
+    if (roomIndex === -1 || !room || !roomExists) {
         io.emit(Signals.ROOM_NOT_FOUND);
         return;
     }
 
-    if (!peerId || !pollId || stringIsEmpty(peerId) || stringIsEmpty(pollId)) {
-        io.emit(Signals.ERROR, {
-            message: "Some data was corrupted or empty.",
-        });
-
-        logData({
-            type: "error",
-            layer: "poll",
-            addSpaceAfter: true,
-            timeStamp: true,
-            title: "Some data was corrupted or empty",
-            data: {
-                peerId,
-                pollId,
-            },
-        });
-
-        return;
-    }
-
-    const peer = rooms[roomIndex].participants.find((p) => p.id === peerId);
-
-    if (!peer) {
+    if (!peer || !peerIsParticipant) {
         io.emit(Signals.ERROR, { message: "The peer is not in the room." });
         logData({
             type: "error",

@@ -1,20 +1,21 @@
 import type { Socket, Server as SocketIOServer } from "socket.io";
 import {
     Signals,
-    Room,
     LeaveRoomWsParams,
     UpdateParticipantsWsCallback,
     PollUpdatedWsParams,
     MessageReceivedWsCallbackParams,
+    ServerRoom,
 } from "@repo/type-definitions/rooms";
 import { logData } from "@repo/shared-utils/log-data";
 import { MessageWithIndex, Poll } from "@repo/type-definitions";
 import { generateId } from "@repo/shared-utils";
 import path from "path";
 import fs from "fs";
+import roomValidation from "../utils/roomValidations";
 
 export interface LeaveRoomParams extends LeaveRoomWsParams {
-    rooms: Room[];
+    rooms: ServerRoom[];
     io: SocketIOServer;
     socket: Socket;
 }
@@ -22,9 +23,13 @@ export interface LeaveRoomParams extends LeaveRoomWsParams {
 export type LeaveRoom = (params: LeaveRoomParams) => void;
 
 export const leaveRoom: LeaveRoom = ({ peerId, roomId, rooms, io, socket }) => {
-    const room = rooms.find((room) => room.id === roomId);
-    const roomIndex = rooms.findIndex((room) => room.id === roomId);
-    if (!room || roomIndex === -1) {
+    const { room, roomIndex, roomExists, peer } = roomValidation({
+        rooms,
+        roomId,
+        peerShouldBeParticipant: true,
+        peerId,
+    });
+    if (!room || roomIndex === -1 || !roomExists) {
         logData({
             title: "User tryed to leave from a non existing room",
             type: "error",
@@ -43,8 +48,7 @@ export const leaveRoom: LeaveRoom = ({ peerId, roomId, rooms, io, socket }) => {
         return;
     }
 
-    const peerName =
-        room.participants.find((peer) => peer.id === peerId)?.name || "Mr. X";
+    const peerName = peer?.name || "Mr. X";
 
     room.participants = room.participants.filter(
         (participant) => participant.id !== peerId
@@ -96,12 +100,7 @@ export const leaveRoom: LeaveRoom = ({ peerId, roomId, rooms, io, socket }) => {
             });
         }
 
-        if (roomIndex !== -1) {
-            rooms.splice(roomIndex, 1);
-        } else {
-            const idx = rooms.findIndex((r) => r.id === roomId);
-            if (idx !== -1) rooms.splice(idx, 1);
-        }
+        rooms.splice(roomIndex, 1);
 
         logData({
             title: "Deleted empty room",

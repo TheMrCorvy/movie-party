@@ -6,32 +6,24 @@ import {
     Signals,
 } from "@repo/type-definitions/rooms";
 import type { Server as SocketIOServer } from "socket.io";
+import roomValidation from "../utils/roomValidations";
 
 export interface RoomExistsParams extends RoomExistsWsParams {
     io: SocketIOServer;
     rooms: ServerRoom[];
 }
 export const roomExists = ({ roomId, rooms, io }: RoomExistsParams) => {
-    const room = rooms.find((r) => r.id === roomId);
+    const { room } = roomValidation({
+        rooms,
+        roomId,
+    });
     const callbackParams: RoomExistsWsCallbackParams = {
         roomExists: true,
         password: false,
         hasCustomBg: undefined,
     };
 
-    if (room) {
-        callbackParams.password = room.password ? true : false;
-        callbackParams.hasCustomBg = room.hasCustomBg;
-        io.emit(Signals.ROOM_EXISTS, callbackParams);
-        logData({
-            layer: "room_ws",
-            type: "log",
-            title: "Room, in fact, exists",
-            timeStamp: true,
-            addSpaceAfter: true,
-            data: roomId,
-        });
-    } else {
+    if (!room) {
         callbackParams.roomExists = false;
         io.emit(Signals.ROOM_NOT_FOUND, callbackParams);
         logData({
@@ -42,5 +34,18 @@ export const roomExists = ({ roomId, rooms, io }: RoomExistsParams) => {
             addSpaceAfter: true,
             data: roomId,
         });
+        return;
     }
+
+    callbackParams.password = room.password ? true : false;
+    callbackParams.hasCustomBg = room.hasCustomBg;
+    io.emit(Signals.ROOM_EXISTS, callbackParams);
+    logData({
+        layer: "room_ws",
+        type: "log",
+        title: "Room, in fact, exists",
+        timeStamp: true,
+        addSpaceAfter: true,
+        data: roomId,
+    });
 };

@@ -6,6 +6,7 @@ import { stringIsEmpty } from "@repo/shared-utils";
 import { verifyPassword } from "../utils/passwordVerification";
 import { enterRoom } from "../rooms/enterRoom";
 import { Socket } from "socket.io";
+import roomValidation from "../utils/roomValidations";
 
 interface VerifyPasswordEndpointParams {
     password?: string;
@@ -38,16 +39,21 @@ export const verifyRoomPassword = async (
         stringIsEmpty(reqBody.peerName)
     ) {
         return res.status(400).send({
-            message: "Data provided is invalid",
+            message: "Data provided is invalid.",
             status: 400,
         });
     }
 
-    const room = rooms.find((r) => r.id === reqBody.roomId);
+    const { roomExists, room, peerIsParticipant } = roomValidation({
+        rooms,
+        roomId: reqBody.roomId,
+        peerShouldBeParticipant: true,
+        peerId: reqBody.peerId,
+    });
 
-    if (!room) {
+    if (!room || !roomExists || peerIsParticipant) {
         return res.status(400).send({
-            message: "Data provided is invalid",
+            message: "Room does not exists.",
             status: 400,
         });
     }

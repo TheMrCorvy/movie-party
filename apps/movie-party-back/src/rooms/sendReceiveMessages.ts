@@ -3,13 +3,14 @@ import { MessageWithIndex } from "@repo/type-definitions";
 import {
     MessageReceivedWsCallbackParams,
     MessagesWsParams,
-    Room,
+    ServerRoom,
     Signals,
 } from "@repo/type-definitions/rooms";
 import { Server as SocketIOServer } from "socket.io";
+import roomValidation from "../utils/roomValidations";
 
 export interface SendReceiveMessagesParams extends MessagesWsParams {
-    rooms: Room[];
+    rooms: ServerRoom[];
     io: SocketIOServer;
 }
 
@@ -21,9 +22,14 @@ export const sendReceiveMessages: SendReceiveMessages = ({
     message,
     io,
 }) => {
-    const room = rooms.find((r) => r.id === roomId);
+    const { room, roomIndex, roomExists, peerIsParticipant } = roomValidation({
+        rooms,
+        roomId,
+        peerId: message.peerId,
+        peerShouldBeParticipant: true,
+    });
 
-    if (!room) {
+    if (!room || !roomExists || roomIndex === -1 || !peerIsParticipant) {
         io.emit(Signals.ROOM_NOT_FOUND);
         return;
     }
@@ -42,7 +48,7 @@ export const sendReceiveMessages: SendReceiveMessages = ({
         data: messageReceived,
     });
 
-    room.messages.push(messageReceived);
+    rooms[roomIndex].messages.push(messageReceived);
     const callbackParams: MessageReceivedWsCallbackParams = { messageReceived };
     io.emit(Signals.MESSAGE_RECEIVED, callbackParams);
 };

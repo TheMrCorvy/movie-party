@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { ServerRoom } from "@repo/type-definitions/rooms";
 import path from "path";
 import fs from "fs";
+import roomValidation from "../utils/roomValidations";
 
 export const getRoomBackground = (
     req: Request,
@@ -17,9 +18,24 @@ export const getRoomBackground = (
         });
     }
 
-    const roomExists = rooms.some((room) => room.id === roomId);
+    const { roomExists, message } = roomValidation({ rooms, roomId });
+
+    if (!roomExists) {
+        return res.status(404).send({
+            message: message,
+            status: 404,
+        });
+    }
+
     const assetsPath = path.join(__dirname, "../assets");
     let imagePath = "";
+
+    if (!fs.existsSync(assetsPath)) {
+        return res.status(500).send({
+            message: "Assets directory not found",
+            status: 500,
+        });
+    }
 
     if (fs.existsSync(assetsPath)) {
         const files = fs.readdirSync(assetsPath);
@@ -29,20 +45,6 @@ export const getRoomBackground = (
         if (match) {
             imagePath = path.join(assetsPath, match);
         }
-    }
-
-    if (!roomExists) {
-        return res.status(404).send({
-            message: "Room not found",
-            status: 404,
-        });
-    }
-
-    if (!fs.existsSync(assetsPath)) {
-        return res.status(500).send({
-            message: "Assets directory not found",
-            status: 500,
-        });
     }
 
     if (!imagePath || !fs.existsSync(imagePath)) {

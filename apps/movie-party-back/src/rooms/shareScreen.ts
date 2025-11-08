@@ -1,15 +1,16 @@
 import { logData } from "@repo/shared-utils/log-data";
 import {
-    Room,
     ScreenShareWsCallbackParams,
+    ServerRoom,
     ShareScreenWsParams,
     Signals,
 } from "@repo/type-definitions/rooms";
 import { Server as SocketIOServer } from "socket.io";
+import roomValidation from "../utils/roomValidations";
 
 export interface ShareScreenParams extends ShareScreenWsParams {
     io: SocketIOServer;
-    rooms: Room[];
+    rooms: ServerRoom[];
 }
 
 export type ShareScreen = (params: ShareScreenParams) => void;
@@ -26,16 +27,19 @@ export const shareScreen: ShareScreen = ({
         return;
     }
 
-    const roomIndex = rooms.findIndex((r) => r.id === roomId);
+    const { roomIndex, roomExists, peer, peerIsParticipant } = roomValidation({
+        roomId,
+        rooms,
+        peerId,
+        peerShouldBeParticipant: true,
+    });
 
-    if (roomIndex === -1) {
+    if (roomIndex === -1 || !roomExists) {
         io.emit(Signals.ROOM_NOT_FOUND);
         return;
     }
 
-    const peer = rooms[roomIndex].participants.find((p) => p.id === peerId);
-
-    if (!peer) {
+    if (!peer || !peerIsParticipant) {
         io.emit(Signals.ERROR);
         return;
     }

@@ -1,18 +1,19 @@
 import type { Socket, Server as SocketIOServer } from "socket.io";
 import {
     Signals,
-    Room,
     EnterRoomWsParams,
     UpdateParticipantsWsCallback,
     MessageReceivedWsCallbackParams,
+    ServerRoom,
 } from "@repo/type-definitions/rooms";
 import { leaveRoom } from "./leaveRoom";
 import { logData } from "@repo/shared-utils/log-data";
 import { MessageWithIndex } from "@repo/type-definitions";
 import { generateId } from "@repo/shared-utils";
+import roomValidation from "../utils/roomValidations";
 
 export interface EnterRoomParams extends EnterRoomWsParams {
-    rooms: Room[];
+    rooms: ServerRoom[];
     socket: Socket;
     io: SocketIOServer;
 }
@@ -27,19 +28,20 @@ export const enterRoom: EnterRoom = async ({
     io,
     socket,
 }) => {
-    const room = rooms.find((room) => room.id === roomId);
-    const roomIndex = rooms.findIndex((room) => room.id === roomId);
+    const { peerIndex, peerIsParticipant, roomExists, roomIndex, room } =
+        roomValidation({
+            rooms,
+            roomId,
+            peerShouldBeParticipant: true,
+            peerId,
+        });
 
-    if (!room || roomIndex === -1) {
+    if (!room || roomIndex === -1 || !roomExists) {
         socket.emit(Signals.ROOM_NOT_FOUND);
         return;
     }
 
-    const participantIndex = room.participants.findIndex(
-        (participant) => participant.id === peerId
-    );
-
-    if (participantIndex === -1) {
+    if (peerIndex === -1 && !peerIsParticipant) {
         room.participants.push({
             id: peerId,
             name: peerName,

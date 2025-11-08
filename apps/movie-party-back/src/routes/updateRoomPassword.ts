@@ -3,6 +3,7 @@ import { logData } from "@repo/shared-utils/log-data";
 import { ServerRoom } from "@repo/type-definitions/rooms";
 import { stringIsEmpty } from "@repo/shared-utils";
 import { hashPassword } from "../utils/passwordVerification";
+import roomValidation from "../utils/roomValidations";
 
 interface UpdateRoomParams {
     password: string;
@@ -37,9 +38,14 @@ export const updateRoomPassword = async (
         });
     }
 
-    const roomIndex = rooms.findIndex((r) => r.id === reqBody.roomId);
+    const { roomExists, roomIndex, peerIsOwner } = roomValidation({
+        rooms,
+        roomId: reqBody.roomId,
+        peerShouldBeParticipant: true,
+        peerId: reqBody.peerId,
+    });
 
-    if (roomIndex === -1 || rooms[roomIndex].roomOwner !== reqBody.peerId) {
+    if (!roomExists || roomIndex === -1 || !peerIsOwner) {
         return res.status(400).send({
             message: "Data provided is invalid",
             status: 400,
