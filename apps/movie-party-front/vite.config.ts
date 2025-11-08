@@ -13,7 +13,7 @@ export default defineConfig(({ mode }) => {
             "process.env": env,
         },
         server: {
-            allowedHosts: [process.env.FRONTEND_BASE_PATH || "localhost"],
+            allowedHosts: ["conference-room.chaldea.foundation", "localhost"],
         },
     };
 });
