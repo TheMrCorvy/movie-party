@@ -9,7 +9,7 @@ import { roomReducer, RoomState } from "./roomReducer";
 import type { RoomAction } from "./roomActions";
 import SocketIOClient from "socket.io-client";
 
-const WS = "http://localhost:4000";
+const WS = process.env.BACKEND_BASE_PATH || "http://localhost:4000";
 const ws = SocketIOClient(WS);
 
 const RoomContext = createContext<RoomState | undefined>(undefined);

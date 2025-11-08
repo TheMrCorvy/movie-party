@@ -74,7 +74,7 @@ const useJoinRoom = () => {
 
         backgroundDispatch({
             type: "SET_BACKGROUND",
-            payload: `http://localhost:4000${params.hasCustomBg.src}`,
+            payload: `${process.env.BACKEND_BASE_PATH || "http://localhost:4000"}${params.hasCustomBg.src}`,
         });
     };
 

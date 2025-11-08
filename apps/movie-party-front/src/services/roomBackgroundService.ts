@@ -29,10 +29,13 @@ export const uploadRoomBackground = async ({
     formData.append("roomId", roomId);
     formData.append("peerId", peerId);
 
-    const response = await fetch("http://localhost:4000/room-background", {
-        method: "POST",
-        body: formData,
-    });
+    const response = await fetch(
+        `${process.env.BACKEND_BASE_PATH || "http://localhost:4000"}/room-background`,
+        {
+            method: "POST",
+            body: formData,
+        }
+    );
 
     if (!response.ok) {
         const error = await response.json();

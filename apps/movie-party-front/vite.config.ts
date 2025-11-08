@@ -12,5 +12,8 @@ export default defineConfig(({ mode }) => {
         define: {
             "process.env": env,
         },
+        server: {
+            allowedHosts: ["conference-room.chaldea.foundation", "localhost"],
+        },
     };
 });

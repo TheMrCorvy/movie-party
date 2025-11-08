@@ -22,17 +22,20 @@ export const useRoomPasswordUpdate = ({
 
     const sendUpdatedPassword = async (customPassword: string = "") => {
         try {
-            const res = await fetch("http://localhost:4000/room-password", {
-                method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    peerId,
-                    roomId,
-                    password: customPassword,
-                }),
-            });
+            const res = await fetch(
+                `${process.env.BACKEND_BASE_PATH || "http://localhost:4000"}/room-password`,
+                {
+                    method: "PATCH",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        peerId,
+                        roomId,
+                        password: customPassword,
+                    }),
+                }
+            );
 
             const data = (await res.json()) as RoomPasswordCallbackParams;
 

@@ -150,7 +150,7 @@ const useLayout = ({ pageIsRoom }: UseLayoutPops) => {
 
                 backgroundDispatch({
                     type: "SET_BACKGROUND",
-                    payload: `http://localhost:4000${params.background.src}`,
+                    payload: `${process.env.BACKEND_BASE_PATH || "http://localhost:4000"}${params.background.src}`,
                 });
             },
         });

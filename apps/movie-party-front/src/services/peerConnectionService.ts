@@ -13,10 +13,10 @@ export type PeerConnectionService = (
 
 export const peerConnectionService: PeerConnectionService = ({ myId }) => {
     return new Peer(myId, {
-        host: "localhost",
-        port: 9000,
-        path: "/",
-        secure: false,
+        host: process.env.PEERJS_HOST || "localhost",
+        port: parseInt(process.env.PEERJS_PORT || "9000"),
+        path: process.env.PEERJS_PATH || "/",
+        secure: process.env.PEERJS_SECURE === "true" || false,
     });
 };
 
