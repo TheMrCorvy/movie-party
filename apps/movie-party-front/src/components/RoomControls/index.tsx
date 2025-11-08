@@ -61,7 +61,9 @@ const RoomControls = () => {
     };
 
     const handleCopy = async () => {
-        const text = "http://localhost:5173/join-room/" + room.id;
+        const text =
+            `${process.env.FRONTEND_BASE_PATH || "http://localhost:5173"}/join-room/` +
+            room.id;
         await copyToClipboard({
             callback: (params) =>
                 logData({
