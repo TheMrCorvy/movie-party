@@ -2,6 +2,7 @@ import { Alert, Collapse, IconButton, Typography } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 
 import CloseIcon from "@mui/icons-material/Close";
+import styles from "./styles";
 
 export interface AlertCallbackParams {
     value: string;
@@ -28,6 +29,7 @@ const GlassAlert: FC<GlassAlertProps> = ({
     description,
 }) => {
     const [open, setOpen] = useState(openFromProps);
+    const { alert } = styles();
 
     useEffect(() => {
         if (open && typeof callback === "undefined") {
@@ -66,20 +68,8 @@ const GlassAlert: FC<GlassAlertProps> = ({
                 variant="outlined"
                 severity={variant}
                 sx={{
-                    backdropFilter: "blur(10px)",
+                    ...alert,
                     backgroundColor: colors[variant],
-                    border: "1px solid rgba(255, 255, 255, 0.15)",
-                    borderRadius: "10px",
-                    color: "#fff",
-                    "& .MuiAlert-icon": {
-                        color: "rgba(255, 255, 255, 0.8)",
-                    },
-                    "&.MuiAlert-outlinedSuccess": {
-                        borderColor: "rgba(255, 255, 255, 0.5)",
-                    },
-                    display: "flex",
-                    alignItems: "center",
-                    verticalAlign: "middle",
                 }}
                 action={
                     callback && (
