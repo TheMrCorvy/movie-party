@@ -94,7 +94,7 @@ const useLayout = ({ pageIsRoom }: UseLayoutPops) => {
         room.myId,
         pageIsRoom,
         playSound,
-        room.participants.length,
+        room.participants,
     ]);
 
     useEffect(() => {
