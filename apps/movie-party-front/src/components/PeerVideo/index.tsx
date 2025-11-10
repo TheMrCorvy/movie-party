@@ -17,6 +17,7 @@ import PhoneDisabledIcon from "@mui/icons-material/PhoneDisabled";
 import useNotificationSound, {
     NotificationSounds,
 } from "../../hooks/useNotificationSound";
+import { useGlassToast } from "../../context/GlassToastContext";
 
 interface PeerVideoProps {
     stream?: MediaStream | null;
@@ -38,6 +39,7 @@ const PeerVideo: FC<PeerVideoProps> = ({
         (participant) => participant.id !== room.myId
     );
     const { playSound } = useNotificationSound();
+    const { dispatch: dispatchToast } = useGlassToast();
 
     useEffect(() => {
         logData({
@@ -78,6 +80,14 @@ const PeerVideo: FC<PeerVideoProps> = ({
                 me,
                 stream: stream,
                 streamType: "camera",
+                errorCallback: (message) =>
+                    dispatchToast({
+                        type: "SHOW_TOAST",
+                        payload: {
+                            message,
+                            severity: "error",
+                        },
+                    }),
             });
         }
     }, [stream, me, cameraIsOn]); // eslint-disable-line react-hooks/exhaustive-deps

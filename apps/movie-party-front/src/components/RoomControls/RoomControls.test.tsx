@@ -6,6 +6,7 @@ import { useBackground } from "../../context/BackgroundImageContext";
 import { sendBackgroundPattern } from "../../services/roomBackgroundService";
 import { copyToClipboard } from "../../utils/accessUserHardware";
 import { PatternClass } from "@repo/type-definitions";
+import { GlassToastProvider } from "../../context/GlassToastContext";
 
 jest.mock("../../context/RoomContext/RoomContextProvider", () => ({
     useRoom: jest.fn(),
@@ -47,6 +48,14 @@ const theme = createTheme({ palette: { mode: "dark" } });
 const mockUseRoom = useRoom as jest.Mock;
 const mockUseBackground = useBackground as jest.Mock;
 
+const renderWithProviders = (children: React.ReactNode) => {
+    return render(
+        <ThemeProvider theme={theme}>
+            <GlassToastProvider>{children}</GlassToastProvider>
+        </ThemeProvider>
+    );
+};
+
 describe("RoomControls Component", () => {
     beforeEach(() => {
         mockUseRoom.mockReturnValue({
@@ -64,11 +73,7 @@ describe("RoomControls Component", () => {
     });
 
     it("should trigger file input when 'Cambiar fondo de pantalla' is clicked", () => {
-        const { container } = render(
-            <ThemeProvider theme={theme}>
-                <RoomControls />
-            </ThemeProvider>
-        );
+        const { container } = renderWithProviders(<RoomControls />);
 
         const fileInput = container.querySelector('input[type="file"]');
         const clickSpy = jest.spyOn(fileInput as HTMLElement, "click");
@@ -80,11 +85,7 @@ describe("RoomControls Component", () => {
     });
 
     it("should call sendBackgroundPattern with default pattern when 'Resetear fondo de pantalla' is clicked", () => {
-        render(
-            <ThemeProvider theme={theme}>
-                <RoomControls />
-            </ThemeProvider>
-        );
+        renderWithProviders(<RoomControls />);
 
         fireEvent.click(
             screen.getByRole("button", { name: /resetear fondo de pantalla/i })
@@ -98,11 +99,7 @@ describe("RoomControls Component", () => {
     });
 
     it("should call copyToClipboard with the room link when 'Compartir sala' is clicked", () => {
-        render(
-            <ThemeProvider theme={theme}>
-                <RoomControls />
-            </ThemeProvider>
-        );
+        renderWithProviders(<RoomControls />);
 
         fireEvent.click(
             screen.getByRole("button", { name: /compartir sala/i })
@@ -115,11 +112,7 @@ describe("RoomControls Component", () => {
     });
 
     it("should not render RoomPasswordUpdate if user is not the room owner", () => {
-        render(
-            <ThemeProvider theme={theme}>
-                <RoomControls />
-            </ThemeProvider>
-        );
+        renderWithProviders(<RoomControls />);
         expect(
             screen.queryByTestId("room-password-update")
         ).not.toBeInTheDocument();

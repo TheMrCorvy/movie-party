@@ -7,10 +7,12 @@ import {
 } from "../../services/roomBackgroundService";
 import { useRoom } from "../../context/RoomContext/RoomContextProvider";
 import { useRef } from "react";
+import { useGlassToast } from "../../context/GlassToastContext";
 
 const useControls = () => {
     const { room, ws } = useRoom();
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const { dispatch } = useGlassToast();
 
     const handleFileChange = async (
         event: React.ChangeEvent<HTMLInputElement>
@@ -24,6 +26,14 @@ const useControls = () => {
                     peerId: room.myId,
                 });
             } catch (error) {
+                dispatch({
+                    type: "SHOW_TOAST",
+                    payload: {
+                        message:
+                            "Hubo un error al intentar subir la imagen. Verifique que esta no pese más de 4mb.",
+                        severity: "error",
+                    },
+                });
                 logData({
                     type: "error",
                     data: error,
@@ -64,6 +74,13 @@ const useControls = () => {
                     layer: "access_user_hardware",
                 }),
             text,
+        });
+        dispatch({
+            type: "SHOW_TOAST",
+            payload: {
+                message: "Copiado!",
+                severity: "success",
+            },
         });
     };
 

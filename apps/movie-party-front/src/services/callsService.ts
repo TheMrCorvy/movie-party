@@ -8,6 +8,7 @@ export interface StartCallParams {
     me: Peer;
     otherParticipants: Participant[];
     callback: (params: StartCallCallbackParams) => void;
+    errorCallback: (message: string) => void;
     stream: MediaStream;
     streamType: StreamType;
 }
@@ -25,6 +26,7 @@ export const startCall: StartCall = ({
     stream,
     callback,
     streamType = "camera",
+    errorCallback,
 }) => {
     logData({
         title: "Starting call to everyone else in the room",
@@ -93,6 +95,9 @@ export const startCall: StartCall = ({
                 layer: "camera_caller",
                 data: error,
             });
+            errorCallback(
+                `Failed to initiate call to peer ${participant.name}`
+            );
         }
     });
 };
@@ -102,6 +107,7 @@ export interface AnswerCallParams {
     stream: MediaStream;
     callback: (payload: AnswerCallCallbackParams) => void;
     peerName: string;
+    errorCallback: (message: string) => void;
 }
 
 export interface AnswerCallCallbackParams {
@@ -112,7 +118,12 @@ export interface AnswerCallCallbackParams {
 
 export type AnswerCall = (params: AnswerCallParams) => () => void;
 
-export const answerCall: AnswerCall = ({ call, stream, callback }) => {
+export const answerCall: AnswerCall = ({
+    call,
+    stream,
+    callback,
+    errorCallback,
+}) => {
     const callerId = call.metadata?.peerId || call.peer;
     const streamType = call.metadata?.streamType || "camera";
 
@@ -184,6 +195,8 @@ export const answerCall: AnswerCall = ({ call, stream, callback }) => {
             layer: "camera",
             data: error,
         });
+
+        errorCallback("[Incoming Call] Failed to answer call");
 
         return () => {
             logData({

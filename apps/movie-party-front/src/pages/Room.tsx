@@ -20,6 +20,7 @@ import { newPeerJoinedListener } from "../services/updateParticipantsService";
 import ScreenPlayer from "../components/ScreenPlayer";
 import { logData } from "@repo/shared-utils/log-data";
 import RoomControls from "../components/RoomControls";
+import { useGlassToast } from "../context/GlassToastContext";
 
 const Room: FC = () => {
     const { room, dispatch, ws } = useRoom();
@@ -28,6 +29,7 @@ const Room: FC = () => {
         [room.myId]
     );
     const [remoteScreen, setremoteScreen] = useState<MediaStream | null>(null);
+    const { dispatch: dispatchToast } = useGlassToast();
 
     useEffect(() => {
         const unmountListenEvent = listenPeerToggledCamera({
@@ -95,6 +97,14 @@ const Room: FC = () => {
             onPeerOpen: () => defaultPeerOpenEvent(peerConnection),
             onPeerDisconnect: () => defaultPeerDesconnected(peerConnection),
             peerConnection: peerConnection,
+            errorCallback: (message) =>
+                dispatchToast({
+                    type: "SHOW_TOAST",
+                    payload: {
+                        message,
+                        severity: "error",
+                    },
+                }),
         });
 
         return () => {

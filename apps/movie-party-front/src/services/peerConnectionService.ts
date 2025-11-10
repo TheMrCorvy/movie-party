@@ -42,6 +42,7 @@ export interface ListenPeerEventsParams {
     onPeerClose: () => void;
     onPeerDisconnect: (peer: Peer) => void;
     me: Participant;
+    errorCallback: (message: string) => void;
 }
 
 export type ListenPeerEventsService = (
@@ -56,6 +57,7 @@ export const listenPeerEventsService: ListenPeerEventsService = ({
     onPeerDisconnect,
     onPeerError,
     me,
+    errorCallback,
 }) => {
     let removeCallListeners = () => {};
     peerConnection.on("open", () => onPeerOpen(peerConnection));
@@ -75,6 +77,7 @@ export const listenPeerEventsService: ListenPeerEventsService = ({
             stream: me.stream as MediaStream,
             callback: onCallEvent,
             peerName: me.name,
+            errorCallback: errorCallback,
         });
     });
 

@@ -10,6 +10,7 @@ import { startCall } from "../../services/callsService";
 import { logData } from "@repo/shared-utils/log-data";
 import { ScreenPlayerProps } from ".";
 import { LocalRoom } from "../../context/RoomContext/roomReducer";
+import { useGlassToast } from "../../context/GlassToastContext";
 
 interface UseScreenPlayerResult {
     screenStream: MediaStream | undefined;
@@ -28,6 +29,7 @@ const useScreenPlayer: UseScreenPlayer = ({
     const { room, dispatch, ws } = useRoom();
     const [screenStream, setScreenStream] = useState<MediaStream>();
     const videoRef = useRef<HTMLVideoElement>(null);
+    const { dispatch: dispatchToast } = useGlassToast();
 
     useEffect(() => {
         if (videoRef.current && screenStream) {
@@ -119,6 +121,14 @@ const useScreenPlayer: UseScreenPlayer = ({
             ),
             stream: displayStream,
             streamType: "screen",
+            errorCallback: (message) =>
+                dispatchToast({
+                    type: "SHOW_TOAST",
+                    payload: {
+                        message,
+                        severity: "error",
+                    },
+                }),
         });
 
         screenShareServcie({
