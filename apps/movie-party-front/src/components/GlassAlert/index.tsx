@@ -1,5 +1,5 @@
 import { Alert, Collapse, IconButton, Typography } from "@mui/material";
-import { FC, useEffect, useState } from "react";
+import { forwardRef, useEffect, useState } from "react";
 
 import CloseIcon from "@mui/icons-material/Close";
 import styles from "./styles";
@@ -17,54 +17,60 @@ export interface GlassAlertProps extends AlertCallbackParams {
     callback?: (params: AlertCallbackParams) => void;
     openFromProps: boolean;
     description?: string;
+    disableCollapse?: boolean;
 }
 
-const GlassAlert: FC<GlassAlertProps> = ({
-    value,
-    variant,
-    id,
-    callback,
-    title,
-    openFromProps,
-    description,
-}) => {
-    const [open, setOpen] = useState(openFromProps);
-    const { alert } = styles();
+const GlassAlert = forwardRef<HTMLDivElement, GlassAlertProps>(
+    (
+        {
+            value,
+            variant,
+            id,
+            callback,
+            title,
+            openFromProps,
+            description,
+            disableCollapse = false,
+        },
+        ref
+    ) => {
+        const [open, setOpen] = useState(openFromProps);
+        const { alert } = styles();
 
-    useEffect(() => {
-        if (open && typeof callback === "undefined") {
-            const timer = setTimeout(() => {
-                setOpen(false);
-            }, 5000);
+        useEffect(() => {
+            if (open && typeof callback === "undefined") {
+                const timer = setTimeout(() => {
+                    setOpen(false);
+                }, 5000);
 
-            return () => clearTimeout(timer);
-        }
-    }, [openFromProps, open, callback]);
+                return () => clearTimeout(timer);
+            }
+        }, [openFromProps, open, callback]);
 
-    const onClose = () => {
-        if (callback) {
-            callback({
-                id,
-                value,
-            });
-        }
+        const onClose = () => {
+            if (callback) {
+                callback({
+                    id,
+                    value,
+                });
+            }
 
-        setOpen(false);
-    };
+            setOpen(false);
+        };
 
-    const colors = {
-        success: "rgba(76, 175, 80, 0.15)",
-        warning: "rgba(255, 152, 0, 0.15)",
-        info: "rgba(33, 150, 243, 0.15)",
-        error: "rgba(244, 67, 54, 0.15)",
-    } as Record<AlertVariants, string>;
+        const colors = {
+            success: "rgba(76, 175, 80, 0.15)",
+            warning: "rgba(255, 152, 0, 0.15)",
+            info: "rgba(33, 150, 243, 0.15)",
+            error: "rgba(244, 67, 54, 0.15)",
+        } as Record<AlertVariants, string>;
 
-    const capitalizeFirstLetter = (str: string) =>
-        str.charAt(0).toUpperCase() + str.slice(1);
+        const capitalizeFirstLetter = (str: string) =>
+            str.charAt(0).toUpperCase() + str.slice(1);
 
-    return (
-        <Collapse in={open} id={id}>
+        const alertContent = (
             <Alert
+                ref={ref}
                 variant="outlined"
                 severity={variant}
                 sx={{
@@ -97,8 +103,20 @@ const GlassAlert: FC<GlassAlertProps> = ({
                     </Typography>
                 )}
             </Alert>
-        </Collapse>
-    );
-};
+        );
+
+        if (disableCollapse) {
+            return alertContent;
+        }
+
+        return (
+            <Collapse in={open} id={id}>
+                {alertContent}
+            </Collapse>
+        );
+    }
+);
+
+GlassAlert.displayName = "GlassAlert";
 
 export default GlassAlert;
