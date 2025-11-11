@@ -3,6 +3,12 @@ import { logData } from "@repo/shared-utils/log-data";
 
 dotenv.config();
 
+/**
+ * to do:
+ * Implement keep alive conection for more time
+ * More logging
+ */
+
 const initServer = async () => {
     const { PeerServer } = await import("peer");
 
@@ -22,7 +28,6 @@ const initServer = async () => {
     peerServer.on("connection", (client) => {
         logData({
             title: `Peer connected: ${client.getId()}`,
-            data: client,
             addSpaceAfter: true,
             timeStamp: true,
             layer: "camera",
@@ -32,7 +37,6 @@ const initServer = async () => {
     peerServer.on("disconnect", (client) => {
         logData({
             title: `Peer disconnected: ${client.getId()}`,
-            data: client,
             addSpaceAfter: true,
             timeStamp: true,
             layer: "camera",
