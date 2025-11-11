@@ -6,30 +6,72 @@
             "dependsOn": ["^build"],
             "inputs": ["$TURBO_DEFAULT$", ".env*"],
             "outputs": [".next/**", "!.next/cache/**", "dist/**", "build/**"],
-            "env": ["PORT", "FEATURE_FLAGS", "LAYERS_AVAILABLE"]
+            "env": [
+                "PORT",
+                "FEATURE_FLAGS",
+                "LAYERS_AVAILABLE",
+                "PEERJS_PORT",
+                "NODE_ENV",
+                "PEERJS_BASE_URL"
+            ]
         },
         "lint": {
             "dependsOn": ["^lint"],
-            "env": ["PORT", "FEATURE_FLAGS", "LAYERS_AVAILABLE"]
+            "env": [
+                "PORT",
+                "FEATURE_FLAGS",
+                "LAYERS_AVAILABLE",
+                "PEERJS_PORT",
+                "NODE_ENV",
+                "PEERJS_BASE_URL"
+            ]
         },
         "check-types": {
             "dependsOn": ["^check-types"],
-            "env": ["PORT", "FEATURE_FLAGS", "LAYERS_AVAILABLE"]
+            "env": [
+                "PORT",
+                "FEATURE_FLAGS",
+                "LAYERS_AVAILABLE",
+                "PEERJS_PORT",
+                "NODE_ENV",
+                "PEERJS_BASE_URL"
+            ]
         },
         "dev": {
             "cache": false,
             "persistent": true,
-            "env": ["PORT", "FEATURE_FLAGS", "LAYERS_AVAILABLE"]
+            "env": [
+                "PORT",
+                "FEATURE_FLAGS",
+                "LAYERS_AVAILABLE",
+                "PEERJS_PORT",
+                "NODE_ENV",
+                "PEERJS_BASE_URL"
+            ]
         },
         "test": {
             "dependsOn": ["^build"],
             "inputs": ["$TURBO_DEFAULT$", ".env*"],
-            "env": ["PORT", "FEATURE_FLAGS", "LAYERS_AVAILABLE"]
+            "env": [
+                "PORT",
+                "FEATURE_FLAGS",
+                "LAYERS_AVAILABLE",
+                "PEERJS_PORT",
+                "NODE_ENV",
+                "PEERJS_BASE_URL"
+            ]
         },
         "test:coverage": {
             "dependsOn": ["^build"],
             "inputs": ["$TURBO_DEFAULT$", ".env*"],
-            "env": ["PORT", "FEATURE_FLAGS", "LAYERS_AVAILABLE"]
+            "env": [
+                "PORT",
+                "FEATURE_FLAGS",
+                "LAYERS_AVAILABLE",
+                "PEERJS_PORT",
+                "NODE_ENV",
+                "PEERJS_BASE_URL"
+            ]
         },
         "clean": {
             "cache": false
