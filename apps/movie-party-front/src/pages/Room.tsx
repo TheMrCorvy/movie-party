@@ -1,9 +1,7 @@
-import { useEffect, useMemo, useState, type FC } from "react";
-import { Container, Grid } from "@mui/material";
-import Chat from "../components/Chat";
+import { useEffect, useMemo, useState, lazy, Suspense, type FC } from "react";
+import { Container, Grid, Skeleton } from "@mui/material";
 import { roomContainerStyles, roomChatSectionStyles } from "../styles/pages";
 import GlassContainer from "../components/GlassContainer";
-import PeerVideo from "../components/PeerVideo";
 import { useRoom } from "../context/RoomContext/RoomContextProvider";
 import {
     defaultPeerClose,
@@ -17,10 +15,13 @@ import { Participant } from "@repo/type-definitions";
 import { ActionTypes } from "../context/RoomContext/roomActions";
 import { listenPeerToggledCamera } from "../services/peerCameraService";
 import { newPeerJoinedListener } from "../services/updateParticipantsService";
-import ScreenPlayer from "../components/ScreenPlayer";
 import { logData } from "@repo/shared-utils/log-data";
-import RoomControls from "../components/RoomControls";
 import { useGlassToast } from "../context/GlassToastContext";
+
+const Chat = lazy(() => import("../components/Chat"));
+const PeerVideo = lazy(() => import("../components/PeerVideo"));
+const ScreenPlayer = lazy(() => import("../components/ScreenPlayer"));
+const RoomControls = lazy(() => import("../components/RoomControls"));
 
 const Room: FC = () => {
     const { room, dispatch, ws } = useRoom();
@@ -148,7 +149,17 @@ const Room: FC = () => {
                         gap: 2,
                     }}
                 >
-                    <RoomControls />
+                    <Suspense
+                        fallback={
+                            <Skeleton
+                                variant="rounded"
+                                width="100%"
+                                height={50}
+                            />
+                        }
+                    >
+                        <RoomControls />
+                    </Suspense>
                     <GlassContainer width={"100%"}>
                         <GlassContainer
                             height={"auto"}
@@ -157,23 +168,44 @@ const Room: FC = () => {
                         >
                             <>
                                 {room.participants.map((participant) => (
-                                    <PeerVideo
+                                    <Suspense
                                         key={`peer-video-${participant.id}`}
-                                        peerName={participant.name}
-                                        stream={participant.stream}
-                                        isMyCamera={
-                                            participant.id === room.myId
+                                        fallback={
+                                            <Skeleton
+                                                variant="rounded"
+                                                width="100%"
+                                                height={300}
+                                                sx={{ borderRadius: 2 }}
+                                            />
                                         }
-                                        me={peerConnection}
-                                    />
+                                    >
+                                        <PeerVideo
+                                            peerName={participant.name}
+                                            stream={participant.stream}
+                                            isMyCamera={
+                                                participant.id === room.myId
+                                            }
+                                            me={peerConnection}
+                                        />
+                                    </Suspense>
                                 ))}
                             </>
                         </GlassContainer>
-                        <ScreenPlayer
-                            remoteScreen={remoteScreen}
-                            me={peerConnection}
-                            clearRemoteScreen={() => setremoteScreen(null)}
-                        />
+                        <Suspense
+                            fallback={
+                                <Skeleton
+                                    variant="rounded"
+                                    width="100%"
+                                    height={200}
+                                />
+                            }
+                        >
+                            <ScreenPlayer
+                                remoteScreen={remoteScreen}
+                                me={peerConnection}
+                                clearRemoteScreen={() => setremoteScreen(null)}
+                            />
+                        </Suspense>
                     </GlassContainer>
                 </Grid>
                 <Grid
@@ -183,7 +215,18 @@ const Room: FC = () => {
                     }}
                     sx={roomChatSectionStyles}
                 >
-                    <Chat />
+                    <Suspense
+                        fallback={
+                            <Skeleton
+                                variant="rounded"
+                                width="100%"
+                                height="100%"
+                                sx={{ borderRadius: 2 }}
+                            />
+                        }
+                    >
+                        <Chat />
+                    </Suspense>
                 </Grid>
             </Grid>
         </Container>
