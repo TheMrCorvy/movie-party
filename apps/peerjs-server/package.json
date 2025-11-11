@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "main": "index.js",
     "scripts": {
-        "dev": "tsx watch src/index.ts",
+        "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
         "build": "tsc",
         "start": "node dist/index.js"
     },
@@ -11,15 +11,15 @@
     "author": "",
     "license": "ISC",
     "description": "",
-    "type": "module",
     "dependencies": {
+        "@repo/shared-utils": "*",
         "@repo/type-definitions": "*",
+        "dotenv": "^16.6.1",
         "peer": "^1.0.2"
     },
     "devDependencies": {
         "@types/node": "^22.15.30",
         "ts-node-dev": "^2.0.0",
-        "tsx": "^4.20.5",
         "typescript": "^5.8.3"
     }
 }
