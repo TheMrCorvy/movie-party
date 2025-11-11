@@ -138,6 +138,14 @@ const PeerVideo: FC<PeerVideoProps> = ({
 
             fakeTimeout(2000).then(() => setCameraIsOn(true));
         } catch (error) {
+            dispatchToast({
+                type: "SHOW_TOAST",
+                payload: {
+                    message:
+                        "Error: la cámara o el micrófono no están disponibles para utilizar.",
+                    severity: "error",
+                },
+            });
             console.error("getUserMedia error:", error);
         }
     };
