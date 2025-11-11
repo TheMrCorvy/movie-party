@@ -15,6 +15,7 @@ const initServer = async () => {
     const PORT = process.env.PEERJS_PORT
         ? parseInt(process.env.PEERJS_PORT)
         : 9000;
+
     const peerjsHost =
         process.env.NODE_ENV === "dev"
             ? "http://localhost:" + PORT
