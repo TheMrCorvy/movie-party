@@ -1,8 +1,8 @@
 {
     "compilerOptions": {
         "target": "ES2020",
-        "module": "NodeNext",
-        "moduleResolution": "NodeNext",
+        "module": "Node16",
+        "moduleResolution": "node16",
         "esModuleInterop": true,
         "outDir": "dist",
         "rootDir": "src",
@@ -13,6 +13,7 @@
         "strictFunctionTypes": true,
         "noUnusedLocals": true,
         "noUnusedParameters": false,
+        "isolatedModules": true,
         "paths": {
             "*": ["node_modules/*"]
         },
