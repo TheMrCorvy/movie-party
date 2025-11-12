@@ -65,22 +65,36 @@ const useControls = () => {
             `${process.env.FRONTEND_BASE_PATH || "http://localhost:5173"}/join-room/` +
             room.id;
         await copyToClipboard({
-            callback: (params) =>
+            callback: (params) => {
                 logData({
                     title: "Copied invitation",
                     data: params,
-                    type: "info",
+                    type: params ? "info" : "error",
                     timeStamp: true,
                     layer: "access_user_hardware",
-                }),
-            text,
-        });
-        dispatch({
-            type: "SHOW_TOAST",
-            payload: {
-                message: "Copiado!",
-                severity: "success",
+                });
+
+                if (!params) {
+                    dispatch({
+                        type: "SHOW_TOAST",
+                        payload: {
+                            message: "Error al copiar el link a la sala...",
+                            severity: "error",
+                        },
+                    });
+
+                    return;
+                }
+
+                dispatch({
+                    type: "SHOW_TOAST",
+                    payload: {
+                        message: "Copiado!",
+                        severity: "success",
+                    },
+                });
             },
+            text,
         });
     };
 
