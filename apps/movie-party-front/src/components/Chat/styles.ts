@@ -11,6 +11,7 @@ const styles: StylesService = (theme = "light") => {
     return {
         chatBoxStyles: {
             width: "100%",
+            height: "100%",
             maxWidth: 500,
             backdropFilter: backdropFilter,
             backgroundColor:
@@ -25,7 +26,7 @@ const styles: StylesService = (theme = "light") => {
         chatListStyles: {
             flexGrow: 1,
             overflowY: "auto",
-            height: "70vh",
+            maxHeight: "100%",
             py: 0,
             px: 1,
             backgroundColor: "rgba(255, 255, 255, 0.05)",

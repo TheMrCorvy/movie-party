@@ -10,6 +10,8 @@ import CreatePoll from "../CreatePoll";
 import ShareIcon from "@mui/icons-material/Share";
 import styles from "./styles";
 import useControls from "./useControls";
+import { useGlassDrawer } from "../../context/GlassDrawerContext";
+import Chat from "../Chat";
 
 const RoomControls = () => {
     const {
@@ -30,6 +32,8 @@ const RoomControls = () => {
         room,
         fileInputRef,
     } = useControls();
+
+    const { dispatch } = useGlassDrawer();
 
     return (
         <GlassContainer width={"100%"}>
@@ -69,6 +73,19 @@ const RoomControls = () => {
                         Compartir sala
                     </GlassButton>
                     <CreatePoll />
+                    <GlassButton
+                        onClick={() =>
+                            dispatch({
+                                type: "OPEN_DRAWER",
+                                payload: {
+                                    children: <Chat />,
+                                    anchor: "right",
+                                },
+                            })
+                        }
+                    >
+                        Ver mensajes
+                    </GlassButton>
                 </Grid>
             </Grid>
         </GlassContainer>
