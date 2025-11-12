@@ -1,0 +1,128 @@
+import { logData } from "@repo/shared-utils/log-data";
+import { Participant } from "@repo/type-definitions";
+import { useRoom } from "../context/RoomContext/RoomContextProvider";
+import { useEffect, useMemo, useState } from "react";
+import {
+    defaultPeerClose,
+    defaultPeerDesconnected,
+    defaultPeerError,
+    defaultPeerOpenEvent,
+    listenPeerEventsService,
+    peerConnectionService,
+} from "../services/peerConnectionService";
+import { useGlassToast } from "../context/GlassToastContext";
+import { listenPeerToggledCamera } from "../services/peerCameraService";
+import { ActionTypes } from "../context/RoomContext/roomActions";
+import { newPeerJoinedListener } from "../services/updateParticipantsService";
+
+const useRoomLogic = () => {
+    const { room, dispatch, ws } = useRoom();
+    const peerConnection = useMemo(
+        () => peerConnectionService({ myId: room.myId }),
+        [room.myId]
+    );
+    const [remoteScreen, setremoteScreen] = useState<MediaStream | null>(null);
+    const { dispatch: dispatchToast } = useGlassToast();
+
+    useEffect(() => {
+        const unmountListenEvent = listenPeerToggledCamera({
+            ws,
+            callback: ({ cameraStatus, peerId }) => {
+                if (!cameraStatus) {
+                    logData({
+                        title: "Peer turned off their camera",
+                        layer: "camera_receiver",
+                        type: "info",
+                        timeStamp: true,
+                        data: { cameraStatus, peerId },
+                    });
+                    dispatch({
+                        type: ActionTypes.TOGGLE_PARTICIPANT_CAMERA,
+                        payload: {
+                            peerId: peerId,
+                            stream: null,
+                        },
+                    });
+                }
+            },
+        });
+
+        return () => {
+            unmountListenEvent();
+        };
+    }, [ws]); // eslint-disable-line react-hooks/exhaustive-deps
+
+    useEffect(() => {
+        const removePeerEventListeners = listenPeerEventsService({
+            me: room.participants.find(
+                (participant) => participant.id === room.myId
+            ) as Participant,
+            onCallEvent: ({ remoteStream, peerId, streamType }) => {
+                if (streamType === "screen") {
+                    logData({
+                        title: "Received remote screen stream",
+                        data: { remoteStream, peerId, streamType },
+                        timeStamp: true,
+                        type: "info",
+                        layer: "screen_sharing_receiver",
+                    });
+                    setremoteScreen(remoteStream);
+                    return;
+                }
+
+                logData({
+                    title: "Received remote camera stream",
+                    data: { remoteStream, peerId, streamType },
+                    timeStamp: true,
+                    type: "info",
+                    layer: "camera_receiver",
+                });
+                dispatch({
+                    type: ActionTypes.TOGGLE_PARTICIPANT_CAMERA,
+                    payload: {
+                        stream: remoteStream,
+                        peerId: peerId,
+                    },
+                });
+            },
+            onPeerClose: defaultPeerClose,
+            onPeerError: defaultPeerError,
+            onPeerOpen: () => defaultPeerOpenEvent(peerConnection),
+            onPeerDisconnect: () => defaultPeerDesconnected(peerConnection),
+            peerConnection: peerConnection,
+            errorCallback: (message) =>
+                dispatchToast({
+                    type: "SHOW_TOAST",
+                    payload: {
+                        message,
+                        severity: "error",
+                    },
+                }),
+        });
+
+        return () => {
+            removePeerEventListeners();
+        };
+    }, [peerConnection, room.participants]); // eslint-disable-line react-hooks/exhaustive-deps
+
+    useEffect(() => {
+        const removeEventListener = newPeerJoinedListener({
+            me: room.participants[0],
+            peer: peerConnection,
+            ws,
+        });
+
+        return () => {
+            removeEventListener();
+        };
+    }, [ws, room.participants, peerConnection, room.myId]);
+
+    return {
+        room,
+        peerConnection,
+        remoteScreen,
+        setremoteScreen,
+    };
+};
+
+export default useRoomLogic;
