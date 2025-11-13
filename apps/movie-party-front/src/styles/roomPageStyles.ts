@@ -5,22 +5,22 @@ const styles: StylesService = () => {
         roomChatSectionStyles: {
             display: "flex",
             flexDirection: "column",
-            padding: "24px",
+            paddingTop: "2rem",
+            paddingBottom: "2rem",
+            paddingLeft: "24px",
             justifyContent: "center",
             height: "100%",
         },
         roomContainerStyles: {
             color: "white",
-            padding: 0,
+            height: "100%",
         },
         roomContainer: {
-            height: "100vh",
             display: "flex",
             verticalAlign: "center",
             justifyContent: "center",
             alignItems: "center",
-            paddingTop: "1rem",
-            paddingBottom: "1rem",
+            height: "100%",
         },
         gridColFlex: {
             display: "flex",
