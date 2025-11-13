@@ -12,7 +12,17 @@ export const Layout: FC = () => {
     useApplyBackground();
 
     return (
-        <Box sx={{ display: "flex", flexDirection: "column" }}>
+        <Box
+            sx={{
+                flexGrow: 1,
+                display: "flex",
+                justifyContent: "center",
+                verticalAlign: "center",
+                alignItems: "center",
+                flexDirection: "column",
+                height: "100vh",
+            }}
+        >
             <Outlet />
         </Box>
     );
