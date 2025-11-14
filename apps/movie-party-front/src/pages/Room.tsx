@@ -3,12 +3,12 @@ import { Container, Grid, Skeleton } from "@mui/material";
 import GlassContainer from "../components/GlassContainer";
 import styles from "../styles/roomPageStyles";
 import useRoomLogic from "../hooks/useRoomLogic";
-import GlassBottomNavbar from "../components/GlassNavbar";
+import Navbar from "../components/Navbar";
+import { useMediaQuery } from "../hooks/useMediaQuery";
 
 const Chat = lazy(() => import("../components/Chat"));
 const PeerVideo = lazy(() => import("../components/PeerVideo"));
 const ScreenPlayer = lazy(() => import("../components/ScreenPlayer"));
-const RoomControls = lazy(() => import("../components/RoomControls"));
 
 const Room: FC = () => {
     const {
@@ -21,6 +21,8 @@ const Room: FC = () => {
     const { room, peerConnection, remoteScreen, setremoteScreen } =
         useRoomLogic();
 
+    const isLgUp = useMediaQuery().min.width("lg");
+
     return (
         <>
             <Container maxWidth="xl" sx={roomContainerStyles}>
@@ -32,17 +34,6 @@ const Room: FC = () => {
                         }}
                         sx={gridColFlex}
                     >
-                        <Suspense
-                            fallback={
-                                <Skeleton
-                                    variant="rounded"
-                                    width="100%"
-                                    height={50}
-                                />
-                            }
-                        >
-                            <RoomControls />
-                        </Suspense>
                         <GlassContainer width={"100%"}>
                             <GlassContainer
                                 height={"auto"}
@@ -74,48 +65,52 @@ const Room: FC = () => {
                                     ))}
                                 </>
                             </GlassContainer>
+                            {isLgUp && (
+                                <Suspense
+                                    fallback={
+                                        <Skeleton
+                                            variant="rounded"
+                                            width="100%"
+                                            height={200}
+                                        />
+                                    }
+                                >
+                                    <ScreenPlayer
+                                        remoteScreen={remoteScreen}
+                                        me={peerConnection}
+                                        clearRemoteScreen={() =>
+                                            setremoteScreen(null)
+                                        }
+                                    />
+                                </Suspense>
+                            )}
+                        </GlassContainer>
+                    </Grid>
+                    {isLgUp && (
+                        <Grid
+                            size={{
+                                md: 12,
+                                lg: 3,
+                            }}
+                            sx={roomChatSectionStyles}
+                        >
                             <Suspense
                                 fallback={
                                     <Skeleton
                                         variant="rounded"
                                         width="100%"
-                                        height={200}
+                                        height="100%"
+                                        sx={{ borderRadius: 2 }}
                                     />
                                 }
                             >
-                                <ScreenPlayer
-                                    remoteScreen={remoteScreen}
-                                    me={peerConnection}
-                                    clearRemoteScreen={() =>
-                                        setremoteScreen(null)
-                                    }
-                                />
+                                <Chat />
                             </Suspense>
-                        </GlassContainer>
-                    </Grid>
-                    <Grid
-                        size={{
-                            md: 12,
-                            lg: 3,
-                        }}
-                        sx={roomChatSectionStyles}
-                    >
-                        <Suspense
-                            fallback={
-                                <Skeleton
-                                    variant="rounded"
-                                    width="100%"
-                                    height="100%"
-                                    sx={{ borderRadius: 2 }}
-                                />
-                            }
-                        >
-                            <Chat />
-                        </Suspense>
-                    </Grid>
+                        </Grid>
+                    )}
                 </Grid>
             </Container>
-            <GlassBottomNavbar />
+            <Navbar />
         </>
     );
 };

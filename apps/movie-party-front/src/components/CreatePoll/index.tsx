@@ -9,6 +9,7 @@ import { PollOption } from "@repo/type-definitions";
 import { useRoom } from "../../context/RoomContext/RoomContextProvider";
 import { createPollSerice } from "../../services/pollService";
 import PollIcon from "@mui/icons-material/Poll";
+import { useMediaQuery } from "../../hooks/useMediaQuery";
 
 const CreatePoll: FC = () => {
     const [modalOpen, setModalOpen] = useState(false);
@@ -16,7 +17,7 @@ const CreatePoll: FC = () => {
     const [titleVal, setTitleVal] = useState("");
     const [options, setOptions] = useState<PollOption[]>([]);
     const [disabledBtn, setDisabledBtn] = useState(false);
-
+    const isMdDown = useMediaQuery().max.width("md");
     const { ws, room } = useRoom();
 
     const handleInputChange = (
@@ -124,15 +125,13 @@ const CreatePoll: FC = () => {
                 closeModalWithoutCallback={closeModal}
                 modalActions={modalActions}
                 title="Iniciar Encuesta"
+                fullScreen={isMdDown}
             >
                 <Grid
                     container
                     direction="column"
                     gap={2}
-                    width="50%"
-                    sx={{
-                        marginLeft: "25%",
-                    }}
+                    width={isMdDown ? "100%" : "50%"}
                 >
                     <Grid width="100%">
                         <GlassInput
