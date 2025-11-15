@@ -16,7 +16,6 @@ const styles: StylesService = (theme = "light") => {
             borderRadius: 3,
             display: "flex",
             alignItems: "center",
-            justifyContent: "center",
             gap: 2,
         },
     };
