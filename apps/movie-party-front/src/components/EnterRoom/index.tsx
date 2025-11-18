@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useState } from "react";
+import { ChangeEvent, FC, useState, FormEvent } from "react";
 import GlassInput from "../GlassInput";
 import GlassButton from "../GlassButton";
 import { stringIsEmpty } from "@repo/shared-utils";
@@ -17,7 +17,11 @@ const EnterRoom: FC<EnterRoomParams> = ({ roomExists, roomHasPassword }) => {
 
     const { room } = useRoom();
 
-    const handleEnterRoom = async () => {
+    const handleEnterRoom = async (e?: FormEvent<HTMLFormElement>) => {
+        if (e) {
+            e.preventDefault();
+        }
+
         if (
             !roomExists ||
             stringIsEmpty(myName) ||
@@ -76,7 +80,15 @@ const EnterRoom: FC<EnterRoomParams> = ({ roomExists, roomHasPassword }) => {
     };
 
     return (
-        <>
+        <form
+            onSubmit={handleEnterRoom}
+            style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 24,
+                justifyContent: "center",
+            }}
+        >
             <GlassInput
                 type="text"
                 kind="text input"
@@ -115,7 +127,7 @@ const EnterRoom: FC<EnterRoomParams> = ({ roomExists, roomHasPassword }) => {
             <GlassButton onClick={handleEnterRoom}>
                 Ingresar a la sala de conferencias
             </GlassButton>
-        </>
+        </form>
     );
 };
 
