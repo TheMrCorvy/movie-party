@@ -1,4 +1,4 @@
-import { ChangeEvent, useState, type FC } from "react";
+import { ChangeEvent, FormEvent, useState, type FC } from "react";
 import { useRoom } from "../../context/RoomContext/RoomContextProvider";
 import Container from "@mui/material/Container";
 import GlassContainer from "../GlassContainer";
@@ -17,7 +17,11 @@ const CreateRoom: FC = () => {
     const [roomPassword, setRoomPassword] = useState("");
     const [addPassword, setAddPassword] = useState(false);
 
-    const createRoomSubmit = () => {
+    const createRoomSubmit = (e?: FormEvent<HTMLFormElement>) => {
+        if (e) {
+            e.preventDefault();
+        }
+
         logData({
             data: "Creating room...",
             layer: "room_ws",
@@ -44,7 +48,7 @@ const CreateRoom: FC = () => {
 
     return (
         <Container maxWidth="xl" sx={mainContainer}>
-            <GlassContainer>
+            <GlassContainer primitive="form" onSubmit={createRoomSubmit}>
                 <GlassInput
                     type="text"
                     kind="text input"
