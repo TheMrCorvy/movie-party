@@ -115,6 +115,7 @@ const useLayout = ({ pageIsRoom }: UseLayoutPops) => {
                         myId: params.room.participants[0].id,
                         imRoomOwner: true,
                         password: params.password,
+                        myCameraIsOn: false,
                     },
                 });
             },
