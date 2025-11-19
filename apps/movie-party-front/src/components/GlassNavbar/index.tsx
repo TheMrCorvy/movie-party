@@ -1,64 +1,78 @@
+import { useTheme } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Fab from "@mui/material/Fab";
-import MenuIcon from "@mui/icons-material/Menu";
-import AddIcon from "@mui/icons-material/Add";
-import SearchIcon from "@mui/icons-material/Search";
-import MoreIcon from "@mui/icons-material/MoreVert";
-import { FC } from "react";
-import { EditLocation } from "@mui/icons-material";
+import { FC, ReactNode } from "react";
+import {
+    backdropFilter,
+    borderWhite,
+    darkThemeBg,
+    lightThemeLighterBg,
+} from "../../styles/components";
 
-const GlassBottomNavbar: FC = () => {
+export interface Padding {
+    paddingTop?: number | string;
+    paddingBottom?: number | string;
+    paddingLeft?: number | string;
+    paddingRight?: number | string;
+}
+
+export interface GlassNavbarProps {
+    children: ReactNode;
+    location?: "top" | "bottom";
+    position?: "absolute" | "sticky" | "fixed" | "static" | "relative";
+    padding?: Padding | number | string;
+}
+
+const GlassNavbar: FC<GlassNavbarProps> = ({
+    children,
+    location = "bottom",
+    position = "static",
+    padding = 0,
+}) => {
+    const theme = useTheme();
+    const appbarLocation = {
+        top: {
+            top: 0,
+            bottom: "auto",
+        },
+        bottom: {
+            top: "auto",
+            bottom: 0,
+        },
+    };
+
+    const addPadding = () => {
+        if (typeof padding === "number" || typeof padding === "string") {
+            return {
+                padding,
+            };
+        }
+
+        return {
+            ...padding,
+        };
+    };
+
     return (
         <AppBar
-            position="static"
+            position={position}
             sx={{
-                top: "auto",
-                bottom: 0,
-                backgroundColor: "rgba(255, 255, 255, 0.15)", // Semi-transparent white
-                backdropFilter: "blur(10px) saturate(180%)", // Glassmorphism effect
-                borderTop: "1px solid rgba(255, 255, 255, 0.2)", // Subtle light border
-                boxShadow: "0 -2px 10px rgba(0, 0, 0, 0.1)", // Subtle shadow for depth
+                // backgroundColor: "rgba(255, 255, 255, 0.15)",
+                backgroundColor:
+                    theme.palette.mode === "dark"
+                        ? darkThemeBg
+                        : lightThemeLighterBg,
+                backdropFilter,
+                borderTop: borderWhite,
+                // paddingTop: 2,
+                // paddingBottom: 2,
+                ...appbarLocation[location],
+                ...addPadding(),
             }}
         >
-            <Toolbar>
-                <IconButton color="inherit" aria-label="open drawer">
-                    <MenuIcon />
-                </IconButton>
-                {/* Container for the two FABs */}
-                <Box
-                    sx={{
-                        position: "absolute",
-                        top: -30, // Floats the FABs 30px above the AppBar
-                        left: "50%",
-                        transform: "translateX(-50%)", // Centers the container horizontally
-                        display: "flex",
-                        gap: 3, // Space between the two FABs
-                    }}
-                >
-                    <Fab color="secondary" aria-label="add">
-                        <AddIcon />
-                    </Fab>
-                    <Fab color="primary" aria-label="edit">
-                        <EditLocation />
-                    </Fab>
-                    <Fab color="secondary" aria-label="add">
-                        <AddIcon />
-                    </Fab>
-                </Box>
-                <Box sx={{ flexGrow: 1 }} />{" "}
-                {/* This pushes icons to the ends */}
-                <IconButton color="inherit" aria-label="search">
-                    <SearchIcon />
-                </IconButton>
-                <IconButton color="inherit" aria-label="display more actions">
-                    <MoreIcon />
-                </IconButton>
-            </Toolbar>
+            <Toolbar>{children}</Toolbar>
         </AppBar>
     );
 };
 
-export default GlassBottomNavbar;
+export default GlassNavbar;
