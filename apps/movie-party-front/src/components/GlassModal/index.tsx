@@ -78,6 +78,8 @@ const GlassModal: FC<GlassModalProps> = ({
             <DialogContent
                 sx={{
                     padding: "10px",
+                    display: "flex",
+                    justifyContent: "center",
                 }}
             >
                 <DialogContentText sx={titleClass}>
