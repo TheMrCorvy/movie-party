@@ -3,12 +3,6 @@ import type { StylesService } from "../../styles/types";
 const styles: StylesService = () => {
     return {
         hidden: { display: "none" },
-        controlGrid: {
-            justifyContent: "center",
-            display: "flex",
-            flexWrap: "wrap",
-            width: "100%",
-        },
         patternPicker: {
             display: "flex",
             justifyContent: "center",
@@ -33,12 +27,7 @@ const styles: StylesService = () => {
             justifyContent: "center",
             alignItems: "center",
             gap: 2,
-            flexDirection: {
-                xs: "column",
-                md: "column",
-                lg: "row",
-                xl: "column",
-            },
+            flexDirection: "column",
         },
     };
 };
