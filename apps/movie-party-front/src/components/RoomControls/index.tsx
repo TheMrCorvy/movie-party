@@ -3,20 +3,18 @@ import GlassContainer from "../GlassContainer";
 import BackgroundPatternPicker from "../BackgroundPatternPicker";
 import ThemeSwitcher from "../ThemeSwitcher";
 import RoomPasswordUpdate from "../RoomPasswordUpdate";
-import { CSSProperties, Grid } from "@mui/material";
+import { Box, CSSProperties, Grid } from "@mui/material";
 
 import CreatePoll from "../CreatePoll";
 
 import ShareIcon from "@mui/icons-material/Share";
 import styles from "./styles";
 import useControls from "./useControls";
-import { useGlassDrawer } from "../../context/GlassDrawerContext";
-import Chat from "../Chat";
+import { FC } from "react";
 
-const RoomControls = () => {
+const RoomControls: FC = () => {
     const {
         hidden,
-        controlGrid,
         patternPicker,
         btnGroup,
         passwordUpdate,
@@ -28,15 +26,16 @@ const RoomControls = () => {
         handleCopy,
         handleFileChange,
         handleReset,
-        colSize,
         room,
         fileInputRef,
     } = useControls();
 
-    const { dispatch } = useGlassDrawer();
-
     return (
-        <GlassContainer width={"100%"}>
+        <GlassContainer
+            width={"100%"}
+            height={"90%"}
+            justifyContent="space-between"
+        >
             <input
                 type="file"
                 accept="image/*"
@@ -45,48 +44,50 @@ const RoomControls = () => {
                 style={hidden as CSSProperties}
             />
 
-            <Grid container spacing={3} sx={controlGrid}>
-                <Grid size={colSize} sx={patternPicker}>
+            <Grid
+                container
+                spacing={{
+                    xs: 0,
+                    sm: 2,
+                    md: 4,
+                }}
+                display={"flex"}
+                direction="column"
+                sx={{
+                    height: "100%",
+                }}
+                justifyContent="space-around"
+            >
+                <Box sx={patternPicker}>
                     <BackgroundPatternPicker />
-                </Grid>
-                <Grid size={colSize} sx={btnGroup}>
+                </Box>
+                <Box sx={btnGroup}>
                     <ThemeSwitcher />
+                </Box>
+                <Box sx={btnGroup}>
                     <GlassButton onClick={handleButtonClick}>
                         Cambiar fondo de pantalla
                     </GlassButton>
                     <GlassButton onClick={handleReset}>
                         Resetear fondo de pantalla
                     </GlassButton>
-                </Grid>
+                </Box>
                 {room.imRoomOwner && (
-                    <Grid size={colSize} sx={passwordUpdate}>
+                    <Box sx={passwordUpdate}>
                         <RoomPasswordUpdate
                             imRoomOwner={room.imRoomOwner}
                             password={room.password}
                             roomId={room.id}
                             peerId={room.myId}
                         />
-                    </Grid>
+                    </Box>
                 )}
-                <Grid size={colSize} sx={shareRoomAndPoll}>
+                <Box sx={shareRoomAndPoll}>
                     <GlassButton onClick={handleCopy} startIcon={<ShareIcon />}>
                         Compartir sala
                     </GlassButton>
                     <CreatePoll />
-                    <GlassButton
-                        onClick={() =>
-                            dispatch({
-                                type: "OPEN_DRAWER",
-                                payload: {
-                                    children: <Chat />,
-                                    anchor: "right",
-                                },
-                            })
-                        }
-                    >
-                        Ver mensajes
-                    </GlassButton>
-                </Grid>
+                </Box>
             </Grid>
         </GlassContainer>
     );
