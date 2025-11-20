@@ -98,14 +98,7 @@ const useControls = () => {
         });
     };
 
-    const colSize = {
-        md: 6,
-        lg: 4,
-        xl: 3,
-    };
-
     return {
-        colSize,
         handleCopy,
         handleButtonClick,
         handleReset,
