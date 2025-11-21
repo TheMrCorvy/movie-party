@@ -41,6 +41,7 @@ const useRoomLogic = () => {
                         payload: {
                             peerId: peerId,
                             stream: null,
+                            myCameraIsOn: room.myCameraIsOn,
                         },
                     });
                 }
@@ -82,6 +83,7 @@ const useRoomLogic = () => {
                     payload: {
                         stream: remoteStream,
                         peerId: peerId,
+                        myCameraIsOn: room.myCameraIsOn,
                     },
                 });
             },
