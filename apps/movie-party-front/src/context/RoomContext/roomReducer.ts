@@ -7,6 +7,7 @@ export interface LocalRoom extends Room {
     myId: string;
     imRoomOwner: boolean;
     password?: string;
+    myCameraIsOn: boolean;
 }
 export interface RoomState {
     room: LocalRoom;
@@ -70,17 +71,6 @@ export const roomReducer = (
                     messages: [...state.room.messages, action.payload],
                 },
             };
-        case ActionTypes.START_MY_CAMERA:
-            return {
-                ...state,
-                room: {
-                    ...state.room,
-                    participants: state.room.participants.map((p, i) => ({
-                        ...p,
-                        stream: i === 0 ? action.payload.stream : p.stream,
-                    })),
-                },
-            };
         case ActionTypes.TOGGLE_PARTICIPANT_CAMERA:
             return {
                 ...state,
@@ -101,6 +91,11 @@ export const roomReducer = (
                         ),
                         myId: state.room.myId,
                     }),
+                    myCameraIsOn: action.payload.myCameraIsOn,
+                    // action.payload.stream &&
+                    // action.payload.peerId === state.room.myId
+                    //     ? true
+                    //     : false,
                 },
             };
         case ActionTypes.TOGGLE_SCREEN_SHARING:
