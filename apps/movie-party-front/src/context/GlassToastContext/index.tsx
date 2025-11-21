@@ -46,7 +46,7 @@ const initialState: GlassToastState = {
     message: null,
     severity: null,
     duration: 10000,
-    position: { vertical: "bottom", horizontal: "center" },
+    position: { vertical: "top", horizontal: "center" },
 };
 
 const reducer = (state: GlassToastState, action: Action): GlassToastState => {
