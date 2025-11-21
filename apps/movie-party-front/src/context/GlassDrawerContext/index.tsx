@@ -45,7 +45,7 @@ const reducer = (state: GlassDrawerState, action: Action): GlassDrawerState => {
                 children: action.payload?.children ?? null,
             };
         case "CLOSE_DRAWER":
-            return { ...state, open: false, anchor: "right", children: null };
+            return { ...state, open: false, children: null };
         default:
             return state;
     }
