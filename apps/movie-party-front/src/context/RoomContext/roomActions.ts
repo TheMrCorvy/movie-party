@@ -6,7 +6,6 @@ export enum ActionTypes {
     "JOIN_ROOM" = "JOIN_ROOM",
     "UPDATE_PARTICIPANTS" = "UPDATE_PARTICIPANTS",
     "MESSAGE_RECEIVED" = "MESSAGE_RECEIVED",
-    "START_MY_CAMERA" = "START_MY_CAMERA",
     "TOGGLE_PARTICIPANT_CAMERA" = "TOGGLE_PARTICIPANT_CAMERA",
     "SETUP_PEER_ACTION" = "SETUP_PEER_ACTION",
     "TOGGLE_SCREEN_SHARING" = "TOGGLE_SCREEN_SHARING",
@@ -35,13 +34,6 @@ export interface JoinRoomAction {
     };
 }
 
-export interface StartMyCameraAction {
-    type: ActionTypes.START_MY_CAMERA;
-    payload: {
-        stream: MediaStream;
-    };
-}
-
 export interface MessageReceivedAction {
     type: ActionTypes.MESSAGE_RECEIVED;
     payload: MessageWithIndex;
@@ -52,6 +44,7 @@ export interface ToggleParticipantCameraAction {
     payload: {
         stream: MediaStream | null;
         peerId: string;
+        myCameraIsOn: boolean;
     };
 }
 
@@ -78,7 +71,6 @@ export type RoomAction =
     | SetRoomAction
     | UpdateParticipantsAction
     | JoinRoomAction
-    | StartMyCameraAction
     | MessageReceivedAction
     | ToggleParticipantCameraAction
     | ToggleScreenSharing
