@@ -25,6 +25,7 @@ const initialState: RoomState = {
         myId: "",
         peerSharingScreen: "",
         imRoomOwner: false,
+        myCameraIsOn: false,
     },
     ws,
 };
