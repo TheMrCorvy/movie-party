@@ -5,10 +5,10 @@ import styles from "../styles/roomPageStyles";
 import useRoomLogic from "../hooks/useRoomLogic";
 import Navbar from "../components/Navbar";
 import { useMediaQuery } from "../hooks/useMediaQuery";
+import ScreenPlayer from "../components/ScreenPlayer";
+import Chat from "../components/Chat";
 
-const Chat = lazy(() => import("../components/Chat"));
 const PeerVideo = lazy(() => import("../components/PeerVideo"));
-const ScreenPlayer = lazy(() => import("../components/ScreenPlayer"));
 
 const Room: FC = () => {
     const {
@@ -66,23 +66,13 @@ const Room: FC = () => {
                                 </>
                             </GlassContainer>
                             {isLgUp && (
-                                <Suspense
-                                    fallback={
-                                        <Skeleton
-                                            variant="rounded"
-                                            width="100%"
-                                            height={200}
-                                        />
+                                <ScreenPlayer
+                                    remoteScreen={remoteScreen}
+                                    me={peerConnection}
+                                    clearRemoteScreen={() =>
+                                        setremoteScreen(null)
                                     }
-                                >
-                                    <ScreenPlayer
-                                        remoteScreen={remoteScreen}
-                                        me={peerConnection}
-                                        clearRemoteScreen={() =>
-                                            setremoteScreen(null)
-                                        }
-                                    />
-                                </Suspense>
+                                />
                             )}
                         </GlassContainer>
                     </Grid>
@@ -94,18 +84,7 @@ const Room: FC = () => {
                             }}
                             sx={roomChatSectionStyles}
                         >
-                            <Suspense
-                                fallback={
-                                    <Skeleton
-                                        variant="rounded"
-                                        width="100%"
-                                        height="100%"
-                                        sx={{ borderRadius: 2 }}
-                                    />
-                                }
-                            >
-                                <Chat />
-                            </Suspense>
+                            <Chat />
                         </Grid>
                     )}
                 </Grid>
