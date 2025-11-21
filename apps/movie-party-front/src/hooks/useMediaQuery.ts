@@ -51,6 +51,7 @@ export const useMediaQuery = () => {
 
         const mediaQuery = window.matchMedia(query);
         mediaQuery.addEventListener("change", handler);
+        setMatches(mediaQuery.matches); // Initial state will not be set to true if it matches, only on change, so we have to set it up like this first
 
         return () => mediaQuery.removeEventListener("change", handler);
     }, [query]);
