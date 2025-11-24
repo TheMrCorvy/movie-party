@@ -25,6 +25,15 @@ const useRoomLogic = () => {
     const { dispatch: dispatchToast } = useGlassToast();
 
     useEffect(() => {
+        if (peerConnection && !room.me) {
+            dispatch({
+                type: ActionTypes.SETUP_PEER_ACTION,
+                payload: peerConnection,
+            });
+        }
+    }, [peerConnection, room.me, dispatch]);
+
+    useEffect(() => {
         const unmountListenEvent = listenPeerToggledCamera({
             ws,
             callback: ({ cameraStatus, peerId }) => {
@@ -41,7 +50,6 @@ const useRoomLogic = () => {
                         payload: {
                             peerId: peerId,
                             stream: null,
-                            myCameraIsOn: room.myCameraIsOn,
                         },
                     });
                 }
@@ -83,7 +91,6 @@ const useRoomLogic = () => {
                     payload: {
                         stream: remoteStream,
                         peerId: peerId,
-                        myCameraIsOn: room.myCameraIsOn,
                     },
                 });
             },
@@ -121,7 +128,6 @@ const useRoomLogic = () => {
 
     return {
         room,
-        peerConnection,
         remoteScreen,
         setremoteScreen,
     };

@@ -1,4 +1,4 @@
-import { lazy, Suspense, type FC } from "react";
+import { Suspense, type FC } from "react";
 import { Container, Grid, Skeleton } from "@mui/material";
 import GlassContainer from "../components/GlassContainer";
 import styles from "../styles/roomPageStyles";
@@ -7,8 +7,7 @@ import Navbar from "../components/Navbar";
 import { useMediaQuery } from "../hooks/useMediaQuery";
 import ScreenPlayer from "../components/ScreenPlayer";
 import Chat from "../components/Chat";
-
-const PeerVideo = lazy(() => import("../components/PeerVideo"));
+import PeerVideo from "../components/PeerVideo";
 
 const Room: FC = () => {
     const {
@@ -18,8 +17,7 @@ const Room: FC = () => {
         gridColFlex,
     } = styles();
 
-    const { room, peerConnection, remoteScreen, setremoteScreen } =
-        useRoomLogic();
+    const { room, remoteScreen, setremoteScreen } = useRoomLogic();
 
     const isLgUp = useMediaQuery().min.width("lg");
 
@@ -59,7 +57,6 @@ const Room: FC = () => {
                                                 isMyCamera={
                                                     participant.id === room.myId
                                                 }
-                                                me={peerConnection}
                                             />
                                         </Suspense>
                                     ))}
@@ -68,7 +65,6 @@ const Room: FC = () => {
                             {isLgUp && (
                                 <ScreenPlayer
                                     remoteScreen={remoteScreen}
-                                    me={peerConnection}
                                     clearRemoteScreen={() =>
                                         setremoteScreen(null)
                                     }

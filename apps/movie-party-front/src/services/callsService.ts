@@ -5,7 +5,7 @@ import Peer, { MediaConnection } from "peerjs";
 export type StreamType = "camera" | "screen";
 
 export interface StartCallParams {
-    me: Peer;
+    me: Peer | null;
     otherParticipants: Participant[];
     callback: (params: StartCallCallbackParams) => void;
     errorCallback: (message: string) => void;
@@ -40,6 +40,24 @@ export const startCall: StartCall = ({
             streamType,
         },
     });
+
+    if (!me) {
+        logData({
+            title: "Peer connection is not available in the global state",
+            layer: "*",
+            type: "error",
+            timeStamp: true,
+            data: {
+                otherParticipants,
+                me,
+                stream,
+                streamType,
+            },
+        });
+        errorCallback(`Something failed when trying to start the call...`);
+        return;
+    }
+
     otherParticipants.forEach((participant) => {
         try {
             const call = me.call(participant.id, stream as MediaStream, {
