@@ -7,21 +7,25 @@ import { ActionTypes } from "../../context/RoomContext/roomActions";
 import { emitToggleCamera } from "../../services/peerCameraService";
 import { useGlassToast } from "../../context/GlassToastContext";
 import fakeTimeout from "../../utils/fakeTimeout";
+import { useState } from "react";
+import { logData } from "@repo/shared-utils/log-data";
+import { startCall } from "../../services/callsService";
 
 const useNavbarLogic = () => {
     const { room, ws, dispatch } = useRoom();
     const { playSound } = useNotificationSound();
     const { dispatch: dispatchToast } = useGlassToast();
+    const [cameraOn, setCameraOn] = useState(false);
 
     const toggleCamera = async () => {
-        if (room.myCameraIsOn) {
+        if (cameraOn) {
             stopAllTracks(room.participants[0].stream);
+            setCameraOn(false);
             dispatch({
                 type: ActionTypes.TOGGLE_PARTICIPANT_CAMERA,
                 payload: {
                     peerId: room.myId,
                     stream: null,
-                    myCameraIsOn: false,
                 },
             });
             emitToggleCamera({
@@ -35,12 +39,12 @@ const useNavbarLogic = () => {
 
         try {
             const camStream = await getUserCamera();
+            setCameraOn(true);
             dispatch({
                 type: ActionTypes.TOGGLE_PARTICIPANT_CAMERA,
                 payload: {
                     peerId: room.myId,
                     stream: camStream,
-                    myCameraIsOn: true,
                 },
             });
             emitToggleCamera({
@@ -48,6 +52,49 @@ const useNavbarLogic = () => {
                 peerId: room.myId,
                 cameraStatus: true,
                 ws,
+            });
+            logData({
+                title: "I am calling everyone",
+                layer: "camera_caller",
+                timeStamp: true,
+                data: {
+                    stream: camStream,
+                    me: undefined,
+                    cameraIsOn: cameraOn,
+                },
+                type: "info",
+            });
+
+            const otherParticipants = [...room.participants].filter(
+                (participant) => participant.id !== room.myId
+            );
+
+            startCall({
+                callback: (params) => {
+                    logData({
+                        title: "Someone answered the call",
+                        timeStamp: true,
+                        data: params,
+                        layer: "camera_receiver",
+                        type: "info",
+                    });
+                    dispatch({
+                        type: ActionTypes.TOGGLE_PARTICIPANT_CAMERA,
+                        payload: { ...params },
+                    });
+                },
+                otherParticipants,
+                me: room.me,
+                stream: camStream,
+                streamType: "camera",
+                errorCallback: (message) =>
+                    dispatchToast({
+                        type: "SHOW_TOAST",
+                        payload: {
+                            message,
+                            severity: "error",
+                        },
+                    }),
             });
         } catch (error) {
             dispatchToast({
@@ -64,12 +111,12 @@ const useNavbarLogic = () => {
 
     const endCall = async () => {
         stopAllTracks(room.participants[0].stream);
+        setCameraOn(false);
         dispatch({
             type: ActionTypes.TOGGLE_PARTICIPANT_CAMERA,
             payload: {
                 peerId: room.myId,
                 stream: null,
-                myCameraIsOn: false,
             },
         });
         emitToggleCamera({
@@ -85,7 +132,7 @@ const useNavbarLogic = () => {
         window.location.href = "/";
     };
 
-    return { toggleCamera, endCall, cameraOn: room.myCameraIsOn };
+    return { toggleCamera, endCall, cameraOn: cameraOn };
 };
 
 export default useNavbarLogic;
