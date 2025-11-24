@@ -56,7 +56,7 @@ const useJoinRoom = () => {
                 myId: generateId(),
                 peerSharingScreen: "",
                 imRoomOwner: false,
-                myCameraIsOn: false,
+                me: null,
             },
         });
 

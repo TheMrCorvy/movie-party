@@ -1,5 +1,6 @@
 import { MessageWithIndex, Participant, Poll } from "@repo/type-definitions";
 import { LocalRoom } from "./roomReducer";
+import Peer from "peerjs";
 
 export enum ActionTypes {
     "SET_ROOM" = "SET_ROOM",
@@ -44,7 +45,6 @@ export interface ToggleParticipantCameraAction {
     payload: {
         stream: MediaStream | null;
         peerId: string;
-        myCameraIsOn: boolean;
     };
 }
 
@@ -67,6 +67,11 @@ export interface FinishedPollAction {
     };
 }
 
+export interface SetPeerConnectionAction {
+    type: ActionTypes.SETUP_PEER_ACTION;
+    payload: Peer;
+}
+
 export type RoomAction =
     | SetRoomAction
     | UpdateParticipantsAction
@@ -75,4 +80,5 @@ export type RoomAction =
     | ToggleParticipantCameraAction
     | ToggleScreenSharing
     | UserVotedAction
-    | FinishedPollAction;
+    | FinishedPollAction
+    | SetPeerConnectionAction;

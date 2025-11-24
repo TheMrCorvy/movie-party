@@ -2,12 +2,13 @@ import { Room } from "@repo/type-definitions/rooms";
 import { Socket } from "socket.io-client";
 import { ActionTypes, RoomAction } from "./roomActions";
 import { putMeFirst } from "../../utils/putMeFirst";
+import Peer from "peerjs";
 
 export interface LocalRoom extends Room {
     myId: string;
     imRoomOwner: boolean;
     password?: string;
-    myCameraIsOn: boolean;
+    me: Peer | null;
 }
 export interface RoomState {
     room: LocalRoom;
@@ -91,11 +92,6 @@ export const roomReducer = (
                         ),
                         myId: state.room.myId,
                     }),
-                    myCameraIsOn: action.payload.myCameraIsOn,
-                    // action.payload.stream &&
-                    // action.payload.peerId === state.room.myId
-                    //     ? true
-                    //     : false,
                 },
             };
         case ActionTypes.TOGGLE_SCREEN_SHARING:
@@ -139,6 +135,15 @@ export const roomReducer = (
                         }
                         return message;
                     }),
+                },
+            };
+
+        case ActionTypes.SETUP_PEER_ACTION:
+            return {
+                ...state,
+                room: {
+                    ...state.room,
+                    me: action.payload,
                 },
             };
 
