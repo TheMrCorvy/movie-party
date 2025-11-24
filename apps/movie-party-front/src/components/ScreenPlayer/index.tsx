@@ -1,21 +1,17 @@
 import { type FC } from "react";
 import GlassButton from "../GlassButton";
-import Peer from "peerjs";
 import useScreenPlayer from "./useScreenPlayer";
 
 export interface ScreenPlayerProps {
-    me: Peer;
     remoteScreen?: MediaStream | null;
     clearRemoteScreen: () => void;
 }
 
 const ScreenPlayer: FC<ScreenPlayerProps> = ({
-    me,
     remoteScreen,
     clearRemoteScreen,
 }) => {
     const { screenStream, videoRef, shareScreen, room } = useScreenPlayer({
-        me,
         remoteScreen,
         clearRemoteScreen,
     });

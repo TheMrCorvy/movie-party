@@ -23,7 +23,6 @@ type UseScreenPlayer = (props: ScreenPlayerProps) => UseScreenPlayerResult;
 
 const useScreenPlayer: UseScreenPlayer = ({
     remoteScreen,
-    me,
     clearRemoteScreen,
 }) => {
     const { room, dispatch, ws } = useRoom();
@@ -107,7 +106,7 @@ const useScreenPlayer: UseScreenPlayer = ({
         });
 
         startCall({
-            me,
+            me: room.me,
             callback: (params) =>
                 logData({
                     title: "Someone answered the screen-sharing call",
