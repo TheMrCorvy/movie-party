@@ -8,6 +8,7 @@
             "outputs": [".next/**", "!.next/cache/**", "dist/**", "build/**"],
             "env": [
                 "PORT",
+                "WORKING_ENV",
                 "FEATURE_FLAGS",
                 "LAYERS_AVAILABLE",
                 "PEERJS_PORT",
@@ -19,6 +20,7 @@
             "dependsOn": ["^lint"],
             "env": [
                 "PORT",
+                "WORKING_ENV",
                 "FEATURE_FLAGS",
                 "LAYERS_AVAILABLE",
                 "PEERJS_PORT",
@@ -30,6 +32,7 @@
             "dependsOn": ["^check-types"],
             "env": [
                 "PORT",
+                "WORKING_ENV",
                 "FEATURE_FLAGS",
                 "LAYERS_AVAILABLE",
                 "PEERJS_PORT",
@@ -42,6 +45,7 @@
             "persistent": true,
             "env": [
                 "PORT",
+                "WORKING_ENV",
                 "FEATURE_FLAGS",
                 "LAYERS_AVAILABLE",
                 "PEERJS_PORT",
@@ -54,6 +58,7 @@
             "inputs": ["$TURBO_DEFAULT$", ".env*"],
             "env": [
                 "PORT",
+                "WORKING_ENV",
                 "FEATURE_FLAGS",
                 "LAYERS_AVAILABLE",
                 "PEERJS_PORT",
@@ -66,6 +71,7 @@
             "inputs": ["$TURBO_DEFAULT$", ".env*"],
             "env": [
                 "PORT",
+                "WORKING_ENV",
                 "FEATURE_FLAGS",
                 "LAYERS_AVAILABLE",
                 "PEERJS_PORT",
