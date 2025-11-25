@@ -57,15 +57,12 @@ const GlassNavbar: FC<GlassNavbarProps> = ({
         <AppBar
             position={position}
             sx={{
-                // backgroundColor: "rgba(255, 255, 255, 0.15)",
                 backgroundColor:
                     theme.palette.mode === "dark"
                         ? darkThemeBg
                         : lightThemeLighterBg,
                 backdropFilter,
                 borderTop: borderWhite,
-                // paddingTop: 2,
-                // paddingBottom: 2,
                 ...appbarLocation[location],
                 ...addPadding(),
             }}
