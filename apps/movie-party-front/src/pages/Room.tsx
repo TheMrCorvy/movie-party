@@ -29,7 +29,6 @@ const Room: FC = () => {
                     sx={{
                         ...roomContainer,
                         alignItems: isLgUp ? "center" : "start",
-                        paddingTop: isLgUp ? 0 : "40px",
                     }}
                 >
                     <Grid

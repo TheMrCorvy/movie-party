@@ -21,6 +21,7 @@ const styles: StylesService = () => {
             verticalAlign: "center",
             justifyContent: "center",
             height: "100%",
+            paddingTop: 0,
         },
         gridColFlex: {
             display: "flex",
