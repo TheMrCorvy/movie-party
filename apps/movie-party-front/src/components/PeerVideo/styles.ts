@@ -27,7 +27,6 @@ const styles: StylesService = () => {
         videoStyles: {
             width: "100%",
             maxWidth: "300px",
-            maxHeight: "200px",
             objectFit: "cover",
             display: "block",
         },
@@ -39,7 +38,6 @@ const styles: StylesService = () => {
             backdropFilter: backdropFilter,
             backgroundColor: lightThemeLighterBg,
             border: `1px solid ${lightThemeLighterBg}`,
-            width: "200px",
         },
     };
 };

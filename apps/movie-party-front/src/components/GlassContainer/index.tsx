@@ -1,4 +1,4 @@
-import { Box, useTheme } from "@mui/material";
+import { Box, SxProps, Theme, useTheme } from "@mui/material";
 import type { ElementType } from "react";
 import styles from "./styles";
 
@@ -20,6 +20,7 @@ type GlassContainerProps<T extends ElementType = "section"> = {
     children: React.ReactNode;
     justifyContent?: "start" | "end" | "space-between" | "space-around";
     primitive?: T;
+    additionalStyles?: SxProps<Theme>;
 } & React.ComponentPropsWithoutRef<T>;
 
 function GlassContainer<T extends ElementType = "section">({
@@ -30,6 +31,7 @@ function GlassContainer<T extends ElementType = "section">({
     gap = 2,
     justifyContent = "start" as const,
     primitive = "section" as T,
+    additionalStyles,
     ...restProps
 }: GlassContainerProps<T>) {
     const theme = useTheme();
@@ -45,6 +47,7 @@ function GlassContainer<T extends ElementType = "section">({
                 flexDirection: direction,
                 gap,
                 justifyContent: justifyContent as any,
+                ...additionalStyles,
             }}
             {...(restProps as any)}
         >

@@ -7,9 +7,15 @@ interface PeerVideoProps {
     stream?: MediaStream | null;
     peerName: string;
     isMyCamera: boolean;
+    isLgUp: boolean;
 }
 
-const PeerVideo: FC<PeerVideoProps> = ({ stream, peerName, isMyCamera }) => {
+const PeerVideo: FC<PeerVideoProps> = ({
+    stream,
+    peerName,
+    isMyCamera,
+    isLgUp,
+}) => {
     const videoRef = useRef<HTMLVideoElement>(null);
 
     const {
@@ -26,7 +32,7 @@ const PeerVideo: FC<PeerVideoProps> = ({ stream, peerName, isMyCamera }) => {
     }, [stream]);
 
     return (
-        <Box sx={videoContainerStyles}>
+        <Box sx={{ ...videoContainerStyles, width: isLgUp ? "200px" : "93%" }}>
             {stream && (
                 <Box
                     component="video"
@@ -34,7 +40,10 @@ const PeerVideo: FC<PeerVideoProps> = ({ stream, peerName, isMyCamera }) => {
                     autoPlay
                     playsInline
                     muted={isMyCamera}
-                    sx={videoStyles}
+                    sx={{
+                        ...videoStyles,
+                        maxHeight: isLgUp || isMyCamera ? "200px" : "auto",
+                    }}
                 />
             )}
 

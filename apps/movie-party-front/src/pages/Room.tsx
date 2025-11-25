@@ -32,12 +32,20 @@ const Room: FC = () => {
                         }}
                         sx={gridColFlex}
                     >
-                        <GlassContainer width={"100%"}>
+                        <GlassContainer
+                            width={isLgUp ? "100%" : "90vw"}
+                            additionalStyles={{
+                                padding: "24px",
+                            }}
+                        >
                             {isLgUp ? (
                                 <GlassContainer
+                                    width="100%"
                                     height={"auto"}
-                                    width={"100%"}
                                     direction="row"
+                                    additionalStyles={{
+                                        marginBottom: isLgUp ? "8px" : 0,
+                                    }}
                                 >
                                     <>
                                         {room.participants.map(
@@ -66,6 +74,7 @@ const Room: FC = () => {
                                                             participant.id ===
                                                             room.myId
                                                         }
+                                                        isLgUp={isLgUp}
                                                     />
                                                 </Suspense>
                                             )
@@ -93,6 +102,7 @@ const Room: FC = () => {
                                             isMyCamera={
                                                 participant.id === room.myId
                                             }
+                                            isLgUp={isLgUp}
                                         />
                                     </Suspense>
                                 ))
