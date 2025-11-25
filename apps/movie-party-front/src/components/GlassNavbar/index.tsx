@@ -34,10 +34,12 @@ const GlassNavbar: FC<GlassNavbarProps> = ({
         top: {
             top: 0,
             bottom: "auto",
+            left: 0,
         },
         bottom: {
             top: "auto",
             bottom: 0,
+            left: 0,
         },
     };
 

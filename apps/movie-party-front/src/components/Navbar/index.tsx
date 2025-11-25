@@ -31,7 +31,7 @@ const Navbar: FC = () => {
                 paddingTop: 2,
                 paddingBottom: 2,
             }}
-            position={isLgDown ? "fixed" : "static"}
+            position={isLgDown ? "fixed" : "absolute"}
         >
             <>
                 <IconButton

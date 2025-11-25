@@ -7,12 +7,13 @@ const styles: StylesService = () => {
             flexDirection: "column",
             paddingTop: "2rem",
             paddingBottom: "2rem",
+            paddingLeft: "1.6rem",
             justifyContent: "center",
             height: "100%",
         },
         roomContainerStyles: {
             color: "white",
-            height: "100lvh",
+            height: "85vh",
             padding: 0,
         },
         roomContainer: {

@@ -20,7 +20,8 @@ export const Layout: FC = () => {
                 verticalAlign: "center",
                 alignItems: "center",
                 flexDirection: "column",
-                height: "100lvh",
+                height: "100vh",
+                position: "relative",
             }}
         >
             <Outlet />

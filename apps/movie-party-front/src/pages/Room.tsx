@@ -130,7 +130,9 @@ const Room: FC = () => {
                                 md: 12,
                                 lg: 3,
                             }}
-                            sx={roomChatSectionStyles}
+                            sx={{
+                                ...roomChatSectionStyles,
+                            }}
                         >
                             <Chat />
                         </Grid>
