@@ -61,7 +61,9 @@ const useControls = () => {
     };
 
     const handleCopy = async () => {
-        const text = `${window.location.hostname}${process.env.WORKING_ENV === "dev" ? ":5173" : ""}/join-room/${room.id}`;
+        const isDevEnv = process.env.WORKING_ENV === "dev";
+        const domainName = window.location.hostname;
+        const text = `${isDevEnv ? "http://" : "https://"}${domainName}${isDevEnv ? ":5173" : ""}/join-room/${room.id}`;
         await copyToClipboard({
             callback: (params) => {
                 logData({

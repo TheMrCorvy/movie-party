@@ -13,7 +13,7 @@ const styles: StylesService = () => {
         },
         roomContainerStyles: {
             color: "white",
-            height: "100%",
+            height: "100lvh",
         },
         roomContainer: {
             display: "flex",
