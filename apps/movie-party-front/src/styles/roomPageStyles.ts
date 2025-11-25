@@ -19,7 +19,6 @@ const styles: StylesService = () => {
             display: "flex",
             verticalAlign: "center",
             justifyContent: "center",
-            alignItems: "center",
             height: "100%",
         },
         gridColFlex: {

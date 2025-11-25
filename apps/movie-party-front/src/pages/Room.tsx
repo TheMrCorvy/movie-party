@@ -24,7 +24,14 @@ const Room: FC = () => {
     return (
         <>
             <Container maxWidth="xl" sx={roomContainerStyles}>
-                <Grid container sx={roomContainer}>
+                <Grid
+                    container
+                    sx={{
+                        ...roomContainer,
+                        alignItems: isLgUp ? "center" : "start",
+                        paddingTop: isLgUp ? 0 : "40px",
+                    }}
+                >
                     <Grid
                         size={{
                             md: 12,

@@ -32,7 +32,13 @@ const PeerVideo: FC<PeerVideoProps> = ({
     }, [stream]);
 
     return (
-        <Box sx={{ ...videoContainerStyles, width: isLgUp ? "200px" : "93%" }}>
+        <Box
+            sx={{
+                ...videoContainerStyles,
+                width: isLgUp ? "200px" : "100%",
+                height: isLgUp ? "auto" : "100%",
+            }}
+        >
             {stream && (
                 <Box
                     component="video"
@@ -42,7 +48,7 @@ const PeerVideo: FC<PeerVideoProps> = ({
                     muted={isMyCamera}
                     sx={{
                         ...videoStyles,
-                        maxHeight: isLgUp || isMyCamera ? "200px" : "auto",
+                        maxHeight: isLgUp || isMyCamera ? "200px" : "300px",
                     }}
                 />
             )}

@@ -26,7 +26,6 @@ const styles: StylesService = () => {
         },
         videoStyles: {
             width: "100%",
-            maxWidth: "300px",
             objectFit: "cover",
             display: "block",
         },
