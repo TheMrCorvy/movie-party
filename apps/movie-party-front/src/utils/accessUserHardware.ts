@@ -20,7 +20,13 @@ export const getUserCamera = async (): Promise<MediaStream> => {
     );
     return await navigator.mediaDevices.getUserMedia({
         video: true,
-        audio: accessMicrophone,
+        audio: accessMicrophone
+            ? {
+                  echoCancellation: true,
+                  noiseSuppression: true,
+                  autoGainControl: true,
+              }
+            : false,
     });
 };
 
