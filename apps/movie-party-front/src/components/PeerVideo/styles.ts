@@ -23,9 +23,13 @@ const styles: StylesService = () => {
             justifyContent: "space-between",
             alignItems: "center",
             minHeight: "56px",
+            bottom: 0,
+            left: 0,
+            width: "100%",
         },
         videoStyles: {
             width: "100%",
+            height: "100%",
             objectFit: "cover",
             display: "block",
         },
@@ -37,6 +41,14 @@ const styles: StylesService = () => {
             backdropFilter: backdropFilter,
             backgroundColor: lightThemeLighterBg,
             border: `1px solid ${lightThemeLighterBg}`,
+            position: "relative",
+        },
+        skeletonStyles: {
+            display: "flex",
+            justifyContent: "center",
+            textAlign: "center",
+            verticalAlign: "center",
+            alignItems: "center",
         },
     };
 };

@@ -2,19 +2,25 @@ import { useEffect, useRef, type FC } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import styles from "./styles";
+import { Skeleton } from "@mui/material";
+import VideocamOffIcon from "@mui/icons-material/VideocamOff";
+import Fab from "@mui/material/Fab";
 
 interface PeerVideoProps {
     stream?: MediaStream | null;
     peerName: string;
     isMyCamera: boolean;
-    isLgUp: boolean;
+    useFullHeight: boolean;
+    screenSharingTime: boolean;
+    useFullWidth: boolean;
 }
 
 const PeerVideo: FC<PeerVideoProps> = ({
     stream,
     peerName,
     isMyCamera,
-    isLgUp,
+    useFullHeight,
+    useFullWidth,
 }) => {
     const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -35,11 +41,11 @@ const PeerVideo: FC<PeerVideoProps> = ({
         <Box
             sx={{
                 ...videoContainerStyles,
-                width: isLgUp ? "200px" : "100%",
-                height: isLgUp ? "auto" : "100%",
+                width: useFullWidth ? "100%" : "200px",
+                height: useFullHeight ? "100%" : "45%",
             }}
         >
-            {stream && (
+            {stream ? (
                 <Box
                     component="video"
                     ref={videoRef}
@@ -48,12 +54,32 @@ const PeerVideo: FC<PeerVideoProps> = ({
                     muted={isMyCamera}
                     sx={{
                         ...videoStyles,
-                        maxHeight: isLgUp || isMyCamera ? "200px" : "300px",
                     }}
                 />
-            )}
+            ) : useFullWidth ? (
+                <Box
+                    height="100%"
+                    width="100%"
+                    sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        textAlign: "center",
+                        verticalAlign: "center",
+                        alignItems: "center",
+                    }}
+                >
+                    <Fab disabled>
+                        <VideocamOffIcon />
+                    </Fab>
+                </Box>
+            ) : null}
 
-            <Box sx={peerLabelStyles}>
+            <Box
+                sx={{
+                    ...peerLabelStyles,
+                    position: useFullWidth ? "absolute" : undefined,
+                }}
+            >
                 <Typography variant="caption" sx={peerTextStyles}>
                     {peerName}
                 </Typography>

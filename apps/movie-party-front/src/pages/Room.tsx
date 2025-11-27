@@ -40,14 +40,20 @@ const Room: FC = () => {
                     >
                         <GlassContainer
                             width={isLgUp ? "100%" : "90vw"}
+                            height={isLgUp ? "auto" : "85vh"}
                             additionalStyles={{
                                 padding: "24px",
+                                marginBottom: isLgUp ? 0 : "7rem",
                             }}
                         >
                             {isLgUp ? (
                                 <GlassContainer
                                     width="100%"
-                                    height={"auto"}
+                                    height={
+                                        !room.peerSharingScreen
+                                            ? "60vh"
+                                            : undefined
+                                    }
                                     direction="row"
                                     additionalStyles={{
                                         marginBottom: isLgUp ? "8px" : 0,
@@ -80,7 +86,19 @@ const Room: FC = () => {
                                                             participant.id ===
                                                             room.myId
                                                         }
-                                                        isLgUp={isLgUp}
+                                                        useFullHeight={
+                                                            isLgUp &&
+                                                            room.participants
+                                                                .length <= 2
+                                                        }
+                                                        screenSharingTime={
+                                                            remoteScreen
+                                                                ? true
+                                                                : false
+                                                        }
+                                                        useFullWidth={
+                                                            !room.peerSharingScreen
+                                                        }
                                                     />
                                                 </Suspense>
                                             )
@@ -108,7 +126,14 @@ const Room: FC = () => {
                                             isMyCamera={
                                                 participant.id === room.myId
                                             }
-                                            isLgUp={isLgUp}
+                                            useFullHeight={
+                                                isLgUp &&
+                                                room.participants.length <= 2
+                                            }
+                                            screenSharingTime={
+                                                remoteScreen ? true : false
+                                            }
+                                            useFullWidth
                                         />
                                     </Suspense>
                                 ))
