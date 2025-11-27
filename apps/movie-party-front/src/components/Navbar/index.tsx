@@ -21,6 +21,7 @@ import { useMediaQuery } from "../../hooks/useMediaQuery";
 import ShareIcon from "@mui/icons-material/Share";
 import { useRoom } from "../../context/RoomContext/RoomContextProvider";
 import useClipboard from "../../hooks/useClipboard";
+import CreatePoll from "../CreatePoll";
 
 const Navbar: FC = () => {
     const { fabButtons, fabButtonsContainer, spacer, endCallStyles } = styles();
@@ -135,9 +136,18 @@ const Navbar: FC = () => {
                         <ChatIcon />
                     </IconButton>
                 ) : (
-                    <IconButton onClick={handleCopy}>
-                        <ShareIcon />
-                    </IconButton>
+                    <Box
+                        sx={{
+                            display: "flex",
+                            gap: 2,
+                            flexDirection: "row",
+                        }}
+                    >
+                        <IconButton onClick={handleCopy}>
+                            <ShareIcon />
+                        </IconButton>
+                        <CreatePoll />
+                    </Box>
                 )}
             </>
         </GlassNavbar>
