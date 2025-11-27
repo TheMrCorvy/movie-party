@@ -1,5 +1,4 @@
 import { PatternClass } from "@repo/type-definitions";
-import { copyToClipboard } from "../../utils/accessUserHardware";
 import { logData } from "@repo/shared-utils/log-data";
 import {
     sendBackgroundPattern,
