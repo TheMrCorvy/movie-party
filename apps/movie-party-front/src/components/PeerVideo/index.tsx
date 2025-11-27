@@ -2,7 +2,6 @@ import { useEffect, useRef, type FC } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import styles from "./styles";
-import { Skeleton } from "@mui/material";
 import VideocamOffIcon from "@mui/icons-material/VideocamOff";
 import Fab from "@mui/material/Fab";
 
