@@ -18,12 +18,17 @@ import Chat from "../Chat";
 import RoomControls from "../RoomControls";
 import GlassButton from "../GlassButton";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
+import ShareIcon from "@mui/icons-material/Share";
+import { useRoom } from "../../context/RoomContext/RoomContextProvider";
+import useClipboard from "../../hooks/useClipboard";
 
 const Navbar: FC = () => {
     const { fabButtons, fabButtonsContainer, spacer, endCallStyles } = styles();
     const { toggleCamera, endCall, cameraOn } = useNavbarLogic();
     const { dispatch } = useGlassDrawer();
     const isLgDown = useMediaQuery().max.width("lg");
+    const { room } = useRoom();
+    const { handleCopy } = useClipboard({ roomId: room.id });
 
     return (
         <GlassNavbar
@@ -94,10 +99,10 @@ const Navbar: FC = () => {
                     </Fab>
                 </Box>
                 <Box sx={spacer} />
-                {isLgDown && (
+                {isLgDown ? (
                     <IconButton
                         color="inherit"
-                        aria-label="search"
+                        aria-label="abrir chat"
                         onClick={() =>
                             dispatch({
                                 type: "OPEN_DRAWER",
@@ -128,6 +133,10 @@ const Navbar: FC = () => {
                         }
                     >
                         <ChatIcon />
+                    </IconButton>
+                ) : (
+                    <IconButton onClick={handleCopy}>
+                        <ShareIcon />
                     </IconButton>
                 )}
             </>

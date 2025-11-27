@@ -11,6 +11,7 @@ import ShareIcon from "@mui/icons-material/Share";
 import styles from "./styles";
 import useControls from "./useControls";
 import { FC } from "react";
+import useClipboard from "../../hooks/useClipboard";
 
 const RoomControls: FC = () => {
     const {
@@ -23,12 +24,13 @@ const RoomControls: FC = () => {
 
     const {
         handleButtonClick,
-        handleCopy,
         handleFileChange,
         handleReset,
         room,
         fileInputRef,
     } = useControls();
+
+    const { handleCopy } = useClipboard({ roomId: room.id });
 
     return (
         <GlassContainer
