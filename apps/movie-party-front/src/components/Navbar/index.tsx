@@ -22,9 +22,17 @@ import ShareIcon from "@mui/icons-material/Share";
 import { useRoom } from "../../context/RoomContext/RoomContextProvider";
 import useClipboard from "../../hooks/useClipboard";
 import CreatePoll from "../CreatePoll";
+import { CSSProperties } from "@mui/material";
 
 const Navbar: FC = () => {
-    const { fabButtons, fabButtonsContainer, spacer, endCallStyles } = styles();
+    const {
+        fabButtons,
+        fabButtonsContainer,
+        spacer,
+        endCallStyles,
+        rightButtons,
+        span,
+    } = styles();
     const { toggleCamera, endCall, cameraOn } = useNavbarLogic();
     const { dispatch } = useGlassDrawer();
     const isLgDown = useMediaQuery().max.width("lg");
@@ -50,11 +58,7 @@ const Navbar: FC = () => {
                                 children: (
                                     <>
                                         <RoomControls />
-                                        <span
-                                            style={{
-                                                height: "16px",
-                                            }}
-                                        />
+                                        <span style={span as CSSProperties} />
                                         <GlassButton
                                             variant="icon-btn"
                                             onClick={() =>
@@ -112,9 +116,7 @@ const Navbar: FC = () => {
                                         <>
                                             <Chat />
                                             <span
-                                                style={{
-                                                    height: "16px",
-                                                }}
+                                                style={span as CSSProperties}
                                             />
                                             <GlassButton
                                                 variant="icon-btn"
@@ -136,13 +138,7 @@ const Navbar: FC = () => {
                         <ChatIcon />
                     </IconButton>
                 ) : (
-                    <Box
-                        sx={{
-                            display: "flex",
-                            gap: 2,
-                            flexDirection: "row",
-                        }}
-                    >
+                    <Box sx={rightButtons}>
                         <IconButton onClick={handleCopy}>
                             <ShareIcon />
                         </IconButton>

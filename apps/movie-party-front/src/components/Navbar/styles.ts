@@ -40,6 +40,12 @@ const styles: StylesService = () => {
         spacer: {
             flexGrow: 1,
         },
+        rightButtons: {
+            display: "flex",
+            gap: 2,
+            flexDirection: "row",
+        },
+        span: { height: "16px" },
     };
 };
 
