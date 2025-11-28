@@ -16,6 +16,8 @@ export interface StartCallParams {
 export interface StartCallCallbackParams {
     peerId: string;
     stream: MediaStream | null;
+    videoStream?: MediaStream | null;
+    audioStream?: MediaStream | null;
 }
 
 export type StartCall = (params: StartCallParams) => void;
@@ -83,9 +85,23 @@ export const startCall: StartCall = ({
             }
 
             call.on("stream", (peerStream) => {
+                const videoTracks = peerStream.getVideoTracks();
+                const audioTracks = peerStream.getAudioTracks();
+
+                const videoStream =
+                    videoTracks.length > 0
+                        ? new MediaStream(videoTracks)
+                        : null;
+                const audioStream =
+                    audioTracks.length > 0
+                        ? new MediaStream(audioTracks)
+                        : null;
+
                 callback({
                     peerId: participant.id,
                     stream: peerStream,
+                    videoStream,
+                    audioStream,
                 });
             });
 
@@ -103,6 +119,8 @@ export const startCall: StartCall = ({
                 callback({
                     peerId: participant.id,
                     stream: null,
+                    videoStream: null,
+                    audioStream: null,
                 });
             });
         } catch (error) {
@@ -132,6 +150,8 @@ export interface AnswerCallCallbackParams {
     remoteStream: MediaStream | null;
     peerId: string;
     streamType: StreamType;
+    videoStream?: MediaStream | null;
+    audioStream?: MediaStream | null;
 }
 
 export type AnswerCall = (params: AnswerCallParams) => () => void;
@@ -159,9 +179,17 @@ export const answerCall: AnswerCall = ({
     try {
         call.answer(stream);
         call.on("stream", (remoteStream: MediaStream) => {
+            const videoTracks = remoteStream.getVideoTracks();
+            const audioTracks = remoteStream.getAudioTracks();
+
+            const videoStream =
+                videoTracks.length > 0 ? new MediaStream(videoTracks) : null;
+            const audioStream =
+                audioTracks.length > 0 ? new MediaStream(audioTracks) : null;
+
             logData({
                 title: "Received stream from another user",
-                data: { remoteStream, streamType },
+                data: { remoteStream, streamType, videoStream, audioStream },
                 timeStamp: true,
                 type: "info",
                 layer: "camera",
@@ -170,6 +198,8 @@ export const answerCall: AnswerCall = ({
                 remoteStream,
                 peerId: callerId,
                 streamType,
+                videoStream,
+                audioStream,
             });
         });
 
@@ -197,6 +227,8 @@ export const answerCall: AnswerCall = ({
                 remoteStream: null,
                 peerId: callerId,
                 streamType,
+                videoStream: null,
+                audioStream: null,
             });
         });
 
