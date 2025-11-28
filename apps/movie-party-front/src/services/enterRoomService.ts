@@ -1,6 +1,7 @@
 import { logData } from "@repo/shared-utils/log-data";
 import {
     EnterRoomWsParams,
+    LeaveRoomWsParams,
     RoomExistsWsCallbackParams,
     RoomExistsWsParams,
     Signals,
@@ -61,4 +62,29 @@ export const verifyRoom: VerifyRoomService = ({ roomId, ws, callback }) => {
         ws.off(Signals.ROOM_EXISTS);
         ws.off(Signals.ROOM_NOT_FOUND);
     };
+};
+
+export interface LeaveRoomServiceParams extends LeaveRoomWsParams {
+    ws: Socket | null;
+}
+
+export type LeaveRoomService = (params: LeaveRoomServiceParams) => void;
+
+export const leaveRoomService: LeaveRoomService = ({ roomId, peerId, ws }) => {
+    if (!ws) {
+        return () => {
+            logData({
+                title: "Failed to call web socket",
+                type: "warn",
+                data: {
+                    message:
+                        "Something during the setup of the events went wrong...",
+                },
+                layer: "room_ws",
+                timeStamp: true,
+            });
+        };
+    }
+
+    ws.emit(Signals.LEAVE_ROOM, { peerId, roomId });
 };
