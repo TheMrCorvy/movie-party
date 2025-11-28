@@ -6,6 +6,7 @@ import { leaveRoom } from "./leaveRoom";
 import { roomExists } from "./roomExists";
 import { sendReceiveMessages } from "./sendReceiveMessages";
 import { togglePeerCamera } from "./togglePeerCamera";
+import { togglePeerMicrophone } from "./togglePeerMicrophone";
 import { shareScreen } from "./shareScreen";
 import { logData } from "@repo/shared-utils/log-data";
 import { createPoll } from "./createPoll";
@@ -46,7 +47,18 @@ export const roomHandler: RoomHandler = ({ socket, io, rooms }) => {
         sendReceiveMessages({ roomId, message, rooms, io })
     );
     socket.on(Signals.PEER_TOGGLED_CAMERA, ({ roomId, peerId, cameraStatus }) =>
-        togglePeerCamera({ roomId, peerId, io, cameraStatus })
+        togglePeerCamera({ roomId, peerId, io, cameraStatus, rooms })
+    );
+    socket.on(
+        Signals.PEER_TOGGLED_MICROPHONE,
+        ({ roomId, peerId, microphoneStatus }) =>
+            togglePeerMicrophone({
+                roomId,
+                peerId,
+                io,
+                microphoneStatus,
+                rooms,
+            })
     );
     socket.on(Signals.SCREEN_SHARING, ({ peerId, status, roomId }) =>
         shareScreen({ peerId, status, rooms, roomId, io })
