@@ -6,7 +6,8 @@ import VideocamOffIcon from "@mui/icons-material/VideocamOff";
 import Fab from "@mui/material/Fab";
 
 interface PeerVideoProps {
-    stream?: MediaStream | null;
+    videoStream?: MediaStream | null;
+    audioStream?: MediaStream | null;
     peerName: string;
     isMyCamera: boolean;
     useFullHeight: boolean;
@@ -15,7 +16,8 @@ interface PeerVideoProps {
 }
 
 const PeerVideo: FC<PeerVideoProps> = ({
-    stream,
+    videoStream,
+    audioStream,
     peerName,
     isMyCamera,
     useFullHeight,
@@ -32,9 +34,24 @@ const PeerVideo: FC<PeerVideoProps> = ({
 
     useEffect(() => {
         if (videoRef.current) {
-            videoRef.current.srcObject = stream || null;
+            const combinedStream = new MediaStream();
+
+            if (videoStream) {
+                videoStream
+                    .getVideoTracks()
+                    .forEach((track) => combinedStream.addTrack(track));
+            }
+
+            if (audioStream) {
+                audioStream
+                    .getAudioTracks()
+                    .forEach((track) => combinedStream.addTrack(track));
+            }
+
+            videoRef.current.srcObject =
+                combinedStream.getTracks().length > 0 ? combinedStream : null;
         }
-    }, [stream]);
+    }, [videoStream, audioStream]);
 
     return (
         <Box
@@ -44,7 +61,7 @@ const PeerVideo: FC<PeerVideoProps> = ({
                 height: useFullHeight ? "100%" : "45%",
             }}
         >
-            {stream ? (
+            {videoStream || audioStream ? (
                 <Box
                     component="video"
                     ref={videoRef}
