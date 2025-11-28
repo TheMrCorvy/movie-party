@@ -13,6 +13,7 @@ export enum Signals {
     "MESSAGE_RECEIVED" = "MESSAGE_RECEIVED",
     "ERROR" = "ERROR",
     "PEER_TOGGLED_CAMERA" = "PEER_TOGGLED_CAMERA",
+    "PEER_TOGGLED_MICROPHONE" = "PEER_TOGGLED_MICROPHONE",
     "NEW_PEER_JOINED" = "NEW_PEER_JOINED",
     "SCREEN_SHARING" = "SCREEN_SHARING",
     "CREATE_POLL" = "CREATE_POLL",
@@ -74,6 +75,11 @@ export interface RoomExistsWsParams {
     roomId: string;
 }
 
+export interface LeaveRoomWsParams {
+    roomId: string;
+    peerId: string;
+}
+
 export interface RoomExistsWsCallbackParams {
     roomExists: boolean;
     password: boolean;
@@ -127,6 +133,17 @@ export interface ToggleCameraWsParams {
 export interface ToggleCameraWsCallbackParams {
     peerId: string;
     cameraStatus: boolean;
+}
+
+export interface ToggleMicrophoneWsParams {
+    roomId: string;
+    peerId: string;
+    microphoneStatus: boolean;
+}
+
+export interface ToggleMicrophoneWsCallbackParams {
+    peerId: string;
+    microphoneStatus: boolean;
 }
 
 export interface ShareScreenWsParams {
