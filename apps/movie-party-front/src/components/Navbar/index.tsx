@@ -33,7 +33,8 @@ const Navbar: FC = () => {
         rightButtons,
         span,
     } = styles();
-    const { toggleCamera, endCall, cameraOn } = useNavbarLogic();
+    const { toggleCamera, endCall, cameraOn, toggleMicrophone, microphoneOn } =
+        useNavbarLogic();
     const { dispatch } = useGlassDrawer();
     const isLgDown = useMediaQuery().max.width("lg");
     const { room } = useRoom();
@@ -91,8 +92,9 @@ const Navbar: FC = () => {
                         sx={fabButtons}
                         color="primary"
                         aria-label="encender / apagar microfono"
+                        onClick={toggleMicrophone}
                     >
-                        {cameraOn ? <MicIcon /> : <MicOffIcon />}
+                        {microphoneOn ? <MicIcon /> : <MicOffIcon />}
                     </Fab>
                     <Fab
                         sx={endCallStyles}
