@@ -79,8 +79,11 @@ const Room: FC = () => {
                                                         peerName={
                                                             participant.name
                                                         }
-                                                        stream={
-                                                            participant.stream
+                                                        videoStream={
+                                                            participant.videoStream
+                                                        }
+                                                        audioStream={
+                                                            participant.audioStream
                                                         }
                                                         isMyCamera={
                                                             participant.id ===
@@ -122,7 +125,12 @@ const Room: FC = () => {
                                     >
                                         <PeerVideo
                                             peerName={participant.name}
-                                            stream={participant.stream}
+                                            videoStream={
+                                                participant.videoStream
+                                            }
+                                            audioStream={
+                                                participant.audioStream
+                                            }
                                             isMyCamera={
                                                 participant.id === room.myId
                                             }

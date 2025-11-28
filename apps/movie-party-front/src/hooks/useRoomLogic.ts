@@ -11,7 +11,10 @@ import {
     peerConnectionService,
 } from "../services/peerConnectionService";
 import { useGlassToast } from "../context/GlassToastContext";
-import { listenPeerToggledCamera } from "../services/peerCameraService";
+import {
+    listenPeerToggledCamera,
+    listenPeerToggledMicrophone,
+} from "../services/peerCameraService";
 import { ActionTypes } from "../context/RoomContext/roomActions";
 import { newPeerJoinedListener } from "../services/updateParticipantsService";
 
@@ -49,7 +52,35 @@ const useRoomLogic = () => {
                         type: ActionTypes.TOGGLE_PARTICIPANT_CAMERA,
                         payload: {
                             peerId: peerId,
-                            stream: null,
+                            videoStream: null,
+                        },
+                    });
+                }
+            },
+        });
+
+        return () => {
+            unmountListenEvent();
+        };
+    }, [ws]); // eslint-disable-line react-hooks/exhaustive-deps
+
+    useEffect(() => {
+        const unmountListenEvent = listenPeerToggledMicrophone({
+            ws,
+            callback: ({ microphoneStatus, peerId }) => {
+                if (!microphoneStatus) {
+                    logData({
+                        title: "Peer turned off their microphone",
+                        layer: "camera_receiver",
+                        type: "info",
+                        timeStamp: true,
+                        data: { microphoneStatus, peerId },
+                    });
+                    dispatch({
+                        type: ActionTypes.TOGGLE_PARTICIPANT_MICROPHONE,
+                        payload: {
+                            peerId: peerId,
+                            audioStream: null,
                         },
                     });
                 }
@@ -66,7 +97,13 @@ const useRoomLogic = () => {
             me: room.participants.find(
                 (participant) => participant.id === room.myId
             ) as Participant,
-            onCallEvent: ({ remoteStream, peerId, streamType }) => {
+            onCallEvent: ({
+                remoteStream,
+                peerId,
+                streamType,
+                videoStream,
+                audioStream,
+            }) => {
                 if (streamType === "screen") {
                     logData({
                         title: "Received remote screen stream",
@@ -80,19 +117,40 @@ const useRoomLogic = () => {
                 }
 
                 logData({
-                    title: "Received remote camera stream",
-                    data: { remoteStream, peerId, streamType },
+                    title: "Received remote camera/audio stream",
+                    data: {
+                        remoteStream,
+                        peerId,
+                        streamType,
+                        videoStream,
+                        audioStream,
+                    },
                     timeStamp: true,
                     type: "info",
                     layer: "camera_receiver",
                 });
-                dispatch({
-                    type: ActionTypes.TOGGLE_PARTICIPANT_CAMERA,
-                    payload: {
-                        stream: remoteStream,
-                        peerId: peerId,
-                    },
-                });
+
+                // Despachar video si existe
+                if (videoStream !== undefined) {
+                    dispatch({
+                        type: ActionTypes.TOGGLE_PARTICIPANT_CAMERA,
+                        payload: {
+                            videoStream: videoStream,
+                            peerId: peerId,
+                        },
+                    });
+                }
+
+                // Despachar audio si existe
+                if (audioStream !== undefined) {
+                    dispatch({
+                        type: ActionTypes.TOGGLE_PARTICIPANT_MICROPHONE,
+                        payload: {
+                            audioStream: audioStream,
+                            peerId: peerId,
+                        },
+                    });
+                }
             },
             onPeerClose: defaultPeerClose,
             onPeerError: defaultPeerError,
