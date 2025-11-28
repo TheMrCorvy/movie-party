@@ -1,10 +1,21 @@
-import { Room } from "@repo/type-definitions/rooms";
+import type { Participant } from "@repo/type-definitions";
 import { Socket } from "socket.io-client";
 import { ActionTypes, RoomAction } from "./roomActions";
 import { putMeFirst } from "../../utils/putMeFirst";
 import Peer from "peerjs";
 
-export interface LocalRoom extends Room {
+export interface LocalRoom {
+    id: string;
+    messages: any[];
+    participants: Array<
+        Participant & {
+            videoStream?: MediaStream | null;
+            audioStream?: MediaStream | null;
+        }
+    >;
+    screenSharing?: MediaStream;
+    peerSharingScreen: string;
+    hasCustomBg?: any;
     myId: string;
     imRoomOwner: boolean;
     password?: string;
@@ -40,11 +51,9 @@ export const roomReducer = (
                         const roomP = state.room.participants.find(
                             (p) => p.id === updatedParticipant.id
                         );
-
                         if (roomP === undefined) {
                             return updatedParticipant;
                         }
-
                         return roomP;
                     }),
                 },
@@ -77,20 +86,30 @@ export const roomReducer = (
                 ...state,
                 room: {
                     ...state.room,
-                    participants: putMeFirst({
-                        participants: state.room.participants.map(
-                            (participant) => {
-                                if (participant.id !== action.payload.peerId) {
-                                    return participant;
-                                }
-
-                                return {
-                                    ...participant,
-                                    stream: action.payload.stream,
-                                };
-                            }
-                        ),
-                        myId: state.room.myId,
+                    participants: state.room.participants.map((participant) => {
+                        if (participant.id !== action.payload.peerId) {
+                            return participant;
+                        }
+                        return {
+                            ...participant,
+                            videoStream: action.payload.videoStream,
+                        };
+                    }),
+                },
+            };
+        case ActionTypes.TOGGLE_PARTICIPANT_MICROPHONE:
+            return {
+                ...state,
+                room: {
+                    ...state.room,
+                    participants: state.room.participants.map((participant) => {
+                        if (participant.id !== action.payload.peerId) {
+                            return participant;
+                        }
+                        return {
+                            ...participant,
+                            audioStream: action.payload.audioStream,
+                        };
                     }),
                 },
             };
@@ -102,7 +121,6 @@ export const roomReducer = (
                     peerSharingScreen: action.payload,
                 },
             };
-
         case ActionTypes.FINISHED_POLL:
             return {
                 ...state,
@@ -116,7 +134,6 @@ export const roomReducer = (
                     }),
                 },
             };
-
         case ActionTypes.USER_VOTED:
             return {
                 ...state,
@@ -137,7 +154,6 @@ export const roomReducer = (
                     }),
                 },
             };
-
         case ActionTypes.SETUP_PEER_ACTION:
             return {
                 ...state,
@@ -146,7 +162,6 @@ export const roomReducer = (
                     me: action.payload,
                 },
             };
-
         default:
             return state;
     }

@@ -3,15 +3,16 @@ import { LocalRoom } from "./roomReducer";
 import Peer from "peerjs";
 
 export enum ActionTypes {
-    "SET_ROOM" = "SET_ROOM",
-    "JOIN_ROOM" = "JOIN_ROOM",
-    "UPDATE_PARTICIPANTS" = "UPDATE_PARTICIPANTS",
-    "MESSAGE_RECEIVED" = "MESSAGE_RECEIVED",
-    "TOGGLE_PARTICIPANT_CAMERA" = "TOGGLE_PARTICIPANT_CAMERA",
-    "SETUP_PEER_ACTION" = "SETUP_PEER_ACTION",
-    "TOGGLE_SCREEN_SHARING" = "TOGGLE_SCREEN_SHARING",
-    "USER_VOTED" = "USER_VOTED",
-    "FINISHED_POLL" = "FINISHED_POLL",
+    SET_ROOM = "SET_ROOM",
+    JOIN_ROOM = "JOIN_ROOM",
+    UPDATE_PARTICIPANTS = "UPDATE_PARTICIPANTS",
+    MESSAGE_RECEIVED = "MESSAGE_RECEIVED",
+    TOGGLE_PARTICIPANT_CAMERA = "TOGGLE_PARTICIPANT_CAMERA",
+    TOGGLE_PARTICIPANT_MICROPHONE = "TOGGLE_PARTICIPANT_MICROPHONE",
+    SETUP_PEER_ACTION = "SETUP_PEER_ACTION",
+    TOGGLE_SCREEN_SHARING = "TOGGLE_SCREEN_SHARING",
+    USER_VOTED = "USER_VOTED",
+    FINISHED_POLL = "FINISHED_POLL",
 }
 
 export interface SetRoomAction {
@@ -43,7 +44,15 @@ export interface MessageReceivedAction {
 export interface ToggleParticipantCameraAction {
     type: ActionTypes.TOGGLE_PARTICIPANT_CAMERA;
     payload: {
-        stream: MediaStream | null;
+        videoStream: MediaStream | null;
+        peerId: string;
+    };
+}
+
+export interface ToggleParticipantMicrophoneAction {
+    type: ActionTypes.TOGGLE_PARTICIPANT_MICROPHONE;
+    payload: {
+        audioStream: MediaStream | null;
         peerId: string;
     };
 }
@@ -78,6 +87,7 @@ export type RoomAction =
     | JoinRoomAction
     | MessageReceivedAction
     | ToggleParticipantCameraAction
+    | ToggleParticipantMicrophoneAction
     | ToggleScreenSharing
     | UserVotedAction
     | FinishedPollAction
