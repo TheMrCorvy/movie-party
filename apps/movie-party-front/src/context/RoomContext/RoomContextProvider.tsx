@@ -9,7 +9,12 @@ import { roomReducer, RoomState } from "./roomReducer";
 import type { RoomAction } from "./roomActions";
 import SocketIOClient from "socket.io-client";
 
-const WS = process.env.BACKEND_BASE_PATH || "http://localhost:4000";
+const WS = process.env.BACKEND_BASE_PATH;
+
+if (!WS) {
+    throw new Error("BACKEND_BASE_PATH environment variable is not defined");
+}
+
 const ws = SocketIOClient(WS);
 
 const RoomContext = createContext<RoomState | undefined>(undefined);
