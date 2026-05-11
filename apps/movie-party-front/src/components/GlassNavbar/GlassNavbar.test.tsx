@@ -3,7 +3,6 @@ import GlassNavbar from ".";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { FC, ReactNode } from "react";
 
-// Mock ThemeProvider to wrap components
 const AllTheProviders: FC<{ children: ReactNode }> = ({ children }) => {
     const theme = createTheme();
     return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
