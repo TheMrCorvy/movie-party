@@ -53,10 +53,6 @@ describe("GlassDrawer", () => {
         );
 
         const drawer = screen.getByRole("presentation");
-
-        // The drawer is opened by TestComponent. Now we simulate a close.
-        // In MUI's SwipeableDrawer, closing can be triggered by various events.
-        // One of them is clicking the backdrop.
         const backdrop =
             drawer.parentElement?.querySelector(".MuiBackdrop-root");
 
@@ -64,8 +60,6 @@ describe("GlassDrawer", () => {
             fireEvent.click(backdrop);
         }
 
-        // After the click, the drawer should be closed.
-        // We can't directly test the state, but we can test that the content is gone.
         expect(screen.queryByText("Test Content")).not.toBeInTheDocument();
     });
 });
