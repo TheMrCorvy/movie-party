@@ -7,7 +7,6 @@ import {
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { useEffect } from "react";
 
-// Mock de MUI components
 jest.mock("@mui/material", () => ({
     ...jest.requireActual("@mui/material"),
     Snackbar: ({
@@ -19,7 +18,6 @@ jest.mock("@mui/material", () => ({
     }) => (open ? <div data-testid="snackbar">{children}</div> : null),
 }));
 
-// Mock del componente GlassAlert para evitar problemas de animación
 jest.mock("../GlassAlert", () => ({
     __esModule: true,
     default: ({
