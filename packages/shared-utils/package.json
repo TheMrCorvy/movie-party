@@ -15,6 +15,6 @@
         }
     },
     "devDependencies": {
-        "@repo/typescript-config": "*"
+        "@repo/typescript-config": "workspace:*"
     }
 }

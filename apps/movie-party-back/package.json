@@ -13,8 +13,8 @@
     "license": "ISC",
     "description": "",
     "dependencies": {
-        "@repo/shared-utils": "*",
-        "@repo/type-definitions": "*",
+        "@repo/shared-utils": "workspace:*",
+        "@repo/type-definitions": "workspace:*",
         "@types/express-fileupload": "^1.5.1",
         "bcrypt": "^6.0.0",
         "dotenv": "^16.0.3",
