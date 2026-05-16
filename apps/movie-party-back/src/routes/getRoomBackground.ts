@@ -5,7 +5,7 @@ import fs from "fs";
 import roomValidation from "../utils/roomValidations";
 
 export const getRoomBackground = (
-    req: Request,
+    req: Request<{ roomId: string }>,
     res: Response,
     rooms: ServerRoom[]
 ) => {

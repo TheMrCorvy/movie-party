@@ -13,11 +13,7 @@
         "strictFunctionTypes": true,
         "noUnusedLocals": true,
         "noUnusedParameters": false,
-        "isolatedModules": true,
-        "paths": {
-            "*": ["node_modules/*"]
-        },
-        "baseUrl": "./"
+        "isolatedModules": true
     },
     "include": ["./src/**/*.ts", "./src/**/*.d.ts"],
     "exclude": ["node_modules", "dist"]
