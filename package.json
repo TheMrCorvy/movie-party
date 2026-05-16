@@ -15,7 +15,9 @@
         "start": "turbo run start"
     },
     "devDependencies": {
+        "@repo/eslint-config": "workspace:*",
         "esbuild": "^0.25.9",
+        "eslint": "^9.33.0",
         "husky": "^9.1.7",
         "lint-staged": "^15.3.0",
         "prettier": "^3.6.2",
