@@ -59,15 +59,19 @@ export const leaveRoom: LeaveRoom = ({ peerId, roomId, rooms, io, socket }) => {
             const bg = room.hasCustomBg;
             if (bg && !bg.isCssPattern) {
                 const assetsPath = path.join(__dirname, "../assets");
+
                 if (fs.existsSync(assetsPath)) {
                     const files = fs.readdirSync(assetsPath);
                     const match = files.find(
                         (f) => f.startsWith(roomId + ".") || f === roomId
                     );
+
                     if (match) {
                         const fileToDelete = path.join(assetsPath, match);
+
                         try {
                             fs.unlinkSync(fileToDelete);
+
                             logData({
                                 title: "Deleted room background image from disk",
                                 layer: "room_ws",
@@ -133,12 +137,14 @@ export const leaveRoom: LeaveRoom = ({ peerId, roomId, rooms, io, socket }) => {
         },
         type: "info",
     });
+
     const getParticipantsCallback: UpdateParticipantsWsCallback = {
         roomId,
         participants: room.participants,
         messages: room.messages,
         peerSharingScreen: room.peerSharingScreen,
     };
+
     io.in(roomId).emit(Signals.GET_PARTICIPANTS, getParticipantsCallback);
 
     const newMessage: MessageWithIndex = {
@@ -150,6 +156,7 @@ export const leaveRoom: LeaveRoom = ({ peerId, roomId, rooms, io, socket }) => {
     };
 
     rooms[roomIndex].messages.push(newMessage);
+
     const callbackParams: MessageReceivedWsCallbackParams = {
         messageReceived: newMessage,
     };

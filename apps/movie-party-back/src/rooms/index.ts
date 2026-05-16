@@ -25,9 +25,11 @@ export const roomHandler: RoomHandler = ({ socket, io, rooms }) => {
     socket.on(Signals.CREATE_ROOM, ({ peerName, peerId, password }) =>
         createRoom({ rooms, socket, peerName, peerId, io, password })
     );
+
     socket.on(Signals.ENTER_ROOM, ({ roomId, peerId, peerName }) =>
         enterRoom({ roomId, peerId, peerName, rooms, io, socket })
     );
+
     socket.on(Signals.LEAVE_ROOM, ({ peerId, roomId }) => {
         // the user clicked to leave the room
         logData({
@@ -40,15 +42,19 @@ export const roomHandler: RoomHandler = ({ socket, io, rooms }) => {
         });
         leaveRoom({ roomId, peerId, rooms, io, socket });
     });
+
     socket.on(Signals.DOES_ROOM_EXISTS, ({ roomId }) =>
         roomExists({ rooms, roomId, io })
     );
+
     socket.on(Signals.SEND_MESSAGE, ({ roomId, message }) =>
         sendReceiveMessages({ roomId, message, rooms, io })
     );
+
     socket.on(Signals.PEER_TOGGLED_CAMERA, ({ roomId, peerId, cameraStatus }) =>
         togglePeerCamera({ roomId, peerId, io, cameraStatus, rooms })
     );
+
     socket.on(
         Signals.PEER_TOGGLED_MICROPHONE,
         ({ roomId, peerId, microphoneStatus }) =>
@@ -60,9 +66,11 @@ export const roomHandler: RoomHandler = ({ socket, io, rooms }) => {
                 rooms,
             })
     );
+
     socket.on(Signals.SCREEN_SHARING, ({ peerId, status, roomId }) =>
         shareScreen({ peerId, status, rooms, roomId, io })
     );
+
     socket.on(
         Signals.CREATE_POLL,
         ({ roomId, peerId, pollOptions, pollId, title }) =>
@@ -87,6 +95,7 @@ export const roomHandler: RoomHandler = ({ socket, io, rooms }) => {
             optionId,
         })
     );
+
     socket.on(Signals.BACKGROUND_UPDATED, ({ roomId, peerId, background }) =>
         updateBackground({ roomId, peerId, background, rooms, io, socket })
     );

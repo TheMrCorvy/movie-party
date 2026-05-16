@@ -17,6 +17,7 @@ export const roomExists = ({ roomId, rooms, io }: RoomExistsParams) => {
         rooms,
         roomId,
     });
+
     const callbackParams: RoomExistsWsCallbackParams = {
         roomExists: true,
         password: false,
