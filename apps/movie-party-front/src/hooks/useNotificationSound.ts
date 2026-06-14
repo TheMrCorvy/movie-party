@@ -1,9 +1,7 @@
-import {
-    FeatureNames,
-    isFeatureFlagEnabled,
-} from "@repo/shared-utils/feature-flags";
 import { logData } from "@salvatore.hakase/log-data";
 import { useCallback } from "react";
+import { isFeatureFlagEnabled } from "@salvatore.hakase/log-data";
+import { FeatureFlagsAvailable } from "@repo/config/feature-flags";
 
 export enum NotificationSounds {
     ENTERING_ROOM = "entering_room",
@@ -20,7 +18,7 @@ export interface PlaySoundParams {
 
 const useNotificationSound = () => {
     const playSound = useCallback((params: PlaySoundParams) => {
-        if (!isFeatureFlagEnabled(FeatureNames.PLAY_SOUNDS)) {
+        if (!isFeatureFlagEnabled(FeatureFlagsAvailable.PLAY_SOUNDS)) {
             if (params?.callback) {
                 params.callback();
             }

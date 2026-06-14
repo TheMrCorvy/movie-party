@@ -1,8 +1,5 @@
-import {
-    FeatureNames,
-    isFeatureFlagEnabled,
-} from "@repo/shared-utils/feature-flags";
-import { logData } from "@salvatore.hakase/log-data";
+import { FeatureFlagsAvailable } from "@repo/config/feature-flags";
+import { isFeatureFlagEnabled, logData } from "@salvatore.hakase/log-data";
 
 export const getUserVideoTrack = async (): Promise<MediaStreamTrack> => {
     const stream = await navigator.mediaDevices.getUserMedia({
@@ -14,7 +11,7 @@ export const getUserVideoTrack = async (): Promise<MediaStreamTrack> => {
 
 export const getUserAudioTrack = async (): Promise<MediaStreamTrack | null> => {
     const accessMicrophone = isFeatureFlagEnabled(
-        FeatureNames.ACCESS_MICROPHONE
+        FeatureFlagsAvailable.ACCESS_MICROPHONE
     );
     if (!accessMicrophone) return null;
     const stream = await navigator.mediaDevices.getUserMedia({
@@ -30,7 +27,7 @@ export const getUserAudioTrack = async (): Promise<MediaStreamTrack | null> => {
 
 export const getUserScreen = async (): Promise<MediaStream> => {
     const accessMicrophone = isFeatureFlagEnabled(
-        FeatureNames.ACCESS_MICROPHONE
+        FeatureFlagsAvailable.ACCESS_MICROPHONE
     );
     return await navigator.mediaDevices.getDisplayMedia({
         video: true,
