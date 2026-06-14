@@ -1,0 +1,16 @@
+{
+    "name": "@repo/config",
+    "exports": {
+        "./feature-flags": {
+            "types": "./featureFlags.ts",
+            "default": "./featureFlags.ts"
+        },
+        "./log-data": {
+            "types": "./log-data.ts",
+            "default": "./log-data.ts"
+        }
+    },
+    "devDependencies": {
+        "@repo/typescript-config": "workspace:*"
+    }
+}

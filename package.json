@@ -33,6 +33,7 @@
         "packages/*"
     ],
     "dependencies": {
+        "@salvatore.hakase/log-data": "^1.0.4",
         "@swc/core": "^1.13.5",
         "uuid": "^11.1.0"
     },

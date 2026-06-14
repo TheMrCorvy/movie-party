@@ -17,6 +17,7 @@
         "@mui/icons-material": "^7.1.1",
         "@mui/material": "^7.1.1",
         "@repo/shared-utils": "workspace:*",
+        "@repo/config": "workspace:*",
         "@repo/type-definitions": "workspace:*",
         "peerjs": "^1.5.5",
         "react": "^19.1.0",

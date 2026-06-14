@@ -13,6 +13,7 @@
     "description": "",
     "dependencies": {
         "@repo/shared-utils": "workspace:*",
+        "@repo/config": "workspace:*",
         "@repo/type-definitions": "workspace:*",
         "dotenv": "^16.6.1",
         "peer": "^1.0.2"
