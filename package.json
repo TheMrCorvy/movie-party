@@ -12,7 +12,10 @@
         "test": "turbo run test",
         "test:coverage": "turbo test:coverage",
         "clean": "turbo clean",
-        "start": "turbo run start"
+        "start": "turbo run start",
+        "initialize:backup": "tsx scripts/backup.ts",
+        "initialize:backup-restoration": "tsx scripts/restore-backup.ts",
+        "verify:backup-auth": "tsx scripts/check-backup-auth.ts"
     },
     "devDependencies": {
         "@repo/eslint-config": "workspace:*",
@@ -35,6 +38,7 @@
     "dependencies": {
         "@salvatore.hakase/log-data": "^1.0.4",
         "@swc/core": "^1.13.5",
+        "tsx": "^4.22.4",
         "uuid": "^11.1.0"
     },
     "overrides": {

@@ -50,3 +50,6 @@ exports
 .strapi-cloud.json
 
 nohup.out
+
+config/config.ts
+specs

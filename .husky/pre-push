@@ -1,3 +1,5 @@
 pnpm lint
 pnpm test
 pnpm build
+pnpm verify:drive-auth
+pnpm initialize:backup
