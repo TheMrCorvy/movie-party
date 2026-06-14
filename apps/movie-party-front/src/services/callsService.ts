@@ -1,4 +1,4 @@
-import { logData } from "@repo/shared-utils/log-data";
+import { logData } from "@salvatore.hakase/log-data";
 import { Participant } from "@repo/type-definitions";
 import Peer, { MediaConnection } from "peerjs";
 

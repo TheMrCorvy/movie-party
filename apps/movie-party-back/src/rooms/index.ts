@@ -8,7 +8,7 @@ import { sendReceiveMessages } from "./sendReceiveMessages";
 import { togglePeerCamera } from "./togglePeerCamera";
 import { togglePeerMicrophone } from "./togglePeerMicrophone";
 import { shareScreen } from "./shareScreen";
-import { logData } from "@repo/shared-utils/log-data";
+import { logData } from "@salvatore.hakase/log-data";
 import { createPoll } from "./createPoll";
 import { voteInPoll } from "./voteInPoll";
 import { updateBackground } from "./updateBackground";

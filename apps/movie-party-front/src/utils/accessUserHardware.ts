@@ -2,7 +2,7 @@ import {
     FeatureNames,
     isFeatureFlagEnabled,
 } from "@repo/shared-utils/feature-flags";
-import { logData } from "@repo/shared-utils/log-data";
+import { logData } from "@salvatore.hakase/log-data";
 
 export const getUserVideoTrack = async (): Promise<MediaStreamTrack> => {
     const stream = await navigator.mediaDevices.getUserMedia({

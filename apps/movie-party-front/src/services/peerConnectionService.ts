@@ -1,7 +1,7 @@
 import Peer, { PeerError } from "peerjs";
 import { answerCall, AnswerCallCallbackParams } from "./callsService";
 import { Participant } from "@repo/type-definitions";
-import { logData } from "@repo/shared-utils/log-data";
+import { logData } from "@salvatore.hakase/log-data";
 
 export interface PeerConnectionServiceParams {
     myId: string;

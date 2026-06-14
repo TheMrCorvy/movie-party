@@ -5,7 +5,7 @@ import { updateParticipantsService } from "../../services/updateParticipantsServ
 import { listenBackgroundUpdates } from "../../services/roomBackgroundService";
 import { ActionTypes } from "../../context/RoomContext/roomActions";
 import { roomWasCreated } from "../../services/createRoomService";
-import { logData } from "@repo/shared-utils/log-data";
+import { logData } from "@salvatore.hakase/log-data";
 import { useBackground } from "../../context/BackgroundImageContext";
 import { PatternClass } from "@repo/type-definitions";
 import useNotificationSound, {

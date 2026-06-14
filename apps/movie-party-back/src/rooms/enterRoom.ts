@@ -7,7 +7,7 @@ import {
     ServerRoom,
 } from "@repo/type-definitions/rooms";
 import { leaveRoom } from "./leaveRoom";
-import { logData } from "@repo/shared-utils/log-data";
+import { logData } from "@salvatore.hakase/log-data";
 import { MessageWithIndex } from "@repo/type-definitions";
 import { generateId } from "@repo/shared-utils";
 import roomValidation from "../utils/roomValidations";

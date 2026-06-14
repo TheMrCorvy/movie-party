@@ -1,5 +1,5 @@
 import { FormEvent, useState } from "react";
-import { logData } from "@repo/shared-utils/log-data";
+import { logData } from "@salvatore.hakase/log-data";
 import { RoomPasswordCallbackParams } from "@repo/type-definitions/rooms";
 
 export interface UseRoomPasswordUpdateParams {

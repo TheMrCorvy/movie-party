@@ -7,7 +7,7 @@ import {
 } from "../../services/screenSharingService";
 import { getUserScreen, stopAllTracks } from "../../utils/accessUserHardware";
 import { startCall } from "../../services/callsService";
-import { logData } from "@repo/shared-utils/log-data";
+import { logData } from "@salvatore.hakase/log-data";
 import { ScreenPlayerProps } from ".";
 import { LocalRoom } from "../../context/RoomContext/roomReducer";
 import { useGlassToast } from "../../context/GlassToastContext";

@@ -1,4 +1,4 @@
-import { logData } from "@repo/shared-utils/log-data";
+import { logData } from "@salvatore.hakase/log-data";
 import { Participant } from "@repo/type-definitions";
 import { useRoom } from "../context/RoomContext/RoomContextProvider";
 import { useEffect, useMemo, useState } from "react";

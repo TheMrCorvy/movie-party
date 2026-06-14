@@ -2,7 +2,7 @@ import { Box, Typography, Button, useTheme } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import styles from "./styles";
 import { Poll, PollOption } from "@repo/type-definitions";
-import { logData } from "@repo/shared-utils/log-data";
+import { logData } from "@salvatore.hakase/log-data";
 import {
     listenPollUpdateService,
     voteInPollService,

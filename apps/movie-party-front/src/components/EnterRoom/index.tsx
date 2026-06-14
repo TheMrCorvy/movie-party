@@ -3,7 +3,7 @@ import GlassInput from "../GlassInput";
 import GlassButton from "../GlassButton";
 import { stringIsEmpty } from "@repo/shared-utils";
 import { useRoom } from "../../context/RoomContext/RoomContextProvider";
-import { logData } from "@repo/shared-utils/log-data";
+import { logData } from "@salvatore.hakase/log-data";
 
 export interface EnterRoomParams {
     roomExists: boolean;

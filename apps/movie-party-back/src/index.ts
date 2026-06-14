@@ -5,12 +5,12 @@ import http from "http";
 import cors from "cors";
 import fileUpload from "express-fileupload";
 import { roomHandler } from "./rooms";
-import { logData } from "@repo/shared-utils/log-data";
 import { ServerRoom } from "@repo/type-definitions/rooms";
 import { updateRoomPassword } from "./routes/updateRoomPassword";
 import { verifyRoomPassword } from "./routes/verifyRoomPassword";
 import { getRoomBackground } from "./routes/getRoomBackground";
 import { uploadRoomBackground } from "./routes/uploadRoomBackground";
+import { logData } from "@salvatore.hakase/log-data";
 
 dotenv.config();
 const app = express();

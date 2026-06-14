@@ -7,7 +7,7 @@ import SendMessage from "../SendMessage";
 import { useChatLogic } from "./useChatLogic";
 import styles from "./styles";
 import { useTheme } from "@mui/material/styles";
-import { logData } from "@repo/shared-utils/log-data";
+import { logData } from "@salvatore.hakase/log-data";
 import Poll from "../Poll";
 import { MessageWithIndex } from "@repo/type-definitions";
 

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { logData } from "@repo/shared-utils/log-data";
+import { logData } from "@salvatore.hakase/log-data";
 import { ServerRoom } from "@repo/type-definitions/rooms";
 import { stringIsEmpty } from "@repo/shared-utils";
 import { hashPassword } from "../utils/passwordVerification";

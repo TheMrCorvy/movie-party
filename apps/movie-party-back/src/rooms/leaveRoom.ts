@@ -7,7 +7,7 @@ import {
     MessageReceivedWsCallbackParams,
     ServerRoom,
 } from "@repo/type-definitions/rooms";
-import { logData } from "@repo/shared-utils/log-data";
+import { logData } from "@salvatore.hakase/log-data";
 import { MessageWithIndex, Poll } from "@repo/type-definitions";
 import { generateId } from "@repo/shared-utils";
 import path from "path";

@@ -7,7 +7,7 @@ import { Socket, Server as SocketIOServer } from "socket.io";
 import { Signals } from "@repo/type-definitions/rooms";
 import { leaveRoom } from "./leaveRoom";
 import { generateId } from "@repo/shared-utils";
-import { logData } from "@repo/shared-utils/log-data";
+import { logData } from "@salvatore.hakase/log-data";
 import { hashPassword } from "../utils/passwordVerification";
 
 export interface CreateRoomParams extends CreateRoomWsParams {

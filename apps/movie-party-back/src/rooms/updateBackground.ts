@@ -5,7 +5,7 @@ import {
     BackgroundUpdatedWsCallbackParams,
     ServerRoom,
 } from "@repo/type-definitions/rooms";
-import { logData } from "@repo/shared-utils/log-data";
+import { logData } from "@salvatore.hakase/log-data";
 import roomValidation from "../utils/roomValidations";
 
 export interface UpdateBackgroundParams extends BackgroundUpdatedWsParams {

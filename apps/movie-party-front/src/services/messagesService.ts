@@ -1,5 +1,5 @@
 import { stringIsEmpty } from "@repo/shared-utils";
-import { logData } from "@repo/shared-utils/log-data";
+import { logData } from "@salvatore.hakase/log-data";
 import {
     MessageReceivedWsCallbackParams,
     MessagesWsParams,

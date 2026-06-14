@@ -7,7 +7,7 @@ import styles from "./styles";
 import GlassButton from "../GlassButton";
 import GlassInput from "../GlassInput";
 import { createRoomService } from "../../services/createRoomService";
-import { logData } from "@repo/shared-utils/log-data";
+import { logData } from "@salvatore.hakase/log-data";
 import { generateId } from "@repo/shared-utils";
 
 const CreateRoom: FC = () => {

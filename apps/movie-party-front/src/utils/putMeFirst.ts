@@ -1,7 +1,7 @@
 import { Participant } from "@repo/type-definitions";
 
 import { stringIsEmpty } from "@repo/shared-utils";
-import { logData } from "@repo/shared-utils/log-data";
+import { logData } from "@salvatore.hakase/log-data";
 
 export interface PutMeFirstParams {
     participants: Participant[];

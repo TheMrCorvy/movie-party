@@ -14,7 +14,7 @@ import {
     sendMessageService,
 } from "../../services/messagesService";
 import { ActionTypes } from "../../context/RoomContext/roomActions";
-import { logData } from "@repo/shared-utils/log-data";
+import { logData } from "@salvatore.hakase/log-data";
 import useNotificationSound, {
     NotificationSounds,
 } from "../../hooks/useNotificationSound";

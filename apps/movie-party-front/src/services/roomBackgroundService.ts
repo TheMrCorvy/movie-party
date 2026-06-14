@@ -5,7 +5,7 @@ import {
     BackgroundUpdatedWsCallbackParams,
 } from "@repo/type-definitions/rooms";
 import { Socket } from "socket.io-client";
-import { logData } from "@repo/shared-utils/log-data";
+import { logData } from "@salvatore.hakase/log-data";
 import { PatternClass } from "@repo/type-definitions";
 
 interface UploadBackgroundParams {

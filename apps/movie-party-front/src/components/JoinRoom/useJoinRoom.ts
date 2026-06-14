@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 
 import { generateId } from "@repo/shared-utils";
 import { ActionTypes } from "../../context/RoomContext/roomActions";
-import { logData } from "@repo/shared-utils/log-data";
+import { logData } from "@salvatore.hakase/log-data";
 import { RoomExistsWsCallbackParams } from "@repo/type-definitions/rooms";
 import { useNavigate } from "react-router-dom";
 import { useBackground } from "../../context/BackgroundImageContext";

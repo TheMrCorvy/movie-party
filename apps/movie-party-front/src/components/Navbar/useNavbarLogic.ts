@@ -16,7 +16,7 @@ import {
 import { useGlassToast } from "../../context/GlassToastContext";
 import fakeTimeout from "../../utils/fakeTimeout";
 import { useState } from "react";
-import { logData } from "@repo/shared-utils/log-data";
+import { logData } from "@salvatore.hakase/log-data";
 import { startCall } from "../../services/callsService";
 import { leaveRoomService } from "../../services/enterRoomService";
 
