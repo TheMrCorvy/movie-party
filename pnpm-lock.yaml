@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@salvatore.hakase/log-data':
-        specifier: ^1.0.4
-        version: 1.0.4
+        specifier: ^1.0.5
+        version: 1.0.5
       '@swc/core':
         specifier: ^1.13.5
         version: 1.15.33
@@ -1296,8 +1296,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@salvatore.hakase/log-data@1.0.4':
-    resolution: {integrity: sha512-T8zXmfHIRcAmlCPf9Cvu9ySk10TvRz+8EzTEOyA3tgaq3Bx2BXql/adBuGO/t150b+FIGySQGfT0shN3aARiUw==}
+  '@salvatore.hakase/log-data@1.0.5':
+    resolution: {integrity: sha512-1SRk+ZjochEAf9LI/SErEt5VVdja/10WbigtOoossrts9l/gG5msJyqAnJJ0HokK02L7R1CFhDHEwfID9gF5PQ==}
 
   '@sinclair/typebox@0.27.10':
     resolution: {integrity: sha512-MTBk/3jGLNB2tVxv6uLlFh1iu64iYOQ2PbdOSK3NW8JZsmlaOh2q6sdtKowBhfw8QFLmYNzTW4/oK4uATIi6ZA==}
@@ -5414,7 +5414,7 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.60.4':
     optional: true
 
-  '@salvatore.hakase/log-data@1.0.4':
+  '@salvatore.hakase/log-data@1.0.5':
     dependencies:
       pino: 10.3.1
 
