@@ -24,6 +24,7 @@ const initServer = async () => {
     const peerServer = PeerServer({
         port: PORT,
         path: "/",
+        proxied: true,
     });
 
     peerServer.on("connection", (client) => {
