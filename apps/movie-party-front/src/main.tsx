@@ -13,6 +13,7 @@ import GlassDrawerProvider from "./context/GlassDrawerContext";
 import GlassDrawer from "./components/GlassDrawer";
 import { hgts } from "@salvatore.hakase/hgts";
 import { resources } from "./lib/HGTS";
+import { LanguageProvider } from "./context/LanguageContext";
 
 const getBrowserLanguage = (): string => {
     if (typeof navigator === "undefined") {
@@ -39,44 +40,52 @@ const NotFound = lazy(() => import("./pages/NotFound"));
 
 createRoot(document.getElementById("root")!).render(
     <StrictMode>
-        <RoomContextProvider>
-            <BackgroundImageProvider>
-                <BrowserRouter>
-                    <ThemeContextProvider>
-                        <GlassToastProvider>
-                            <GlassDrawerProvider>
-                                <Suspense fallback={<Loader />}>
-                                    <Routes>
-                                        <Route path="/" element={<Layout />}>
-                                            <Route index element={<Home />} />
+        <LanguageProvider>
+            <RoomContextProvider>
+                <BackgroundImageProvider>
+                    <BrowserRouter>
+                        <ThemeContextProvider>
+                            <GlassToastProvider>
+                                <GlassDrawerProvider>
+                                    <Suspense fallback={<Loader />}>
+                                        <Routes>
                                             <Route
-                                                path="/room/:roomId"
-                                                element={<Room />}
-                                            />
-                                            <Route
-                                                path="/join-room/:roomId"
-                                                element={<JoinRoomPage />}
-                                            />
-                                        </Route>
+                                                path="/"
+                                                element={<Layout />}
+                                            >
+                                                <Route
+                                                    index
+                                                    element={<Home />}
+                                                />
+                                                <Route
+                                                    path="/room/:roomId"
+                                                    element={<Room />}
+                                                />
+                                                <Route
+                                                    path="/join-room/:roomId"
+                                                    element={<JoinRoomPage />}
+                                                />
+                                            </Route>
 
-                                        {/* Page not found: explicit and catch-all */}
-                                        <Route
-                                            path="/404"
-                                            element={<NotFound />}
-                                        />
-                                        <Route
-                                            path="*"
-                                            element={<NotFound />}
-                                        />
-                                    </Routes>
-                                </Suspense>
-                                <GlassDrawer />
-                            </GlassDrawerProvider>
-                            <GlassToast />
-                        </GlassToastProvider>
-                    </ThemeContextProvider>
-                </BrowserRouter>
-            </BackgroundImageProvider>
-        </RoomContextProvider>
+                                            {/* Page not found: explicit and catch-all */}
+                                            <Route
+                                                path="/404"
+                                                element={<NotFound />}
+                                            />
+                                            <Route
+                                                path="*"
+                                                element={<NotFound />}
+                                            />
+                                        </Routes>
+                                    </Suspense>
+                                    <GlassDrawer />
+                                </GlassDrawerProvider>
+                                <GlassToast />
+                            </GlassToastProvider>
+                        </ThemeContextProvider>
+                    </BrowserRouter>
+                </BackgroundImageProvider>
+            </RoomContextProvider>
+        </LanguageProvider>
     </StrictMode>
 );
