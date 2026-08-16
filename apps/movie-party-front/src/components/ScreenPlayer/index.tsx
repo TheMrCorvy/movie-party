@@ -1,6 +1,7 @@
 import { type FC } from "react";
 import GlassButton from "../GlassButton";
 import useScreenPlayer from "./useScreenPlayer";
+import { useTranslation } from "@salvatore.hakase/hgts/react";
 
 export interface ScreenPlayerProps {
     remoteScreen?: MediaStream | null;
@@ -11,6 +12,7 @@ const ScreenPlayer: FC<ScreenPlayerProps> = ({
     remoteScreen,
     clearRemoteScreen,
 }) => {
+    const { t } = useTranslation();
     const { screenStream, videoRef, shareScreen, room } = useScreenPlayer({
         remoteScreen,
         clearRemoteScreen,
@@ -38,8 +40,8 @@ const ScreenPlayer: FC<ScreenPlayerProps> = ({
                 }
             >
                 {screenStream && room.myId === room.peerSharingScreen
-                    ? "Dejar de compartir pantalla"
-                    : "Compartir pantalla"}
+                    ? t("screenShare.stop")
+                    : t("screenShare.start")}
             </GlassButton>
         </>
     );

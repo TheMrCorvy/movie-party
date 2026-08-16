@@ -10,8 +10,10 @@ import { useRoom } from "../../context/RoomContext/RoomContextProvider";
 import { createPollSerice } from "../../services/pollService";
 import PollIcon from "@mui/icons-material/Poll";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
+import { useTranslation } from "@salvatore.hakase/hgts/react";
 
 const CreatePoll: FC = () => {
+    const { t } = useTranslation();
     const [modalOpen, setModalOpen] = useState(false);
     const [inputVal, setInputVal] = useState("");
     const [titleVal, setTitleVal] = useState("");
@@ -56,11 +58,11 @@ const CreatePoll: FC = () => {
     const modalActions: ModalAction[] = [
         {
             callback: () => closeModal(),
-            buttonLabel: "Cancelar",
+            buttonLabel: t("poll.cancel"),
         },
         {
             callback: () => emitPollCreation(),
-            buttonLabel: "Crear encuesta",
+            buttonLabel: t("poll.create"),
             buttonProps: {
                 disabled: options.length < 2 || options.length > 6,
             },
@@ -116,15 +118,13 @@ const CreatePoll: FC = () => {
                 onClick={() => setModalOpen(true)}
                 startIcon={<PollIcon />}
             >
-                {disabledBtn
-                    ? "Ya hay una encuesta en proceso"
-                    : "Iniciar encuesta"}
+                {disabledBtn ? t("poll.inProgress") : t("poll.start")}
             </GlassButton>
             <GlassModal
                 open={modalOpen}
                 closeModalWithoutCallback={closeModal}
                 modalActions={modalActions}
-                title="Iniciar Encuesta"
+                title={t("poll.modalTitle")}
                 fullScreen={isMdDown}
             >
                 <Grid
@@ -139,7 +139,7 @@ const CreatePoll: FC = () => {
                             required
                             id="poll-title"
                             name="poll-title"
-                            label="Título para la encuesta"
+                            label={t("poll.titleLabel")}
                             type="text"
                             kind="text input"
                             size="medium"
@@ -155,7 +155,7 @@ const CreatePoll: FC = () => {
                                 fontWeight: "bold",
                             }}
                         >
-                            Agregar opciones para votar
+                            {t("poll.optionsHeader")}
                         </Typography>
                     </Grid>
 
@@ -165,14 +165,14 @@ const CreatePoll: FC = () => {
                             required
                             id="poll-input"
                             name="poll-input"
-                            label="Opción"
+                            label={t("poll.optionLabel")}
                             type="text"
                             kind="text input"
                             size="medium"
                             onChange={(e) => handleInputChange(e, "option")}
                             value={inputVal}
                             error={inputVal.length > 20}
-                            helperText="Las opciones no pueden ser más de 20 caractéres."
+                            helperText={t("poll.maxCharacters")}
                         />
                     </Grid>
 
@@ -182,7 +182,7 @@ const CreatePoll: FC = () => {
                             fullWidth
                             disabled={inputVal.length > 20}
                         >
-                            Agregar opción
+                            {t("poll.addOption")}
                         </GlassButton>
                     </Grid>
 

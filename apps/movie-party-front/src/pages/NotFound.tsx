@@ -3,9 +3,11 @@ import { useNavigate } from "react-router-dom";
 import GlassButton from "../components/GlassButton";
 import type { FC } from "react";
 import useApplyBackground from "../hooks/useApplyBackground";
+import { useTranslation } from "@salvatore.hakase/hgts/react";
 
 const NotFound: FC = () => {
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     useApplyBackground();
 
@@ -26,14 +28,14 @@ const NotFound: FC = () => {
                     gutterBottom
                     sx={{ fontWeight: "bold" }}
                 >
-                    Sala no encontrada
+                    {t("notFound.title")}
                 </Typography>
 
                 <GlassButton
                     onClick={() => navigate("/", { replace: true })}
                     fullWidth={false}
                 >
-                    Volver al inicio
+                    {t("notFound.backHome")}
                 </GlassButton>
             </Box>
         </Box>

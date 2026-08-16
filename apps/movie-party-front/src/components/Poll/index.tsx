@@ -9,6 +9,7 @@ import {
 } from "../../services/pollService";
 import { useRoom } from "../../context/RoomContext/RoomContextProvider";
 import { ActionTypes } from "../../context/RoomContext/roomActions";
+import { useTranslation } from "@salvatore.hakase/hgts/react";
 
 const colors = [
     "#f44336",
@@ -24,6 +25,7 @@ export interface PollProps {
 }
 
 const Poll: FC<PollProps> = ({ poll }) => {
+    const { t } = useTranslation();
     const { room, ws, dispatch } = useRoom();
     const [disableButtons, setDisableButtons] = useState(false);
 
@@ -107,7 +109,7 @@ const Poll: FC<PollProps> = ({ poll }) => {
     if (poll.status !== "live") return null;
 
     return (
-        <Box sx={pollContainer} aria-label="Encuesta">
+        <Box sx={pollContainer} aria-label={t("poll.ariaLabel")}>
             <Typography variant="h6" sx={pollTitle}>
                 {poll.title}
             </Typography>
@@ -126,7 +128,7 @@ const Poll: FC<PollProps> = ({ poll }) => {
                                 backgroundColor: colors[i],
                             },
                         }}
-                        aria-label={`Votar por ${option.title}`}
+                        aria-label={t("poll.voteFor", { title: option.title })}
                     >
                         <Typography variant="body2" sx={pollOptionName}>
                             {option.title}

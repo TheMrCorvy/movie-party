@@ -5,8 +5,10 @@ import { useRoom } from "../../context/RoomContext/RoomContextProvider";
 import { createPollSerice } from "../../services/pollService";
 import { ModalAction } from "../GlassModal";
 import { AlertCallbackParams } from "../GlassAlert";
+import { useTranslation } from "@salvatore.hakase/hgts/react";
 
 const usePollLogic = () => {
+    const { t } = useTranslation();
     const [modalOpen, setModalOpen] = useState(false);
     const [inputVal, setInputVal] = useState("");
     const [titleVal, setTitleVal] = useState("");
@@ -50,11 +52,11 @@ const usePollLogic = () => {
     const modalActions: ModalAction[] = [
         {
             callback: () => closeModal(),
-            buttonLabel: "Cancelar",
+            buttonLabel: t("poll.cancel"),
         },
         {
             callback: () => emitPollCreation(),
-            buttonLabel: "Crear encuesta",
+            buttonLabel: t("poll.create"),
             buttonProps: {
                 disabled: options.length < 2 || options.length > 6,
             },

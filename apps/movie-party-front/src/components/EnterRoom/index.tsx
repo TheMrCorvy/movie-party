@@ -4,6 +4,7 @@ import GlassButton from "../GlassButton";
 import { stringIsEmpty } from "@repo/shared-utils";
 import { useRoom } from "../../context/RoomContext/RoomContextProvider";
 import { logData } from "@salvatore.hakase/log-data";
+import { useTranslation } from "@salvatore.hakase/hgts/react";
 
 export interface EnterRoomParams {
     roomExists: boolean;
@@ -11,6 +12,7 @@ export interface EnterRoomParams {
 }
 
 const EnterRoom: FC<EnterRoomParams> = ({ roomExists, roomHasPassword }) => {
+    const { t } = useTranslation();
     const [myName, setMyName] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(false);
@@ -99,24 +101,18 @@ const EnterRoom: FC<EnterRoomParams> = ({ roomExists, roomHasPassword }) => {
                     setMyName(e.target.value);
                 }}
                 error={error}
-                helperText={
-                    error ? "Los datos ingresados son incorrectos" : undefined
-                }
-                label="Nombre"
+                helperText={error ? t("enterRoom.errorMsg") : undefined}
+                label={t("enterRoom.name")}
             />
             {roomHasPassword && (
                 <GlassInput
                     type="password"
                     kind="text input"
-                    label="Contraseña"
+                    label={t("enterRoom.password")}
                     size="medium"
                     name="password"
                     error={error}
-                    helperText={
-                        error
-                            ? "Los datos ingresados son incorrectos"
-                            : undefined
-                    }
+                    helperText={error ? t("enterRoom.errorMsg") : undefined}
                     onChange={(e: ChangeEvent<HTMLInputElement>) => {
                         e.preventDefault();
                         setError(false);
@@ -125,7 +121,7 @@ const EnterRoom: FC<EnterRoomParams> = ({ roomExists, roomHasPassword }) => {
                 />
             )}
             <GlassButton onClick={handleEnterRoom}>
-                Ingresar a la sala de conferencias
+                {t("enterRoom.submit")}
             </GlassButton>
         </form>
     );

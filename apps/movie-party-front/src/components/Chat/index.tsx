@@ -10,10 +10,13 @@ import { useTheme } from "@mui/material/styles";
 import { logData } from "@salvatore.hakase/log-data";
 import Poll from "../Poll";
 import { MessageWithIndex } from "@repo/type-definitions";
+import { useTranslation } from "@salvatore.hakase/hgts/react";
 
 const Chat: FC = () => {
+    const { t } = useTranslation();
     const {
         messages,
+
         messageInput,
         messagesEndRef,
         handleSendMessage,
@@ -50,10 +53,14 @@ const Chat: FC = () => {
             let messageBody = "";
 
             message.poll.options.forEach((option) => {
+                const resultText = t("chat.pollResult", {
+                    count: option.votes,
+                    title: option.title,
+                });
                 if (!messageBody) {
-                    messageBody = `${option.votes} voto(s) para "${option.title}"`;
+                    messageBody = resultText;
                 } else {
-                    messageBody += `, ${option.votes} voto(s) para "${option.title}"`;
+                    messageBody += `, ${resultText}`;
                 }
             });
 

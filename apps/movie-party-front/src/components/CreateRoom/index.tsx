@@ -9,8 +9,10 @@ import GlassInput from "../GlassInput";
 import { createRoomService } from "../../services/createRoomService";
 import { logData } from "@salvatore.hakase/log-data";
 import { generateId } from "@repo/shared-utils";
+import { useTranslation } from "@salvatore.hakase/hgts/react";
 
 const CreateRoom: FC = () => {
+    const { t } = useTranslation();
     const [myName, setMyName] = useState("");
     const { ws } = useRoom();
     const { mainContainer } = styles();
@@ -53,27 +55,27 @@ const CreateRoom: FC = () => {
                     type="text"
                     kind="text input"
                     size="medium"
-                    label="Nombre"
+                    label={t("createRoom.name")}
                     name="name"
                     onChange={handleChange}
                 />
                 <GlassButton onClick={() => setAddPassword(!addPassword)}>
                     {addPassword
-                        ? "Quitar contraseña de sala"
-                        : "Añadir contraseña a la sala"}
+                        ? t("createRoom.removePassword")
+                        : t("createRoom.addPassword")}
                 </GlassButton>
                 {addPassword && (
                     <GlassInput
                         type="password"
                         kind="text input"
-                        label="Contraseña"
+                        label={t("createRoom.password")}
                         size="medium"
                         name="password"
                         onChange={handleChange}
                     />
                 )}
                 <GlassButton onClick={createRoomSubmit}>
-                    Ingresar a la sala de conferencias
+                    {t("createRoom.submit")}
                 </GlassButton>
             </GlassContainer>
         </Container>

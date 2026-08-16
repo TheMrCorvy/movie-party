@@ -4,6 +4,7 @@ import SendIcon from "@mui/icons-material/Send";
 import styles from "./styles";
 import GlassButton from "../GlassButton";
 import GlassInput from "../GlassInput";
+import { useTranslation } from "@salvatore.hakase/hgts/react";
 
 export interface SendMessageProps {
     messageInput: string;
@@ -18,13 +19,14 @@ const SendMessage: FC<SendMessageProps> = ({
     handleKeyPress,
     handleSendMessage,
 }) => {
+    const { t } = useTranslation();
     const theme = useTheme();
     const { sendMessageContainerStyles } = styles(theme.palette.mode);
     return (
         <Stack direction="row" spacing={1} sx={sendMessageContainerStyles}>
             <GlassInput
                 kind="text input"
-                placeholder="Escribe tu mensaje..."
+                placeholder={t("chat.placeholder")}
                 value={messageInput}
                 onChange={handleInputChange}
                 onKeyDown={handleKeyPress}

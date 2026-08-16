@@ -23,8 +23,10 @@ import { useRoom } from "../../context/RoomContext/RoomContextProvider";
 import useClipboard from "../../hooks/useClipboard";
 import CreatePoll from "../CreatePoll";
 import { CSSProperties } from "@mui/material";
+import { useTranslation } from "@salvatore.hakase/hgts/react";
 
 const Navbar: FC = () => {
+    const { t } = useTranslation();
     const {
         fabButtons,
         fabButtonsContainer,
@@ -51,7 +53,7 @@ const Navbar: FC = () => {
             <>
                 <IconButton
                     color="inherit"
-                    aria-label="abrir ajustes"
+                    aria-label={t("navbar.settings")}
                     onClick={() =>
                         dispatch({
                             type: "OPEN_DRAWER",
@@ -83,7 +85,7 @@ const Navbar: FC = () => {
                     <Fab
                         sx={fabButtons}
                         color="primary"
-                        aria-label="encender / apagar camara"
+                        aria-label={t("navbar.camera")}
                         onClick={toggleCamera}
                     >
                         {cameraOn ? <VideocamIcon /> : <VideocamOffIcon />}
@@ -91,7 +93,7 @@ const Navbar: FC = () => {
                     <Fab
                         sx={fabButtons}
                         color="primary"
-                        aria-label="encender / apagar microfono"
+                        aria-label={t("navbar.microphone")}
                         onClick={toggleMicrophone}
                     >
                         {microphoneOn ? <MicIcon /> : <MicOffIcon />}
@@ -99,7 +101,7 @@ const Navbar: FC = () => {
                     <Fab
                         sx={endCallStyles}
                         color="primary"
-                        aria-label="finalizar a llamada"
+                        aria-label={t("navbar.endCall")}
                         onClick={endCall}
                     >
                         <PhoneDisabledIcon />
@@ -109,7 +111,7 @@ const Navbar: FC = () => {
                 {isLgDown ? (
                     <IconButton
                         color="inherit"
-                        aria-label="abrir chat"
+                        aria-label={t("navbar.chat")}
                         onClick={() =>
                             dispatch({
                                 type: "OPEN_DRAWER",

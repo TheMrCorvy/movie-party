@@ -12,8 +12,10 @@ import styles from "./styles";
 import useControls from "./useControls";
 import { FC } from "react";
 import useClipboard from "../../hooks/useClipboard";
+import { useTranslation } from "@salvatore.hakase/hgts/react";
 
 const RoomControls: FC = () => {
+    const { t } = useTranslation();
     const {
         hidden,
         patternPicker,
@@ -68,10 +70,10 @@ const RoomControls: FC = () => {
                 </Box>
                 <Box sx={btnGroup}>
                     <GlassButton onClick={handleButtonClick}>
-                        Cambiar fondo de pantalla
+                        {t("roomControls.changeBackground")}
                     </GlassButton>
                     <GlassButton onClick={handleReset}>
-                        Resetear fondo de pantalla
+                        {t("roomControls.resetBackground")}
                     </GlassButton>
                 </Box>
                 {room.imRoomOwner && (
@@ -86,7 +88,7 @@ const RoomControls: FC = () => {
                 )}
                 <Box sx={shareRoomAndPoll}>
                     <GlassButton onClick={handleCopy} startIcon={<ShareIcon />}>
-                        Compartir sala
+                        {t("roomControls.shareRoom")}
                     </GlassButton>
                     <CreatePoll />
                 </Box>

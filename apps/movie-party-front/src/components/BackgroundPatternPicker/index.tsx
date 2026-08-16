@@ -4,8 +4,10 @@ import { PatternClass } from "@repo/type-definitions";
 import { useRoom } from "../../context/RoomContext/RoomContextProvider";
 import styles from "./styles";
 import { CSSProperties } from "@mui/material";
+import { useTranslation } from "@salvatore.hakase/hgts/react";
 
 export const BackgroundPatternPicker: React.FC = () => {
+    const { t } = useTranslation();
     const { patternClass } = useBackground();
     const { room, ws } = useRoom();
     const { patternTitle, container, patternGrid, btn } = styles();
@@ -22,7 +24,7 @@ export const BackgroundPatternPicker: React.FC = () => {
     return (
         <div style={container as CSSProperties}>
             <label style={patternTitle as CSSProperties}>
-                Patrones de fondo
+                {t("roomControls.patternsHeader")}
             </label>
             <div style={patternGrid as CSSProperties}>
                 {patterns.map((p, idx) => {

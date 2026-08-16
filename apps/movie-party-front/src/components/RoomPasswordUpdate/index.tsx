@@ -6,6 +6,7 @@ import KeyIcon from "@mui/icons-material/Key";
 import GlassInput from "../GlassInput";
 import styles from "./styles";
 import useRoomPasswordUpdate from "./useRoomPasswordUpdate";
+import { useTranslation } from "@salvatore.hakase/hgts/react";
 
 export interface RoomPasswordUpdateProps {
     imRoomOwner: boolean;
@@ -20,6 +21,7 @@ const RoomPasswordUpdate: FC<RoomPasswordUpdateProps> = ({
     roomId,
     peerId,
 }) => {
+    const { t } = useTranslation();
     const {
         newPassword,
         setNewPassword,
@@ -47,7 +49,7 @@ const RoomPasswordUpdate: FC<RoomPasswordUpdateProps> = ({
                         kind="text input"
                         type="password"
                         value={newPassword}
-                        label="Contraseña de la sala"
+                        label={t("roomControls.passwordLabel")}
                         size="medium"
                         onChange={(e: ChangeEvent<HTMLInputElement>) => {
                             e.preventDefault();
