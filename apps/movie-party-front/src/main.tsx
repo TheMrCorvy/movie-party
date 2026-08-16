@@ -11,6 +11,26 @@ import "./styles/backgroundPatterns.css";
 import Loader from "./components/Loader";
 import GlassDrawerProvider from "./context/GlassDrawerContext";
 import GlassDrawer from "./components/GlassDrawer";
+import { hgts } from "@salvatore.hakase/hgts";
+import { resources } from "./lib/HGTS";
+
+const getBrowserLanguage = (): string => {
+    if (typeof navigator === "undefined") {
+        return "es";
+    }
+    const lang = navigator.language || (navigator as any).userLanguage || "";
+    const shortLang = lang.split("-")[0].toLowerCase();
+    if (shortLang === "es") {
+        return "es";
+    }
+    return "en";
+};
+
+hgts.setup({
+    resources,
+    defaultLocale: getBrowserLanguage(),
+    fallbackLocale: "en",
+});
 
 const Home = lazy(() => import("./pages/Home"));
 const Room = lazy(() => import("./pages/Room"));
