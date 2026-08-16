@@ -130,6 +130,9 @@ importers:
       '@repo/type-definitions':
         specifier: workspace:*
         version: link:../../packages/type-definitions
+      '@salvatore.hakase/hgts':
+        specifier: ^1.0.3
+        version: 1.0.3(react@19.2.6)
       peerjs:
         specifier: ^1.5.5
         version: 1.5.5
@@ -1295,6 +1298,14 @@ packages:
     resolution: {integrity: sha512-QVTUovf40zgTqlFVrKA1uXMVvU2QWEFWfAH8Wdc48IxLvrJMQVMBRjuQyUpzZCDkakImib9eVazbWlC6ksWtJw==}
     cpu: [x64]
     os: [win32]
+
+  '@salvatore.hakase/hgts@1.0.3':
+    resolution: {integrity: sha512-r0VYpJXRyGfP38X8AwS6/BFy1N6mY/5jgND9R1y5tosbNaRKWM8dvTf1TuxXMTLYSk38XFnwKH0lhUP03aerQw==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    peerDependenciesMeta:
+      react:
+        optional: true
 
   '@salvatore.hakase/log-data@1.0.5':
     resolution: {integrity: sha512-1SRk+ZjochEAf9LI/SErEt5VVdja/10WbigtOoossrts9l/gG5msJyqAnJJ0HokK02L7R1CFhDHEwfID9gF5PQ==}
@@ -5413,6 +5424,10 @@ snapshots:
 
   '@rollup/rollup-win32-x64-msvc@4.60.4':
     optional: true
+
+  '@salvatore.hakase/hgts@1.0.3(react@19.2.6)':
+    optionalDependencies:
+      react: 19.2.6
 
   '@salvatore.hakase/log-data@1.0.5':
     dependencies:
