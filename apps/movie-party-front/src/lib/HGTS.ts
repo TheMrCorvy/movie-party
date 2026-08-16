@@ -1,0 +1,118 @@
+export const resources = {
+    es: {
+        createRoom: {
+            name: "Nombre",
+            removePassword: "Quitar contraseña de sala",
+            addPassword: "Añadir contraseña a la sala",
+            password: "Contraseña",
+            submit: "Ingresar a la sala de conferencias",
+        },
+        enterRoom: {
+            errorMsg: "Los datos ingresados son incorrectos",
+            name: "Nombre",
+            password: "Contraseña",
+            submit: "Ingresar a la sala de conferencias",
+        },
+        notFound: {
+            title: "Sala no encontrada",
+            backHome: "Volver al inicio",
+        },
+        navbar: {
+            settings: "abrir ajustes",
+            camera: "encender / apagar camara",
+            microphone: "encender / apagar microfono",
+            endCall: "finalizar a llamada",
+            chat: "abrir chat",
+        },
+        roomControls: {
+            changeBackground: "Cambiar fondo de pantalla",
+            resetBackground: "Resetear fondo de pantalla",
+            shareRoom: "Compartir sala",
+            patternsHeader: "Patrones de fondo",
+            passwordLabel: "Contraseña de la sala",
+        },
+        screenShare: {
+            start: "Compartir pantalla",
+            stop: "Dejar de compartir pantalla",
+        },
+        chat: {
+            placeholder: "Escribe tu mensaje...",
+            pollResult: {
+                one: '{{count}} voto para "{{title}}"',
+                other: '{{count}} voto(s) para "{{title}}"',
+            },
+        },
+        poll: {
+            ariaLabel: "Encuesta",
+            voteFor: "Votar por {{title}}",
+            cancel: "Cancelar",
+            create: "Crear encuesta",
+            inProgress: "Ya hay una encuesta en proceso",
+            start: "Iniciar encuesta",
+            modalTitle: "Iniciar Encuesta",
+            titleLabel: "Título para la encuesta",
+            optionsHeader: "Agregar opciones para votar",
+            optionLabel: "Opción",
+            maxCharacters: "Las opciones no pueden ser más de 20 caractéres.",
+            addOption: "Agregar opción",
+        },
+    },
+    en: {
+        createRoom: {
+            name: "Name",
+            removePassword: "Remove room password",
+            addPassword: "Add password to room",
+            password: "Password",
+            submit: "Enter conference room",
+        },
+        enterRoom: {
+            errorMsg: "The entered data is incorrect",
+            name: "Name",
+            password: "Password",
+            submit: "Enter conference room",
+        },
+        notFound: {
+            title: "Room not found",
+            backHome: "Go back to home",
+        },
+        navbar: {
+            settings: "open settings",
+            camera: "turn camera on / off",
+            microphone: "turn microphone on / off",
+            endCall: "end call",
+            chat: "open chat",
+        },
+        roomControls: {
+            changeBackground: "Change wallpaper",
+            resetBackground: "Reset wallpaper",
+            shareRoom: "Share room",
+            patternsHeader: "Background patterns",
+            passwordLabel: "Room password",
+        },
+        screenShare: {
+            start: "Share screen",
+            stop: "Stop sharing screen",
+        },
+        chat: {
+            placeholder: "Type your message...",
+            pollResult: {
+                one: '{{count}} vote for "{{title}}"',
+                other: '{{count}} votes for "{{title}}"',
+            },
+        },
+        poll: {
+            ariaLabel: "Poll",
+            voteFor: "Vote for {{title}}",
+            cancel: "Cancel",
+            create: "Create poll",
+            inProgress: "A poll is already in progress",
+            start: "Start poll",
+            modalTitle: "Start Poll",
+            titleLabel: "Poll title",
+            optionsHeader: "Add voting options",
+            optionLabel: "Option",
+            maxCharacters: "Options cannot be more than 20 characters.",
+            addOption: "Add option",
+        },
+    },
+};
